@@ -1,7 +1,10 @@
-package com.tritonkor.grouptester.persistence.entity;
+package com.tritonkor.grouptester.persistence.entity.impl;
 
+import com.tritonkor.grouptester.persistence.entity.Entity;
+import com.tritonkor.grouptester.persistence.entity.ErrorTemplates;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -107,5 +110,35 @@ public class User extends Entity {
 
   public void setAvatar(String avatar) {
     this.avatar = avatar;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return Objects.equals(email, user.email);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(email);
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", avatar='" + avatar + '\'' +
+            ", birthday=" + birthday +
+            ", id=" + id +
+            '}';
   }
 }
