@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Question extends Entity {
 
+
     private String content;
     private final LocalDate createdAt;
     private List<Answer> answerList;

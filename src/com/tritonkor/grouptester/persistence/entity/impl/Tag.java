@@ -37,7 +37,6 @@ public class Tag extends Entity implements Comparable<Tag> {
     @Override
     public int compareTo(Tag o) {
         return this.name.compareTo(o.name);
-
     }
 
     @Override

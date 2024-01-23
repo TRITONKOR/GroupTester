@@ -4,141 +4,169 @@ import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.entity.ErrorTemplates;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class User extends Entity {
 
-  private UUID id;
-  private String username;
-  private String email;
-  private final String password;
-  private String avatar;
-  private final LocalDate birthday;
+    private String username;
+    private String email;
+    private final String password;
+    private final LocalDate birthday;
 
-  public User(UUID id, String username, String email, String password, String avatar,
-      LocalDate birthday) {
-    super(id);
-    this.id = id;
-    setUsername(username);
-    //  TODO: setEmail(email);
-    this.email = email;
-    this.password = password;
-    //  TODO: setAvatar(avatar);
-    this.avatar = avatar;
-    //  TODO: validatedBirthday(birthday);
-    this.birthday = birthday;
-  }
-
-  private String validatedPassword(String password) {
-    final String templateName = "паролю";
-
-    if(password.isBlank()) {
-      errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
-    }
-    if (username.length() > 8) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
-    }
-    if (username.length() < 32) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 24));
-    }
-    Pattern pattern = Pattern.compile("^()");
-    if (pattern.matcher(username).matches()) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 24));
+    public User(UUID id, String username, String email, String password, LocalDate birthday) {
+        super(id);
+        setUsername(username);
+        this.email = validatedEmail(email);
+        this.password = validatedPassword(password);
+        this.birthday = validatedBirthday(birthday);
     }
 
-    if(this.errors.size() > 0) {
-      throw new EntityArgumentException(errors);
+    /**
+     * Сетер для логіна з валідацією
+     *
+     * @param username
+     * @throws EntityArgumentException в разі, якщо є помилка в username
+     */
+    public void setUsername(String username) {
+
+        final String templateName = "логіну";
+
+        if (username.isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
+        if (username.length() < 4) {
+            errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
+        }
+        if (username.length() > 24) {
+            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 24));
+        }
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]+$");
+        if (pattern.matcher(username).matches()) {
+            errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
+        }
+
+        if (!this.errors.isEmpty()) {
+            throw new EntityArgumentException(errors);
+        }
+
+        this.username = username;
     }
 
-    return password;
+    private String validatedPassword(String password) {
+        final String templateName = "паролю";
 
-  }
-  public UUID getId() {
-    return id;
-  }
+        if (password.isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
+        if (password.length() < 8) {
+            errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 8));
+        }
+        if (password.length() > 32) {
+            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 32));
+        }
+        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$");
+        if (pattern.matcher(password).matches()) {
+            errors.add(ErrorTemplates.PASSWORD.getTemplate().formatted(templateName));
+        }
 
-  public String getUsername() {
-    return username;
-  }
+        if (!this.errors.isEmpty()) {
+            throw new EntityArgumentException(errors);
+        }
 
-  public String getEmail() {
-    return email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public String getAvatar() {
-    return avatar;
-  }
-
-  public LocalDate getBirthday() {
-    return birthday;
-  }
-
-  /**
-   * Сетер для логіна з валідацією
-   * @param username
-   */
-  public void setUsername(String username) {
-
-    final String templateName = "логіну";
-
-    if(username.isBlank()) {
-        errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
-    }
-    if (username.length() > 4) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
-    }
-    if (username.length() < 24) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 24));
-    }
-    Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]+$");
-    if (pattern.matcher(username).matches()) {
-      errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 24));
+        return password;
     }
 
-    if(this.errors.size() > 0) {
-      throw new EntityArgumentException(errors);
+    private String validatedEmail(String email) {
+        final String templateName = "електронної пошти";
+
+        if (email.isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
+
+        Pattern pattern = Pattern.compile(
+                "^[a-zA-Z0-9_%+-]+(?:[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+[a-zA-Z]{2,}$");
+        if (pattern.matcher(email).matches()) {
+            errors.add(ErrorTemplates.EMAIL.getTemplate().formatted(templateName));
+        }
+
+        if (!this.errors.isEmpty()) {
+            throw new EntityArgumentException(errors);
+        }
+
+        return email;
     }
 
-    this.username = username;
-  }
+    private LocalDate validatedBirthday(LocalDate birthday) {
+        final String templateName = "дня народження";
 
-  public void setAvatar(String avatar) {
-    this.avatar = avatar;
-  }
+        if (birthday.toString().isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedDate = LocalDate.parse(birthday.toString(), formatter);
+
+        LocalDate currentDate = LocalDate.now();
+        if (parsedDate.isAfter(currentDate)) {
+            errors.add(ErrorTemplates.BIRTHDAY.getTemplate().formatted(templateName));
+        }
+
+        if (!this.errors.isEmpty()) {
+            throw new EntityArgumentException(errors);
+        }
+
+        return birthday;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public UUID getId() {
+        return id;
     }
-    User user = (User) o;
-    return Objects.equals(email, user.email);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(email);
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  @Override
-  public String toString() {
-    return "User{" +
-            "id=" + id +
-            ", username='" + username + '\'' +
-            ", email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            ", avatar='" + avatar + '\'' +
-            ", birthday=" + birthday +
-            ", id=" + id +
-            '}';
-  }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", birthday=" + birthday +
+                ", id=" + id +
+                '}';
+    }
 }

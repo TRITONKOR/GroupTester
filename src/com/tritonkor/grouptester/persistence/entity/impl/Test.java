@@ -15,9 +15,9 @@ public class Test extends Entity {
 
     private String title;
 
-    private  int countOfQuestions;
+    private int countOfQuestions;
 
-    private  List<Question> questionsList;
+    private List<Question> questionsList;
 
     private final LocalDate createdAt;
 
@@ -53,8 +53,7 @@ public class Test extends Entity {
         return questionsList;
     }
 
-    public void setQuestionsList(
-            List<Question> questionsList) {
+    public void setQuestionsList(List<Question> questionsList) {
         this.questionsList = questionsList;
     }
 

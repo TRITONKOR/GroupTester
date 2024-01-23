@@ -1,16 +1,9 @@
 
-]	java:S125"<This block of commented-out lines of code should be removed.(ÌğßØùÿÿÿÿ8ÀİÆ±Ó1
-T
-java:S1135"2Complete the task associated to this TODO comment.(ÌğßØùÿÿÿÿ8ÁİÆ±Ó1
-X	java:S125"<This block of commented-out lines of code should be removed.(„Û«Ù8«îÅ±Ó1
-O
-java:S1135"2Complete the task associated to this TODO comment.(„Û«Ù8Ï¢Å±Ó1
-]	java:S125"<This block of commented-out lines of code should be removed.(‚ÍÁÃıÿÿÿÿ8³ûÆ±Ó1
-T
-java:S1135"2Complete the task associated to this TODO comment.(‚ÍÁÃıÿÿÿÿ8³ûÆ±Ó1
-4
-java:S6331."Remove this empty group.(´¼©8¸¥¸±Ó1
 e
-java:S6353c"CUse concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'.(Ş¨æîüÿÿÿÿ8òõª±Ó1
-X
-java:S1144""6Remove this unused private "validatedPassword" method.(û¯¤¬ıÿÿÿÿ8àı©±Ó1
+java:S6353."CUse concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'.(Ş¨æîüÿÿÿÿ8îèë¾Ó1
+^
+java:S6353F"<Use concise character class syntax '\\d' instead of '[0-9]'.(à†òÏúÿÿÿÿ8°æ­½Ó1
+i
+java:S5998Z"LRefactor this repetition that can lead to a stack overflow for large inputs.(±œª8âˆÓ¿Ó1
+\
+java:S1161|":Add the "@Override" annotation above this method signature(áòó„øÿÿÿÿ8–â¹¿Ó1
