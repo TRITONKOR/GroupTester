@@ -1,7 +1,9 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
+import com.tritonkor.grouptester.persistence.util.Validation;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
@@ -12,11 +14,14 @@ public class Question extends Entity {
     private final LocalDate createdAt;
     private List<Answer> answerList;
 
-    public Question(UUID id, String content, LocalDate createdAt, List<Answer> answerList) {
+    private final Answer correctAnswer;
+
+    public Question(UUID id, String content, LocalDate createdAt, List<Answer> answerList, Answer correctAnswer) {
         super(id);
-        this.content = content;
-        this.createdAt = createdAt;
-        this.answerList = answerList;
+        this.content = Validation.validateText(content, errors, 120);
+        this.createdAt = Validation.validateDate(createdAt, errors);
+        this.answerList = new ArrayList<>();
+        this.correctAnswer = correctAnswer;
     }
 
     public String getContent() {

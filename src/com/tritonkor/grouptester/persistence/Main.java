@@ -1,6 +1,8 @@
 package com.tritonkor.grouptester.persistence;
 
 import com.github.javafaker.Faker;
+import com.tritonkor.grouptester.persistence.entity.impl.Test;
+import com.tritonkor.grouptester.persistence.entity.impl.Test.TestBuilder;
 import com.tritonkor.grouptester.persistence.util.LocalDateSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +24,9 @@ public class Main {
         for (User user : generatedUsers) {
             System.out.println(user);
         }
+
+        //Test test = Test.builder().id(UUID.randomUUID()).title("This name").countOfQuestionsle(12).questionsList(null).createdAt(LocalDate.now()).build();
+        //System.out.println(test.toString());
 
         writeUsersToJsonFile(generatedUsers, "users.json");
     }

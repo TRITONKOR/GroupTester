@@ -2,6 +2,7 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
 
+import com.tritonkor.grouptester.persistence.util.Validation;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -21,16 +22,41 @@ public class Test extends Entity {
 
     private final LocalDate createdAt;
 
-    private List<Tag> tagList;
-
-    public Test(UUID id, String title, int countOfQuestions, List<Question> questionsList,
-            LocalDate createdAt, List<Tag> tagList) {
+    private Test(UUID id, String title, int countOfQuestions, List<Question> questionsList,
+            LocalDate createdAt) {
         super(id);
-        this.title = title;
+        this.title = Validation.validateText(title, errors, 24);
         this.countOfQuestions = countOfQuestions;
         this.questionsList = questionsList;
         this.createdAt = createdAt;
-        this.tagList = tagList;
+    }
+
+    public static TestBuilderId builder() {
+        return id -> title -> countOfQuestions -> questionsList -> createdAt -> () -> new Test(id, title, countOfQuestions, questionsList, createdAt);
+    }
+
+    public interface TestBuilderId {
+        TestBuilderTitle id(UUID id);
+    }
+
+    public interface TestBuilderTitle {
+        TestBuilderCountOfQuestions title(String title);
+    }
+
+    public interface TestBuilderCountOfQuestions {
+        TestBuilderQuestionsList countOfQuestionsle(int countOfQuestions);
+    }
+
+    public interface TestBuilderQuestionsList {
+        TestBuilderCreatedAt questionsList(List<Question> questionList);
+    }
+
+    public interface TestBuilderCreatedAt {
+        TestBuilder createdAt(LocalDate createdAt);
+    }
+
+    public interface TestBuilder {
+        Test build();
     }
 
     public String getTitle() {
@@ -61,15 +87,6 @@ public class Test extends Entity {
         return createdAt;
     }
 
-    public List<Tag> getTagList() {
-        return tagList;
-    }
-
-    public void setTagList(List<Tag> tagList) {
-        this.tagList = tagList;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,5 +102,15 @@ public class Test extends Entity {
     @Override
     public int hashCode() {
         return Objects.hash(title);
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "title='" + title + '\'' +
+                ", countOfQuestions=" + countOfQuestions +
+                ", questionsList=" + questionsList +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
