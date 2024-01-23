@@ -1,2 +1,2 @@
 # GroupTester
-Group tester for testing construction personnel
+Group tester for testing builders
