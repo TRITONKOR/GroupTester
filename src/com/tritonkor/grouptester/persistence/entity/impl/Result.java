@@ -11,12 +11,40 @@ public class Result extends Entity {
     private final Test test;
     private final LocalDate createdAt;
 
-    public Result(UUID id, User owner, int mark, Test test, LocalDate createdAt) {
+    private Result(UUID id, User owner, int mark, Test test, LocalDate createdAt) {
         super(id);
         this.owner = owner;
         this.mark = mark;
         this.test = test;
         this.createdAt = createdAt;
+    }
+
+    public static ResultBuilderId builder() {
+        return id -> owner -> mark -> test -> createdAt -> () -> new Result(id, owner, mark, test, createdAt);
+    }
+
+    public interface ResultBuilderId {
+        ResultBuilderOwner id(UUID id);
+    }
+
+    public interface ResultBuilderOwner{
+        ResultBuilderMark owner(User owner);
+    }
+
+    public interface ResultBuilderMark {
+        ResultBuilderTest mark(int mark);
+    }
+
+    public interface ResultBuilderTest {
+        ResultBuilderCreatedAt test(Test test);
+    }
+
+    public interface ResultBuilderCreatedAt {
+        ResultBuilder createdAt(LocalDate createdAt);
+    }
+
+    public interface ResultBuilder {
+        Result build();
     }
 
     public User getOwner() {

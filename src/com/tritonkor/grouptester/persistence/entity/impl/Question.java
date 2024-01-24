@@ -16,16 +16,16 @@ public class Question extends Entity {
 
     private final Answer correctAnswer;
 
-    private Question(UUID id, String text, LocalDate createdAt, List<Answer> answerList, Answer correctAnswer) {
+    private Question(UUID id, String text, List<Answer> answerList, Answer correctAnswer, LocalDate createdAt) {
         super(id);
         this.text = Validation.validateText(text, errors, 200);
-        this.createdAt = Validation.validateDate(createdAt, errors);
-        this.answerList = new ArrayList<>();
+        this.answerList = answerList;
         this.correctAnswer = correctAnswer;
+        this.createdAt = Validation.validateDate(createdAt, errors);
     }
 
     public static QuestionBuilderId builder() {
-        return id -> content -> createdAt -> answerList -> correctAnswer -> () -> new Question(id, content, createdAt, answerList, correctAnswer);
+        return id -> content -> answerList -> correctAnswer -> createdAt -> () -> new Question(id, content, answerList, correctAnswer, createdAt);
     }
 
     public interface QuestionBuilderId {
@@ -33,11 +33,7 @@ public class Question extends Entity {
     }
 
     public interface QuestionBuilderText {
-        QuestionBuilderCreatedAt text(String text);
-    }
-
-    public interface QuestionBuilderCreatedAt {
-        QuestionBuilderAnswerList createdAt(LocalDate createdAt);
+        QuestionBuilderAnswerList text(String text);
     }
 
     public interface QuestionBuilderAnswerList {
@@ -45,8 +41,13 @@ public class Question extends Entity {
     }
 
     public interface QuestionBuilderCorrectAnswer {
-        QuestionBuilder correctAnswer(Answer correctAnswer);
+        QuestionBuilderCreatedAt correctAnswer(Answer correctAnswer);
     }
+
+    public interface QuestionBuilderCreatedAt {
+        QuestionBuilder createdAt(LocalDate createdAt);
+    }
+
 
     public interface QuestionBuilder {
         Question build();

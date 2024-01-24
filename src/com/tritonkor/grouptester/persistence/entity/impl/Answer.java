@@ -51,4 +51,12 @@ public class Answer extends Entity {
     public LocalDate getCreatedAt() {
         return createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

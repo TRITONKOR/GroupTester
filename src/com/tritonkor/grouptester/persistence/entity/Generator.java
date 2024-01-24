@@ -2,6 +2,7 @@ package com.tritonkor.grouptester.persistence.entity;
 
 import com.github.javafaker.Faker;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
+import com.tritonkor.grouptester.persistence.entity.impl.Group;
 import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
@@ -28,11 +29,30 @@ public class Generator {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            User user = new User(id, username, email, password, birthday);
+            User user = User.builder().id(id).username(username).email(email).password(password)
+                    .birthday(birthday).build();
             users.add(user);
         }
 
         return users;
+    }
+
+    public static List<Group> generateGroups(int count) {
+        List<Group> groups = new ArrayList<>();
+        Faker faker = new Faker();
+
+        for (int i = 0; i < count; i++) {
+            UUID id = UUID.randomUUID();
+            String name = faker.lorem().characters(5);
+            List<User> users = generateUsers(4);
+            LocalDate createdAt = LocalDate.now();
+
+            Group group = Group.builder().id(id).name(name).users(users).createdAt(createdAt)
+                    .build();
+            groups.add(group);
+        }
+
+        return groups;
     }
 
     public static List<Test> generateTests(int count) {
@@ -42,11 +62,11 @@ public class Generator {
         for (int i = 0; i < count; i++) {
             UUID id = UUID.randomUUID();
             String title = faker.lorem().sentence(2);
-            String password = faker.internet().password();
-            List<Question> questionList = generateQuestions(10);
+            List<Question> questionList = generateQuestions(3);
             LocalDate createdAt = LocalDate.now();
 
-            Test test = Test.builder().id(id).title(title).countOfQuestionsle(questionList.size()).questionsList(questionList).createdAt(createdAt).build();
+            Test test = Test.builder().id(id).title(title).countOfQuestionsle(questionList.size())
+                    .questionsList(questionList).createdAt(createdAt).build();
             tests.add(test);
         }
 
@@ -64,7 +84,9 @@ public class Generator {
             Answer correctAnswer = answerList.get(0);
             LocalDate createdAt = LocalDate.now();
 
-            Question question = Question.builder().id(id).text(text).createdAt(createdAt).answerList(answerList).correctAnswer(correctAnswer).build();
+            Question question = Question.builder().id(id).text(text)
+                    .answerList(answerList).correctAnswer(correctAnswer).createdAt(createdAt)
+                    .build();
             questionList.add(question);
         }
 

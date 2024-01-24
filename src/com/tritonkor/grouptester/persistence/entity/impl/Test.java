@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Test extends Entity {
+public class Test extends Entity implements Comparable<Test> {
 
     private String title;
 
@@ -88,6 +88,11 @@ public class Test extends Entity {
 
     public LocalDate getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public int compareTo(Test o) {
+        return this.createdAt.compareTo(o.createdAt);
     }
 
     @Override

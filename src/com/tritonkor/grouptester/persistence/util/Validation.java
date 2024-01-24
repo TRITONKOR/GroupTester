@@ -27,8 +27,8 @@ public class Validation {
         if (text.length() > maxSynbols) {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, maxSynbols));
         }
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]+$");
-        if (pattern.matcher(text).matches()) {
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
+        if (!pattern.matcher(text).matches()) {
             errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
         }
 
