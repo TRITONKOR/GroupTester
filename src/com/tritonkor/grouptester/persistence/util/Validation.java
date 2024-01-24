@@ -24,7 +24,7 @@ public class Validation {
         if (text.length() < 4) {
             errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
         }
-        if (text.length() > 24) {
+        if (text.length() > maxSynbols) {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, maxSynbols));
         }
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]+$");
@@ -33,6 +33,7 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
+            System.out.println(errors.toString());
             throw new EntityArgumentException(errors);
         }
 

@@ -10,26 +10,54 @@ import java.util.List;
 public class Question extends Entity {
 
 
-    private String content;
+    private String text;
     private final LocalDate createdAt;
     private List<Answer> answerList;
 
     private final Answer correctAnswer;
 
-    public Question(UUID id, String content, LocalDate createdAt, List<Answer> answerList, Answer correctAnswer) {
+    private Question(UUID id, String text, LocalDate createdAt, List<Answer> answerList, Answer correctAnswer) {
         super(id);
-        this.content = Validation.validateText(content, errors, 120);
+        this.text = Validation.validateText(text, errors, 200);
         this.createdAt = Validation.validateDate(createdAt, errors);
         this.answerList = new ArrayList<>();
         this.correctAnswer = correctAnswer;
     }
 
-    public String getContent() {
-        return content;
+    public static QuestionBuilderId builder() {
+        return id -> content -> createdAt -> answerList -> correctAnswer -> () -> new Question(id, content, createdAt, answerList, correctAnswer);
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public interface QuestionBuilderId {
+        QuestionBuilderText id(UUID id);
+    }
+
+    public interface QuestionBuilderText {
+        QuestionBuilderCreatedAt text(String text);
+    }
+
+    public interface QuestionBuilderCreatedAt {
+        QuestionBuilderAnswerList createdAt(LocalDate createdAt);
+    }
+
+    public interface QuestionBuilderAnswerList {
+        QuestionBuilderCorrectAnswer answerList(List<Answer> answerList);
+    }
+
+    public interface QuestionBuilderCorrectAnswer {
+        QuestionBuilder correctAnswer(Answer correctAnswer);
+    }
+
+    public interface QuestionBuilder {
+        Question build();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public LocalDate getCreatedAt() {
@@ -48,8 +76,10 @@ public class Question extends Entity {
     @Override
     public String toString() {
         return "Question{" +
-                "content='" + content + '\'' +
+                "text='" + text + '\'' +
                 ", createdAt=" + createdAt +
+                ", answerList=" + answerList +
+                ", correctAnswer=" + correctAnswer +
                 '}';
     }
 }

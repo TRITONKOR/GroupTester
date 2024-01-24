@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * TODO: зробити валідацію по аналогії з User
- */
-
 public class Test extends Entity {
 
     private String title;
@@ -25,37 +21,44 @@ public class Test extends Entity {
     private Test(UUID id, String title, int countOfQuestions, List<Question> questionsList,
             LocalDate createdAt) {
         super(id);
-        this.title = Validation.validateText(title, errors, 24);
+        this.title = Validation.validateText(title, errors, 100);
         this.countOfQuestions = countOfQuestions;
         this.questionsList = questionsList;
-        this.createdAt = createdAt;
+        this.createdAt = Validation.validateDate(createdAt, errors);
     }
 
     public static TestBuilderId builder() {
-        return id -> title -> countOfQuestions -> questionsList -> createdAt -> () -> new Test(id, title, countOfQuestions, questionsList, createdAt);
+        return id -> title -> countOfQuestions -> questionsList -> createdAt -> () -> new Test(id,
+                title, countOfQuestions, questionsList, createdAt);
     }
 
     public interface TestBuilderId {
+
         TestBuilderTitle id(UUID id);
     }
 
     public interface TestBuilderTitle {
+
         TestBuilderCountOfQuestions title(String title);
     }
 
     public interface TestBuilderCountOfQuestions {
+
         TestBuilderQuestionsList countOfQuestionsle(int countOfQuestions);
     }
 
     public interface TestBuilderQuestionsList {
+
         TestBuilderCreatedAt questionsList(List<Question> questionList);
     }
 
     public interface TestBuilderCreatedAt {
+
         TestBuilder createdAt(LocalDate createdAt);
     }
 
     public interface TestBuilder {
+
         Test build();
     }
 
