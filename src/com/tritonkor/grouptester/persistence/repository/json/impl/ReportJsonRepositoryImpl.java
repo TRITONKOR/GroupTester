@@ -19,13 +19,13 @@ public class ReportJsonRepositoryImpl
     }
 
     @Override
-    public Set<Report> findAllByGroup(Group group) {
-        return entities.stream().filter(r -> r.getGroup().equals(group))
+    public Set<Report> findAllByGroupName(String groupName) {
+        return entities.stream().filter(r -> r.getGroupName().equals(groupName))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Report> findAllByTest(Test test) {
-        return entities.stream().filter(r -> r.getTest().equals(test)).collect(Collectors.toSet());
+    public Set<Report> findAllByTestTitle(String testTitle) {
+        return entities.stream().filter(r -> r.getTestTitle().equals(testTitle)).collect(Collectors.toSet());
     }
 }

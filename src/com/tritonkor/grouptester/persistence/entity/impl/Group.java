@@ -1,18 +1,23 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
-import com.tritonkor.grouptester.persistence.util.Validation;
+import com.tritonkor.grouptester.domain.observer.Observer;
+import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 public class Group extends Entity {
 
-    private String name;
     private final LocalDateTime createdAt;
+
+    private Test testToPerform = null;
+
+    private String name;
     private Set<User> users;
+    private Set<Observer> observers = new HashSet<>();
 
     private Group(UUID id, String name, Set<User> users, LocalDateTime createdAt) {
         super(id);
@@ -50,6 +55,36 @@ public class Group extends Entity {
         Group build();
     }
 
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(User user) {
+        for (Observer observer : observers) {
+            observer.update(user, testToPerform);
+        }
+    }
+
+    public Test getTestToPerform() {
+        return testToPerform;
+    }
+
+    public void setTestToPerform(Test testToPerform) {
+        this.testToPerform = testToPerform;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
     public String getName() {
         return name;
     }
@@ -60,14 +95,6 @@ public class Group extends Entity {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
     @Override

@@ -1,21 +1,19 @@
-package com.tritonkor.grouptester.persistence.entity;
+package com.tritonkor.grouptester.domain;
 
 import com.github.javafaker.Faker;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
 import com.tritonkor.grouptester.persistence.entity.impl.Group;
 import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
+import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
+import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Formatter;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,7 +35,7 @@ public class Generator {
                     .toLocalDate();
 
             User user = User.builder().id(id).username(username).email(email).password(password)
-                    .birthday(birthday).build();
+                    .birthday(birthday).role(Role.valueOf("ADMIN")).build();
             users.add(user);
         }
 
@@ -51,7 +49,7 @@ public class Generator {
         for (int i = 0; i < count; i++) {
             UUID id = UUID.randomUUID();
             String name = faker.lorem().characters(5);
-            Set<User> users = generateUsers(4);
+            Set<User> users = generateUsers(3);
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
             Group group = Group.builder().id(id).name(name).users(users).createdAt(createdAt)
@@ -126,8 +124,7 @@ public class Generator {
 
         for (int i = 0; i < resultCount; i++) {
             UUID id = UUID.randomUUID();
-            User[] userset = generateUsers(1).toArray(new User[0]);
-            User owner = userset[0];
+            String ownerUsername = faker.name().username();
 
             String testTitle = faker.lorem().sentence(2);
 
@@ -135,7 +132,7 @@ public class Generator {
 
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
-            Result result = Result.builder().id(id).owner(owner).mark(mark).testTitle(testTitle)
+            Result result = Result.builder().id(id).ownerUsername(ownerUsername).mark(mark).testTitle(testTitle)
                     .createdAt(createdAt).build();
             results.add(result);
         }

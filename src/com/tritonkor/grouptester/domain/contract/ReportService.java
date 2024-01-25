@@ -1,14 +1,14 @@
-package com.tritonkor.grouptester.persistence.repository.contracts;
+package com.tritonkor.grouptester.domain.contract;
 
+import com.tritonkor.grouptester.domain.Service;
 import com.tritonkor.grouptester.persistence.entity.impl.Group;
 import com.tritonkor.grouptester.persistence.entity.impl.Report;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
-import com.tritonkor.grouptester.persistence.repository.Repository;
 import java.util.Set;
 
-public interface ReportRepository extends Repository<Report> {
+public interface ReportService extends Service<Report> {
 
-    Set<Report> findAllByGroupName(String groupName);
+    Set<Report> findAllByGroupName(String  groupName);
 
     Set<Report> findAllByTestTitle(String testTitle);
 }

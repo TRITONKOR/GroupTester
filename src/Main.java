@@ -1,6 +1,6 @@
 import static java.lang.System.out;
 
-import com.tritonkor.grouptester.persistence.entity.Generator;
+import com.tritonkor.grouptester.domain.Generator;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.repository.RepositoryFactory;

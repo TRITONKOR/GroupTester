@@ -1,16 +1,16 @@
 package com.tritonkor.grouptester.persistence.exception;
 
-import java.util.List;
+import java.util.Set;
 
 public class EntityArgumentException extends IllegalArgumentException {
 
-    private List<String> errors;
+    private Set<String> errors;
 
-    public EntityArgumentException(List<String> errors) {
+    public EntityArgumentException(Set<String> errors) {
         this.errors = errors;
     }
 
-    public List<String> getErrors() {
+    public Set<String> getErrors() {
         return errors;
     }
 }

@@ -1,4 +1,4 @@
-package com.tritonkor.grouptester.persistence.util;
+package com.tritonkor.grouptester.domain;
 
 import com.tritonkor.grouptester.persistence.entity.ErrorTemplates;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Validation {
@@ -17,7 +17,7 @@ public class Validation {
      * @param text
      * @throws EntityArgumentException в разі, якщо є помилка в text
      */
-    public static String validateText(String text, List<String> errors, int maxSynbols) {
+    public static String validateText(String text, Set<String> errors, int maxSynbols) {
 
         final String templateName = "тексту";
 
@@ -30,6 +30,7 @@ public class Validation {
         if (text.length() > maxSynbols) {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, maxSynbols));
         }
+
         Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
         if (!pattern.matcher(text).matches()) {
             errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
@@ -42,7 +43,7 @@ public class Validation {
         return text;
     }
 
-    public static String validatePassword(String password, List<String> errors) {
+    public static String validatePassword(String password, Set<String> errors) {
         final String templateName = "паролю";
 
         if (password.isBlank()) {
@@ -67,7 +68,7 @@ public class Validation {
         return password;
     }
 
-    public static String validateEmail(String email, List<String> errors) {
+    public static String validateEmail(String email, Set<String> errors) {
         final String templateName = "електронної пошти";
 
         if (email.isBlank()) {
@@ -87,7 +88,7 @@ public class Validation {
         return email;
     }
 
-    public static LocalDate validateDate(LocalDate date, List<String> errors) {
+    public static LocalDate validateDate(LocalDate date, Set<String> errors) {
         final String templateName = "дати";
 
         if (date.toString().isBlank()) {
@@ -109,7 +110,7 @@ public class Validation {
         return date;
     }
 
-    public static LocalDateTime validateDateTime(LocalDateTime date, List<String> errors) {
+    public static LocalDateTime validateDateTime(LocalDateTime date, Set<String> errors) {
         final String templateName = "дати і часу";
 
         if (date.toString().isBlank()) {

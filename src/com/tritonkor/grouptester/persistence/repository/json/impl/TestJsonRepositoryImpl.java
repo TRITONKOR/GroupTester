@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.repository.contracts.TestRepository;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,8 +19,7 @@ public class TestJsonRepositoryImpl
     }
 
     @Override
-    public Set<Test> findAllByTitle(String title) {
-        return entities.stream().filter(t -> t.getTitle().equals(title))
-                .collect(Collectors.toSet());
+    public Optional<Test> findByTitle(String title) {
+        return entities.stream().filter(t -> t.getTitle().equals(title)).findFirst();
     }
 }

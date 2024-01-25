@@ -19,12 +19,12 @@ public class ResultJsonRepositoryImpl
     }
 
     @Override
-    public Set<Result> findAllByUser(User user) {
-        return entities.stream().filter(r -> r.getOwner().equals(user)).collect(Collectors.toSet());
+    public Set<Result> findAllByUsername(String username) {
+        return entities.stream().filter(r -> r.getOwnerUsername().equals(username)).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Result> findAllByTest(String testTitle) {
+    public Set<Result> findAllByTestTitle(String testTitle) {
         return entities.stream().filter(r -> r.getTestTitle().equals(testTitle)).collect(Collectors.toSet());
     }
 }

@@ -1,25 +1,24 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
-import com.tritonkor.grouptester.persistence.util.Validation;
-import java.time.LocalDate;
+import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Report extends Entity implements Comparable<Report> {
 
-    private final Test test;
-    private final Group group;
+    private final String testTitle;
+    private final String groupName;
     private final LocalDateTime createdAt;
     private int minResult;
     private int maxResult;
     private int averageResult;
 
-    private Report(UUID id, Test test, Group group, int minResult,
+    private Report(UUID id, String testTitle, String groupName, int minResult,
             int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
-        this.test = test;
-        this.group = group;
+        this.testTitle = Validation.validateText(testTitle, errors, 24);
+        this.groupName = Validation.validateText(groupName, errors, 10);
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
@@ -27,23 +26,23 @@ public class Report extends Entity implements Comparable<Report> {
     }
 
     public static ReportBuilderId builder() {
-        return id -> test -> group -> minResult -> maxResult -> averageResult -> createdAt -> () -> new Report(
-                id, test, group, minResult, maxResult, averageResult, createdAt);
+        return id -> testTitle -> groupName -> minResult -> maxResult -> averageResult -> createdAt -> () -> new Report(
+                id, testTitle, groupName, minResult, maxResult, averageResult, createdAt);
     }
 
     public interface ReportBuilderId {
 
-        ReportBuilderTest id(UUID id);
+        ReportBuilderTestTitle id(UUID id);
     }
 
-    public interface ReportBuilderTest {
+    public interface ReportBuilderTestTitle {
 
-        ReportBuilderGroup test(Test test);
+        ReportBuilderGroupName testTitle(String testTitle);
     }
 
-    public interface ReportBuilderGroup {
+    public interface ReportBuilderGroupName {
 
-        ReportBuilderMinResult group(Group group);
+        ReportBuilderMinResult groupName(String groupName);
     }
 
     public interface ReportBuilderMinResult {
@@ -77,12 +76,12 @@ public class Report extends Entity implements Comparable<Report> {
         Group build();
     }
 
-    public Test getTest() {
-        return test;
+    public String getTestTitle() {
+        return testTitle;
     }
 
-    public Group getGroup() {
-        return group;
+    public String getGroupName() {
+        return groupName;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -121,8 +120,8 @@ public class Report extends Entity implements Comparable<Report> {
     @Override
     public String toString() {
         return "Report{" +
-                "test=" + test +
-                ", group=" + group +
+                "testTitle=" + testTitle +
+                ", groupName=" + groupName +
                 ", createdAt=" + createdAt +
                 ", minResult=" + minResult +
                 ", maxResult=" + maxResult +

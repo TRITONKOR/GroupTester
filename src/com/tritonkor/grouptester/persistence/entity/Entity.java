@@ -1,19 +1,20 @@
 package com.tritonkor.grouptester.persistence.entity;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-import java.util.List;
 
 public abstract class Entity {
 
     protected final UUID id;
-    protected List<String> errors;
 
-    protected boolean isValid;
+    protected transient Set<String> errors;
+
+    protected transient boolean isValid;
 
     public Entity(UUID id) {
-        errors = new ArrayList<>();
+        errors = new HashSet<>();
         this.id = id;
     }
 

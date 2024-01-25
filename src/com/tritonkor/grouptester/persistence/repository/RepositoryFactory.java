@@ -11,12 +11,10 @@ import org.apache.commons.lang3.NotImplementedException;
 public abstract class RepositoryFactory {
 
     public static final int JSON = 1;
-    public static final int XML = 2;
 
     public static RepositoryFactory getRepositoryFactory(int whichFactory) {
         return switch (whichFactory) {
             case JSON -> JsonRepositoryFactory.getInstance();
-            case XML -> throw new NotImplementedException("Робота з XML файлами не реалізована.");
             default -> throw new IllegalArgumentException(
                     "Помилка при виборі фабрики репозиторіїв.");
         };

@@ -2,7 +2,7 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
 
-import com.tritonkor.grouptester.persistence.util.Validation;
+import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
