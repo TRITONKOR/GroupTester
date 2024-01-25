@@ -3,11 +3,14 @@ package com.tritonkor.grouptester.persistence.util;
 import com.tritonkor.grouptester.persistence.entity.ErrorTemplates;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Validation {
+
     /**
      * Валідація тексту
      *
@@ -33,7 +36,6 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            System.out.println(errors.toString());
             throw new EntityArgumentException(errors);
         }
 
@@ -53,7 +55,8 @@ public class Validation {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 32));
         }
         Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$");
-        if (pattern.matcher(password).matches()) {
+
+        if (!pattern.matcher(password).matches()) {
             errors.add(ErrorTemplates.PASSWORD.getTemplate().formatted(templateName));
         }
 
@@ -72,8 +75,8 @@ public class Validation {
         }
 
         Pattern pattern = Pattern.compile(
-                "^[a-zA-Z0-9_%+-]+(?:[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+[a-zA-Z]{2,}$");
-        if (pattern.matcher(email).matches()) {
+                "^[a-zA-Z0-9._%+-]+(?:\\.[a-zA-Z0-9._%+-]+)*@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+        if (!pattern.matcher(email).matches()) {
             errors.add(ErrorTemplates.EMAIL.getTemplate().formatted(templateName));
         }
 
@@ -84,25 +87,48 @@ public class Validation {
         return email;
     }
 
-    public static LocalDate validateDate(LocalDate birthday, List<String> errors) {
+    public static LocalDate validateDate(LocalDate date, List<String> errors) {
         final String templateName = "дати";
 
-        if (birthday.toString().isBlank()) {
+        if (date.toString().isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate parsedDate = LocalDate.parse(birthday.toString(), formatter);
+        LocalDate parsedDate = LocalDate.parse(date.toString(), formatter);
 
         LocalDate currentDate = LocalDate.now();
         if (parsedDate.isAfter(currentDate)) {
-            errors.add(ErrorTemplates.BIRTHDAY.getTemplate().formatted(templateName));
+            errors.add(ErrorTemplates.DATE.getTemplate().formatted(templateName));
         }
 
         if (!errors.isEmpty()) {
             throw new EntityArgumentException(errors);
         }
 
-        return birthday;
+        return date;
+    }
+
+    public static LocalDateTime validateDateTime(LocalDateTime date, List<String> errors) {
+        final String templateName = "дати і часу";
+
+        if (date.toString().isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime parsedDate = LocalDateTime.parse(date.format(formatter), formatter);
+
+        LocalDateTime currentDate = LocalDateTime.parse(
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).format(formatter), formatter);
+        if (parsedDate.isAfter(currentDate)) {
+            errors.add(ErrorTemplates.DATE.getTemplate().formatted(templateName));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new EntityArgumentException(errors);
+        }
+
+        return date;
     }
 }

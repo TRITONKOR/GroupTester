@@ -1,27 +1,29 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
+import com.tritonkor.grouptester.persistence.util.Validation;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Report extends Entity implements Comparable<Report> {
 
     private final Test test;
     private final Group group;
-    private final LocalDate createdAt;
+    private final LocalDateTime createdAt;
     private int minResult;
     private int maxResult;
     private int averageResult;
 
     private Report(UUID id, Test test, Group group, int minResult,
-            int maxResult, int averageResult, LocalDate createdAt) {
+            int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
         this.test = test;
         this.group = group;
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
-        this.createdAt = createdAt;
+        this.createdAt = Validation.validateDateTime(createdAt, errors);
     }
 
     public static ReportBuilderId builder() {
@@ -61,7 +63,7 @@ public class Report extends Entity implements Comparable<Report> {
 
     public interface ReportBuilderCreatedAt {
 
-        ReportBuilder createdAt(LocalDate createdAt);
+        ReportBuilder createdAt(LocalDateTime createdAt);
     }
 
     public interface ReportBuilder {
@@ -83,7 +85,7 @@ public class Report extends Entity implements Comparable<Report> {
         return group;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 

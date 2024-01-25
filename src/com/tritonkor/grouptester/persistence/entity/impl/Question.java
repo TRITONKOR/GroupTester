@@ -2,30 +2,29 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.util.Validation;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
-import java.util.List;
 
 public class Question extends Entity {
 
 
     private String text;
-    private final LocalDate createdAt;
-    private List<Answer> answerList;
+    private final LocalDateTime createdAt;
+    private Set<Answer> answers;
 
     private final Answer correctAnswer;
 
-    private Question(UUID id, String text, List<Answer> answerList, Answer correctAnswer, LocalDate createdAt) {
+    private Question(UUID id, String text, Set<Answer> answers, Answer correctAnswer, LocalDateTime createdAt) {
         super(id);
         this.text = Validation.validateText(text, errors, 200);
-        this.answerList = answerList;
+        this.answers = answers;
         this.correctAnswer = correctAnswer;
-        this.createdAt = Validation.validateDate(createdAt, errors);
+        this.createdAt = Validation.validateDateTime(createdAt, errors);
     }
 
     public static QuestionBuilderId builder() {
-        return id -> content -> answerList -> correctAnswer -> createdAt -> () -> new Question(id, content, answerList, correctAnswer, createdAt);
+        return id -> content -> answers -> correctAnswer -> createdAt -> () -> new Question(id, content, answers, correctAnswer, createdAt);
     }
 
     public interface QuestionBuilderId {
@@ -33,11 +32,11 @@ public class Question extends Entity {
     }
 
     public interface QuestionBuilderText {
-        QuestionBuilderAnswerList text(String text);
+        QuestionBuilderAnswers text(String text);
     }
 
-    public interface QuestionBuilderAnswerList {
-        QuestionBuilderCorrectAnswer answerList(List<Answer> answerList);
+    public interface QuestionBuilderAnswers {
+        QuestionBuilderCorrectAnswer answers(Set<Answer> answers);
     }
 
     public interface QuestionBuilderCorrectAnswer {
@@ -45,7 +44,7 @@ public class Question extends Entity {
     }
 
     public interface QuestionBuilderCreatedAt {
-        QuestionBuilder createdAt(LocalDate createdAt);
+        QuestionBuilder createdAt(LocalDateTime createdAt);
     }
 
 
@@ -61,17 +60,17 @@ public class Question extends Entity {
         this.text = text;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public List<Answer> getAnswerList() {
-        return answerList;
+    public Set<Answer> getAnswerList() {
+        return answers;
     }
 
-    public void setAnswerList(
-            List<Answer> answerList) {
-        this.answerList = answerList;
+    public void setAnswers(
+            Set<Answer> answers) {
+        this.answers = answers;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class Question extends Entity {
         return "Question{" +
                 "text='" + text + '\'' +
                 ", createdAt=" + createdAt +
-                ", answerList=" + answerList +
+                ", answers=" + answers +
                 ", correctAnswer=" + correctAnswer +
                 '}';
     }

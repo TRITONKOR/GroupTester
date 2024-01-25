@@ -2,18 +2,18 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.util.Validation;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Answer extends Entity {
 
     private String text;
-    private final LocalDate createdAt;
+    private final LocalDateTime createdAt;
 
-    private Answer(UUID id, String text, LocalDate createdAt) {
+    private Answer(UUID id, String text, LocalDateTime createdAt) {
         super(id);
         this.text = Validation.validateText(text, errors, 100);
-        this.createdAt = Validation.validateDate(createdAt, errors);
+        this.createdAt = Validation.validateDateTime(createdAt, errors);
     }
 
     public static AnswerBuilderId builder() {
@@ -32,7 +32,7 @@ public class Answer extends Entity {
 
     public interface AnswerBuilderCreatedAt {
 
-        AnswerBuilder createdAt(LocalDate createdAt);
+        AnswerBuilder createdAt(LocalDateTime createdAt);
     }
 
     public interface AnswerBuilder {
@@ -48,7 +48,7 @@ public class Answer extends Entity {
         this.text = text;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 

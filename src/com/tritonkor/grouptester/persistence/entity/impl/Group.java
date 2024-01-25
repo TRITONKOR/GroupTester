@@ -1,30 +1,24 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilder;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilderBirthday;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilderEmail;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilderId;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilderPassword;
-import com.tritonkor.grouptester.persistence.entity.impl.User.UserBuilderUsername;
 import com.tritonkor.grouptester.persistence.util.Validation;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class Group extends Entity {
 
     private String name;
-    private final LocalDate createdAt;
-    private List<User> users;
+    private final LocalDateTime createdAt;
+    private Set<User> users;
 
-    private Group(UUID id, String name, List<User> users, LocalDate createdAt) {
+    private Group(UUID id, String name, Set<User> users, LocalDateTime createdAt) {
         super(id);
         this.name = Validation.validateText(name, errors, 10);
         this.users = users;
-        this.createdAt = createdAt;
+        this.createdAt = Validation.validateDateTime(createdAt, errors);
     }
 
     public static GroupBuilderId builder() {
@@ -43,12 +37,12 @@ public class Group extends Entity {
 
     public interface GroupBuilderUsers {
 
-        GroupBuilderCreatedAt users(List<User> users);
+        GroupBuilderCreatedAt users(Set<User> users);
     }
 
     public interface GroupBuilderCreatedAt {
 
-        GroupBuilder createdAt(LocalDate createdAt);
+        GroupBuilder createdAt(LocalDateTime createdAt);
     }
 
     public interface GroupBuilder {
@@ -64,15 +58,15 @@ public class Group extends Entity {
         this.name = name;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

@@ -1,47 +1,39 @@
+import static java.lang.System.out;
+
 import com.tritonkor.grouptester.persistence.entity.Generator;
-import com.tritonkor.grouptester.persistence.entity.impl.Group;
+import com.tritonkor.grouptester.persistence.entity.impl.Result;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
-import com.tritonkor.grouptester.persistence.util.LocalDateSerializer;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
+import com.tritonkor.grouptester.persistence.repository.RepositoryFactory;
+import com.tritonkor.grouptester.persistence.repository.contracts.ResultRepository;
+import com.tritonkor.grouptester.persistence.repository.contracts.TestRepository;
+import java.util.Set;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        List<Test> generatedTests = Generator.generateTests(5);
+        Set<Test> tests = Generator.generateTests(5);
+        Set<Result> results = Generator.generateResults(5);
 
-        for (Test test : generatedTests) {
-            System.out.println(test);
+
+        RepositoryFactory jsonRepositoryFactory = RepositoryFactory.getRepositoryFactory(RepositoryFactory.JSON);
+
+        TestRepository testRepository = jsonRepositoryFactory.getTestRepository();
+        ResultRepository resultRepository = jsonRepositoryFactory.getResultRepository();
+
+        for(Test test : tests) {
+            testRepository.add(test);
         }
 
-        List<Group> generatedGroups = Generator.generateGroups(3);
-
-        for (Group group : generatedGroups) {
-            System.out.println(group);
+        for(Result result : results) {
+            resultRepository.add(result);
         }
 
-        writeUsersToJsonFile(generatedTests, "tests.json");
-        writeUsersToJsonFile(generatedGroups, "groups.json");
-    }
+        testRepository.findAll().forEach(out::println);
+        out.println("----------------");
+        resultRepository.findAll().forEach(out::println);
 
-    public static <T> void writeUsersToJsonFile(List<T> list, String fileName) {
-        try (FileWriter writer = new FileWriter(fileName)) {
-            // Створюємо Gson з красивим виведенням
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
-                    .setPrettyPrinting().create();
+        jsonRepositoryFactory.commit();
 
-            // Перетворюємо колекцію користувачів в JSON та записуємо у файл
-            gson.toJson(list, writer);
-
-            System.out.println("Колекцію користувачів збережено в файл " + fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

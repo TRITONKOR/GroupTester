@@ -3,9 +3,9 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 
 import com.tritonkor.grouptester.persistence.util.Validation;
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class Test extends Entity implements Comparable<Test> {
@@ -14,22 +14,22 @@ public class Test extends Entity implements Comparable<Test> {
 
     private int countOfQuestions;
 
-    private List<Question> questionsList;
+    private Set<Question> questions;
 
-    private final LocalDate createdAt;
+    private final LocalDateTime createdAt;
 
-    private Test(UUID id, String title, int countOfQuestions, List<Question> questionsList,
-            LocalDate createdAt) {
+    private Test(UUID id, String title, int countOfQuestions, Set<Question> questions,
+            LocalDateTime createdAt) {
         super(id);
         this.title = Validation.validateText(title, errors, 100);
         this.countOfQuestions = countOfQuestions;
-        this.questionsList = questionsList;
-        this.createdAt = Validation.validateDate(createdAt, errors);
+        this.questions = questions;
+        this.createdAt = Validation.validateDateTime(createdAt, errors);
     }
 
     public static TestBuilderId builder() {
-        return id -> title -> countOfQuestions -> questionsList -> createdAt -> () -> new Test(id,
-                title, countOfQuestions, questionsList, createdAt);
+        return id -> title -> countOfQuestions -> questions -> createdAt -> () -> new Test(id,
+                title, countOfQuestions, questions, createdAt);
     }
 
     public interface TestBuilderId {
@@ -44,17 +44,17 @@ public class Test extends Entity implements Comparable<Test> {
 
     public interface TestBuilderCountOfQuestions {
 
-        TestBuilderQuestionsList countOfQuestionsle(int countOfQuestions);
+        TestBuilderQuestions countOfQuestionsle(int countOfQuestions);
     }
 
-    public interface TestBuilderQuestionsList {
+    public interface TestBuilderQuestions {
 
-        TestBuilderCreatedAt questionsList(List<Question> questionList);
+        TestBuilderCreatedAt questions(Set<Question> questions);
     }
 
     public interface TestBuilderCreatedAt {
 
-        TestBuilder createdAt(LocalDate createdAt);
+        TestBuilder createdAt(LocalDateTime createdAt);
     }
 
     public interface TestBuilder {
@@ -78,15 +78,15 @@ public class Test extends Entity implements Comparable<Test> {
         this.countOfQuestions = countOfQuestions;
     }
 
-    public List<Question> getQuestionsList() {
-        return questionsList;
+    public Set<Question> getQuestionsList() {
+        return questions;
     }
 
-    public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -117,7 +117,7 @@ public class Test extends Entity implements Comparable<Test> {
         return "Test{" +
                 "title='" + title + '\'' +
                 ", countOfQuestions=" + countOfQuestions +
-                ", questionsList=" + questionsList +
+                ", questions=" + questions +
                 ", createdAt=" + createdAt +
                 '}';
     }

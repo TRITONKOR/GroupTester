@@ -1,0 +1,167 @@
+[
+  {
+    "owner": {
+      "username": "isabel.larson",
+      "email": "jeffery.cummings@gmail.com",
+      "password": "i9\u0026g@M$J3",
+      "birthday": "15-11-1977",
+      "id": "7879b16f-9a72-429d-952c-e225fb75945f",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 76,
+    "createdAt": "25-01-2024 10:37",
+    "id": "52a9f6a2-82f4-481b-a80c-57093c9ee8f0",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "kia.ward",
+      "email": "jerrell.olson@hotmail.com",
+      "password": "T79yck8t\u0026PA!A^XtEyb@nvvtVT@6l",
+      "birthday": "13-07-1992",
+      "id": "586da9e8-48e8-4155-9865-1b785b8d8a73",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 10,
+    "testTitle": "Consequatur dolor sed voluptatem sit.",
+    "createdAt": "25-01-2024 10:43",
+    "id": "8f8bd562-10f1-4a98-921a-3978a75a714e",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "felisa.cole",
+      "email": "jc.nader@gmail.com",
+      "password": "lX4HVK23gA!",
+      "birthday": "28-07-1977",
+      "id": "d895dcf1-6b03-4fe8-918d-05dbfd2cc551",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 26,
+    "testTitle": "Doloribus reprehenderit sunt numquam non.",
+    "createdAt": "25-01-2024 10:43",
+    "id": "279088a2-4d66-4743-a66e-dd7a0ec84e4d",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "venus.kuhn",
+      "email": "asa.dare@gmail.com",
+      "password": "e60VXE8w#7\u0026qFDp\u00269z0",
+      "birthday": "18-12-2003",
+      "id": "d6640e95-753c-44fc-a98d-bc5bbd021b57",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 25,
+    "createdAt": "25-01-2024 10:37",
+    "id": "2865d328-aa37-42c3-bd4b-7c55a0ce5cbf",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "andria.pfeffer",
+      "email": "katherina.oconnell@yahoo.com",
+      "password": "d39NrsbWS32T0AvK$C04SX",
+      "birthday": "09-09-1969",
+      "id": "6342f096-bfe9-4090-8e2a-c27e7cae13d9",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 93,
+    "testTitle": "Aliquam aliquid.",
+    "createdAt": "25-01-2024 10:43",
+    "id": "b82d08ab-b966-4e46-892b-66a47edd4162",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "margarete.glover",
+      "email": "britney.gaylord@hotmail.com",
+      "password": "c#\u0026*6OP0$!Bt36N5F",
+      "birthday": "18-07-1999",
+      "id": "edf39f94-b775-4acc-a5c8-8d7fc8ebe4c5",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 41,
+    "createdAt": "25-01-2024 10:37",
+    "id": "7f012adb-7f6a-4063-b4f6-21306290154e",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "charleen.white",
+      "email": "clay.schiller@hotmail.com",
+      "password": "!73QK6AkL9fq6",
+      "birthday": "04-06-1990",
+      "id": "9ebc2163-8b84-41b1-9925-66ff4dc6554d",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 29,
+    "testTitle": "Repellat nihil.",
+    "createdAt": "25-01-2024 10:43",
+    "id": "ad3c75c4-4fbd-4f81-974a-d03a04e791a7",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "selma.ullrich",
+      "email": "delicia.baumbach@hotmail.com",
+      "password": "6kl9GD6r7nd7bZtjn1gT4@lSVm",
+      "birthday": "09-08-1976",
+      "id": "1a14eb40-61b7-4e47-abfc-6f545a5994be",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 48,
+    "createdAt": "25-01-2024 10:37",
+    "id": "0268898c-f3d6-4e5a-9107-bea034d51634",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "dalton.heller",
+      "email": "monte.crona@gmail.com",
+      "password": "Su3EK9Sr3z$c%6W1HP05!",
+      "birthday": "08-09-1973",
+      "id": "e4f6a557-b816-4cc1-84c8-16e2a3f4ee72",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 98,
+    "testTitle": "Aliquam ut ut porro commodi molestias delectus.",
+    "createdAt": "25-01-2024 10:43",
+    "id": "470ede66-f38a-4986-b70b-0d6f3d195cc3",
+    "errors": [],
+    "isValid": false
+  },
+  {
+    "owner": {
+      "username": "velva.leuschke",
+      "email": "malcolm.veum@gmail.com",
+      "password": "p5z1Nh58KsmgT9tEJ1t@^L3v$76",
+      "birthday": "14-11-1968",
+      "id": "915ff15d-e985-416a-9799-5ffafc84421a",
+      "errors": [],
+      "isValid": false
+    },
+    "mark": 57,
+    "createdAt": "25-01-2024 10:37",
+    "id": "bc743534-dfd2-4ae1-9bd9-4c7f93ba6686",
+    "errors": [],
+    "isValid": false
+  }
+]
