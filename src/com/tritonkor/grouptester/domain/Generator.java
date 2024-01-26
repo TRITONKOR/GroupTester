@@ -2,6 +2,7 @@ package com.tritonkor.grouptester.domain;
 
 import com.github.javafaker.Faker;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
+import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import com.tritonkor.grouptester.persistence.entity.impl.Group;
 import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
@@ -13,7 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +38,7 @@ public class Generator {
                     .toLocalDate();
 
             User user = User.builder().id(id).username(username).email(email).password(password)
-                    .birthday(birthday).role(Role.valueOf("ADMIN")).build();
+                    .birthday(birthday).role(Role.ADMIN).build();
             users.add(user);
         }
 
@@ -68,10 +71,15 @@ public class Generator {
             UUID id = UUID.randomUUID();
             String title = faker.lorem().sentence(2);
             Set<Question> questionList = generateQuestions(3);
+
+            Set<Answer> correctAnswers = new HashSet<>();
+            for(Question question : questionList) {
+                correctAnswers.add(question.getCorrectAnswer());
+            }
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
             Test test = Test.builder().id(id).title(title).countOfQuestionsle(questionList.size())
-                    .questions(questionList).createdAt(createdAt).build();
+                    .questions(questionList).correctAnswers(correctAnswers).createdAt(createdAt).build();
             tests.add(test);
         }
 
@@ -85,7 +93,7 @@ public class Generator {
         for (int i = 0; i < questionCount; i++) {
             UUID id = UUID.randomUUID();
             String text = faker.lorem().sentence(15);
-            Set<Answer> answers = generateAnswers(3);
+            List<Answer> answers = generateAnswers(3);
             Answer[] array = answers.toArray(new Answer[0]);
             Answer correctAnswer = array[0];
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -99,8 +107,8 @@ public class Generator {
         return questionList;
     }
 
-    private static Set<Answer> generateAnswers(int answerCount) {
-        Set<Answer> answers = new HashSet<>();
+    private static List<Answer> generateAnswers(int answerCount) {
+        List<Answer> answers = new ArrayList<>();
 
         Faker faker = new Faker();
 
@@ -128,11 +136,11 @@ public class Generator {
 
             String testTitle = faker.lorem().sentence(2);
 
-            int mark = (int) Math.floor(Math.random() * 100 + 1);
+            Grade grade = new Grade((int) Math.floor(Math.random() * 100 + 1));
 
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
-            Result result = Result.builder().id(id).ownerUsername(ownerUsername).mark(mark).testTitle(testTitle)
+            Result result = Result.builder().id(id).ownerUsername(ownerUsername).grade(grade).testTitle(testTitle)
                     .createdAt(createdAt).build();
             results.add(result);
         }

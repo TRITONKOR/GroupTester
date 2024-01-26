@@ -8,20 +8,20 @@ import java.util.UUID;
 public class Result extends Entity {
 
     private final String ownerUsername;
-    private final int mark;
+    private final Grade grade;
     private final String testTitle;
     private final LocalDateTime createdAt;
 
-    private Result(UUID id, String ownerUsername, int mark, String testTitle, LocalDateTime createdAt) {
+    private Result(UUID id, String ownerUsername, Grade grade, String testTitle, LocalDateTime createdAt) {
         super(id);
-        this.ownerUsername = Validation.validateText(ownerUsername, errors, 24);
-        this.mark = mark;
+        this.ownerUsername = Validation.validateText(ownerUsername, 24);
+        this.grade = grade;
         this.testTitle = testTitle;
-        this.createdAt = Validation.validateDateTime(createdAt, errors);
+        this.createdAt = Validation.validateDateTime(createdAt);
     }
 
     public static ResultBuilderId builder() {
-        return id -> ownerUsername -> mark -> testTitle -> createdAt -> () -> new Result(id, ownerUsername, mark, testTitle, createdAt);
+        return id -> ownerUsername -> grade -> testTitle -> createdAt -> () -> new Result(id, ownerUsername, grade, testTitle, createdAt);
     }
 
     public interface ResultBuilderId {
@@ -29,11 +29,11 @@ public class Result extends Entity {
     }
 
     public interface ResultBuilderOwnerUsername{
-        ResultBuilderMark ownerUsername(String ownerUsername);
+        ResultBuilderGrade ownerUsername(String ownerUsername);
     }
 
-    public interface ResultBuilderMark {
-        ResultBuilderTestTitle mark(int mark);
+    public interface ResultBuilderGrade {
+        ResultBuilderTestTitle grade(Grade grade);
     }
 
     public interface ResultBuilderTestTitle {
@@ -52,8 +52,8 @@ public class Result extends Entity {
         return ownerUsername;
     }
 
-    public int getMark() {
-        return mark;
+    public Grade getMark() {
+        return grade;
     }
 
     public String getTestTitle() {
@@ -67,8 +67,7 @@ public class Result extends Entity {
     @Override
     public String toString() {
         return "Result{" +
-                "ownerUsername=" + ownerUsername +
-                ", mark=" + mark +
+                "ownerUsername=" + ownerUsername + grade +
                 ", testTitle=" + testTitle +
                 ", createdAt=" + createdAt +
                 '}';

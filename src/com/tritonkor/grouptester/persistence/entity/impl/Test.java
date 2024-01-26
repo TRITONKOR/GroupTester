@@ -4,32 +4,35 @@ import com.tritonkor.grouptester.persistence.entity.Entity;
 
 import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Test extends Entity implements Comparable<Test> {
+public class Test extends Entity {
 
     private String title;
 
     private int countOfQuestions;
 
     private Set<Question> questions;
+    private Set<Answer> correctAnswers;
 
     private final LocalDateTime createdAt;
 
-    private Test(UUID id, String title, int countOfQuestions, Set<Question> questions,
+    private Test(UUID id, String title, int countOfQuestions, Set<Question> questions, Set<Answer> correctAnswers,
             LocalDateTime createdAt) {
         super(id);
-        this.title = Validation.validateText(title, errors, 100);
+        this.title = Validation.validateText(title, 100);
         this.countOfQuestions = countOfQuestions;
         this.questions = questions;
-        this.createdAt = Validation.validateDateTime(createdAt, errors);
+        this.correctAnswers = correctAnswers;
+        this.createdAt = Validation.validateDateTime(createdAt);
     }
 
     public static TestBuilderId builder() {
-        return id -> title -> countOfQuestions -> questions -> createdAt -> () -> new Test(id,
-                title, countOfQuestions, questions, createdAt);
+        return id -> title -> countOfQuestions -> questions -> correctAnswers -> createdAt -> () -> new Test(id,
+                title, countOfQuestions, questions, correctAnswers, createdAt);
     }
 
     public interface TestBuilderId {
@@ -49,7 +52,12 @@ public class Test extends Entity implements Comparable<Test> {
 
     public interface TestBuilderQuestions {
 
-        TestBuilderCreatedAt questions(Set<Question> questions);
+        TestBuilderCorrectAnswers questions(Set<Question> questions);
+    }
+
+    public interface TestBuilderCorrectAnswers {
+
+        TestBuilderCreatedAt correctAnswers(Set<Answer> correctAnswers);
     }
 
     public interface TestBuilderCreatedAt {
@@ -90,9 +98,8 @@ public class Test extends Entity implements Comparable<Test> {
         return createdAt;
     }
 
-    @Override
-    public int compareTo(Test o) {
-        return this.createdAt.compareTo(o.createdAt);
+    public Set<Answer> getCorrectAnswers() {
+        return correctAnswers;
     }
 
     @Override

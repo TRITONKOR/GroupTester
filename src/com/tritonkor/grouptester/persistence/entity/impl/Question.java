@@ -3,6 +3,7 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,16 +12,16 @@ public class Question extends Entity {
 
     private String text;
     private final LocalDateTime createdAt;
-    private Set<Answer> answers;
+    private List<Answer> answers;
 
     private final Answer correctAnswer;
 
-    private Question(UUID id, String text, Set<Answer> answers, Answer correctAnswer, LocalDateTime createdAt) {
+    private Question(UUID id, String text, List<Answer> answers, Answer correctAnswer, LocalDateTime createdAt) {
         super(id);
-        this.text = Validation.validateText(text, errors, 200);
+        this.text = Validation.validateText(text, 200);
         this.answers = answers;
         this.correctAnswer = correctAnswer;
-        this.createdAt = Validation.validateDateTime(createdAt, errors);
+        this.createdAt = Validation.validateDateTime(createdAt);
     }
 
     public static QuestionBuilderId builder() {
@@ -36,7 +37,7 @@ public class Question extends Entity {
     }
 
     public interface QuestionBuilderAnswers {
-        QuestionBuilderCorrectAnswer answers(Set<Answer> answers);
+        QuestionBuilderCorrectAnswer answers(List<Answer> answers);
     }
 
     public interface QuestionBuilderCorrectAnswer {
@@ -64,13 +65,17 @@ public class Question extends Entity {
         return createdAt;
     }
 
-    public Set<Answer> getAnswerList() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
     public void setAnswers(
-            Set<Answer> answers) {
+            List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public Answer getCorrectAnswer() {
+        return correctAnswer;
     }
 
     @Override
@@ -78,8 +83,6 @@ public class Question extends Entity {
         return "Question{" +
                 "text='" + text + '\'' +
                 ", createdAt=" + createdAt +
-                ", answers=" + answers +
-                ", correctAnswer=" + correctAnswer +
                 '}';
     }
 }

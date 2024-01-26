@@ -1,5 +1,6 @@
 package com.tritonkor.grouptester.domain.impl;
 
+import com.tritonkor.grouptester.domain.Validation;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
 import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
@@ -101,12 +102,18 @@ public class SignUpService {
         codeCreationTime = null;
     }
 
-    public void signUp(String username,
+    public void validateUser(String username,
             String password,
             String email,
             LocalDate birthday,
             Supplier<String> waitForUserInput) {
-        signUp(username, password, email, birthday, Role.GENERAL, waitForUserInput);
+
+        signUp(Validation.validateText(username, 24),
+                Validation.validatePassword(password),
+                Validation.validateEmail(email),
+                Validation.validateDate(birthday),
+                Role.GENERAL,
+                waitForUserInput);
     }
 
     public void signUp(String username,

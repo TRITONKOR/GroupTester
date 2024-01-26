@@ -17,12 +17,12 @@ public class Report extends Entity implements Comparable<Report> {
     private Report(UUID id, String testTitle, String groupName, int minResult,
             int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
-        this.testTitle = Validation.validateText(testTitle, errors, 24);
-        this.groupName = Validation.validateText(groupName, errors, 10);
+        this.testTitle = Validation.validateText(testTitle, 24);
+        this.groupName = Validation.validateText(groupName, 10);
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
-        this.createdAt = Validation.validateDateTime(createdAt, errors);
+        this.createdAt = Validation.validateDateTime(createdAt);
     }
 
     public static ReportBuilderId builder() {

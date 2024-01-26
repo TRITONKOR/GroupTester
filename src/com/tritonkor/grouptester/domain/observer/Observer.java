@@ -5,5 +5,5 @@ import com.tritonkor.grouptester.persistence.entity.impl.User;
 
 public interface Observer {
 
-    void update(User user, Test test);
+    void update(String testName);
 }

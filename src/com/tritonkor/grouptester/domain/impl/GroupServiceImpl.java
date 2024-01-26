@@ -10,9 +10,8 @@ public class GroupServiceImpl extends GenericService<Group> implements GroupServ
 
     private GroupRepository groupRepository;
 
-    public GroupServiceImpl(Repository<Group> repository,
-            GroupRepository groupRepository) {
-        super(repository);
+    public GroupServiceImpl(GroupRepository groupRepository) {
+        super(groupRepository);
         this.groupRepository = groupRepository;
     }
 

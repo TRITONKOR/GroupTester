@@ -9,21 +9,14 @@ public abstract class Entity {
 
     protected final UUID id;
 
-    protected transient Set<String> errors;
-
     protected transient boolean isValid;
 
     public Entity(UUID id) {
-        errors = new HashSet<>();
         this.id = id;
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public boolean isValid() {
-        return errors.isEmpty();
     }
 
     @Override

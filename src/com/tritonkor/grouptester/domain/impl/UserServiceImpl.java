@@ -10,9 +10,8 @@ public class UserServiceImpl extends GenericService<User> implements UserService
 
     private UserRepository userRepository;
 
-    public UserServiceImpl(Repository<User> repository,
-            UserRepository userRepository) {
-        super(repository);
+    public UserServiceImpl(UserRepository userRepository) {
+        super(userRepository);
         this.userRepository = userRepository;
     }
 

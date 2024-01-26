@@ -1,19 +1,27 @@
 package com.tritonkor.grouptester.domain.impl;
 
 import com.tritonkor.grouptester.domain.contract.ResultService;
+import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
-import com.tritonkor.grouptester.persistence.repository.Repository;
 import com.tritonkor.grouptester.persistence.repository.contracts.ResultRepository;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
+import java.util.UUID;
 
 public class ResultServiceImpl extends GenericService<Result> implements ResultService {
 
     private ResultRepository resultRepository;
 
-    public ResultServiceImpl(Repository<Result> repository,
-            ResultRepository resultRepository) {
-        super(repository);
+    public ResultServiceImpl(ResultRepository resultRepository) {
+        super(resultRepository);
         this.resultRepository = resultRepository;
+    }
+
+    public Result makeResult(String userName, String testTitle, Grade grade) {
+        return Result.builder().id(UUID.randomUUID()).ownerUsername(userName).grade(grade)
+                .testTitle(testTitle).createdAt(LocalDateTime.now().truncatedTo(
+                        ChronoUnit.MINUTES)).build();
     }
 
     @Override

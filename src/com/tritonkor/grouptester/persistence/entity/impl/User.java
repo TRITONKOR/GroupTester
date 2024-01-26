@@ -1,6 +1,6 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
-import com.tritonkor.grouptester.domain.Tester;
+import com.tritonkor.grouptester.domain.impl.TestServiceImpl;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.observer.Observer;
 import com.tritonkor.grouptester.domain.Validation;
@@ -9,21 +9,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User extends Entity implements Observer, Tester {
+public class User extends Entity implements Observer {
 
     private String username;
     private String email;
-    private Role role;
+    private final Role role;
     private final String password;
     private final LocalDate birthday;
 
     public User(UUID id, String username, String email, String password, LocalDate birthday,
             Role role) {
         super(id);
-        this.username = Validation.validateText(username, errors, 24);
-        this.email = Validation.validateEmail(email, errors);
-        this.password = Validation.validatePassword(password, errors);
-        this.birthday = Validation.validateDate(birthday, errors);
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.birthday = birthday;
         this.role = role;
     }
 
@@ -93,14 +93,7 @@ public class User extends Entity implements Observer, Tester {
     }
 
     @Override
-    public void runTest(Test test) {
-
-    }
-
-    @Override
-    public void update(User user, Test test) {
-
-        runTest(test);
+    public void update(String test) {
     }
 
     @Override

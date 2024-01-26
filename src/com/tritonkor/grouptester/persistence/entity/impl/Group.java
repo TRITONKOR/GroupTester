@@ -1,5 +1,6 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
+import com.tritonkor.grouptester.domain.observer.Subject;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.observer.Observer;
 import com.tritonkor.grouptester.domain.Validation;
@@ -9,11 +10,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Group extends Entity {
+public class Group extends Entity implements Subject {
 
     private final LocalDateTime createdAt;
 
-    private Test testToPerform = null;
+    private String testNameToPerform = null;
 
     private String name;
     private Set<User> users;
@@ -21,9 +22,9 @@ public class Group extends Entity {
 
     private Group(UUID id, String name, Set<User> users, LocalDateTime createdAt) {
         super(id);
-        this.name = Validation.validateText(name, errors, 10);
-        this.users = users;
-        this.createdAt = Validation.validateDateTime(createdAt, errors);
+        this.name = Validation.validateText(name, 10);
+        this.users = new HashSet<>();
+        this.createdAt = Validation.validateDateTime(createdAt);
     }
 
     public static GroupBuilderId builder() {
@@ -55,26 +56,34 @@ public class Group extends Entity {
         Group build();
     }
 
+    @Override
     public void addObserver(Observer observer) {
+
         observers.add(observer);
+        users.add((User) observer);
     }
 
+    @Override
     public void removeObserver(Observer observer) {
+
         observers.remove(observer);
+        users.remove((User) observer);
     }
 
-    public void notifyObservers(User user) {
-        for (Observer observer : observers) {
-            observer.update(user, testToPerform);
+    @Override
+    public void notifyObservers(String currentTest) {
+        for(Observer observer : observers) {
+            observer.update(currentTest);
         }
     }
 
-    public Test getTestToPerform() {
-        return testToPerform;
+    public String getTestNameToPerform() {
+        return testNameToPerform;
     }
 
-    public void setTestToPerform(Test testToPerform) {
-        this.testToPerform = testToPerform;
+    public void setTestNameToPerform(String testNameToPerform) {
+        this.testNameToPerform = testNameToPerform;
+        notifyObservers(testNameToPerform);
     }
 
     public Set<User> getUsers() {

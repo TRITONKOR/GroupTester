@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -17,8 +18,8 @@ public class Validation {
      * @param text
      * @throws EntityArgumentException в разі, якщо є помилка в text
      */
-    public static String validateText(String text, Set<String> errors, int maxSynbols) {
-
+    public static String validateText(String text, int maxSynbols) {
+        Set<String> errors = new HashSet<>();
         final String templateName = "тексту";
 
         if (text.isBlank()) {
@@ -43,7 +44,8 @@ public class Validation {
         return text;
     }
 
-    public static String validatePassword(String password, Set<String> errors) {
+    public static String validatePassword(String password) {
+        Set<String> errors = new HashSet<>();
         final String templateName = "паролю";
 
         if (password.isBlank()) {
@@ -68,7 +70,8 @@ public class Validation {
         return password;
     }
 
-    public static String validateEmail(String email, Set<String> errors) {
+    public static String validateEmail(String email) {
+        Set<String> errors = new HashSet<>();
         final String templateName = "електронної пошти";
 
         if (email.isBlank()) {
@@ -88,7 +91,8 @@ public class Validation {
         return email;
     }
 
-    public static LocalDate validateDate(LocalDate date, Set<String> errors) {
+    public static LocalDate validateDate(LocalDate date) {
+        Set<String> errors = new HashSet<>();
         final String templateName = "дати";
 
         if (date.toString().isBlank()) {
@@ -110,7 +114,8 @@ public class Validation {
         return date;
     }
 
-    public static LocalDateTime validateDateTime(LocalDateTime date, Set<String> errors) {
+    public static LocalDateTime validateDateTime(LocalDateTime date) {
+        Set<String> errors = new HashSet<>();
         final String templateName = "дати і часу";
 
         if (date.toString().isBlank()) {
