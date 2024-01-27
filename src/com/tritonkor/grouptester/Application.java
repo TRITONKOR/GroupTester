@@ -21,6 +21,9 @@ final class Application {
         SignUpService signUpService = serviceFactory.getSignUpService();
 
         //===
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
         AnsiConsole.systemInstall();                                      // #1
         System.out.println(ansi().eraseScreen().render("Simple list example:"));
 

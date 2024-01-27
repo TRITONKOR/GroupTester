@@ -12,8 +12,8 @@ public class Answer extends Entity {
 
     private Answer(UUID id, String text, LocalDateTime createdAt) {
         super(id);
-        this.text = Validation.validateText(text, 100);
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.text = text;
+        this.createdAt = createdAt;
     }
 
     public static AnswerBuilderId builder() {

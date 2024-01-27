@@ -56,13 +56,14 @@ public class UserServiceImpl extends GenericService<User> implements UserService
     @Override
     public User add(UserAddDto userAddDto) {
         try {
-            var user = new User(userAddDto.getId(), userAddDto.username(), userAddDto.email(),
-                    BCrypt.hashpw(userAddDto.rawPassword(), BCrypt.gensalt()),
-                    userAddDto.birthday(), userAddDto.role());
+            var user = User.builder().id(userAddDto.getId()).username(userAddDto.username())
+                    .email(userAddDto.email())
+                    .password(BCrypt.hashpw(userAddDto.rawPassword(), BCrypt.gensalt()))
+                    .birthday(userAddDto.birthday()).role(userAddDto.role()).build();
             userRepository.add(user);
             return user;
         } catch (RuntimeException e) {
-            throw new SignUpException("Помилка при збереженні аватара користувача: %s"
+            throw new SignUpException("Error when saving user: %s"
                     .formatted(e.getMessage()));
         }
     }

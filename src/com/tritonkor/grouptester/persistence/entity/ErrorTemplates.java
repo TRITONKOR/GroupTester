@@ -2,15 +2,15 @@ package com.tritonkor.grouptester.persistence.entity;
 
 public enum ErrorTemplates {
 
-    REQUIRED("Поле %s є обов'язкове до заповнення"),
-    MIN_LENGTH("Поле %s не може бути меншим за %d симв."),
-    MAX_LENGTH("Поле %s не може бути більшим за %d симв."),
-    ONLY_LATIN("Поле %s може містити лише латинські літери"),
+    REQUIRED("The %s field is required"),
+    MIN_LENGTH("The %s field cannot be less than %d characters."),
+    MAX_LENGTH("The %s field cannot be more than %d characters."),
+    ONLY_LATIN("The %s field can contain only Latin letters"),
     PASSWORD(
-            "Поле %s дозволяє тільки латинські миволи, хочаб одна буква з великої, одна з малої та "
-                    + "хочаб одна цифра."),
-    EMAIL("Поле %s дозволя тільки латинські літери, повинно бути @ і крапка повинна бути тільки одна"),
-   DATE("Поле %s не може містити дату з майбутнього");
+            "The %s field allows only Latin characters, at least one uppercase letter, one lowercase"
+                    + " letter, and at least one digit."),
+    EMAIL("The %s field allows only Latin letters, must be @ and there must be only one dot"),
+    DATE("The %s field cannot contain a date from the future");
     private String template;
 
     ErrorTemplates(String template) {

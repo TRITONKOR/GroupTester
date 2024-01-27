@@ -23,11 +23,11 @@ public class Test extends Entity {
     private Test(UUID id, String title, int countOfQuestions, Set<Question> questions, Set<Answer> correctAnswers,
             LocalDateTime createdAt) {
         super(id);
-        this.title = Validation.validateText(title, 100);
+        this.title = title;
         this.countOfQuestions = countOfQuestions;
         this.questions = questions;
         this.correctAnswers = correctAnswers;
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = createdAt;
     }
 
     public static TestBuilderId builder() {

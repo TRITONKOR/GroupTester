@@ -17,7 +17,7 @@ public final class UserAddDto extends Entity {
     public UserAddDto(UUID id, String username, String rawPassword, String email,
             String birthday) {
         super(id);
-        this.username = Validation.validateText(username, 24);
+        this.username = Validation.validateText(username);
         this.rawPassword = Validation.validatePassword(rawPassword);
         this.email = Validation.validateEmail(email);
         this.birthday = Validation.validateDate(LocalDate.parse(birthday));

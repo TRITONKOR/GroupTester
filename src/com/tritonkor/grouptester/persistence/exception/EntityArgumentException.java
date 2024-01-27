@@ -4,13 +4,10 @@ import java.util.Set;
 
 public class EntityArgumentException extends IllegalArgumentException {
 
-    private Set<String> errors;
 
-    public EntityArgumentException(Set<String> errors) {
-        this.errors = errors;
+
+    public EntityArgumentException(String errors) {
+        super(errors);
     }
 
-    public Set<String> getErrors() {
-        return errors;
-    }
 }

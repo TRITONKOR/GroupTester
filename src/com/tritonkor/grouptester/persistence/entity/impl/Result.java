@@ -14,10 +14,10 @@ public class Result extends Entity {
 
     private Result(UUID id, String ownerUsername, Grade grade, String testTitle, LocalDateTime createdAt) {
         super(id);
-        this.ownerUsername = Validation.validateText(ownerUsername, 24);
+        this.ownerUsername = ownerUsername;
         this.grade = grade;
         this.testTitle = testTitle;
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = createdAt;
     }
 
     public static ResultBuilderId builder() {

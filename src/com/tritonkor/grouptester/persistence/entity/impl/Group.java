@@ -23,9 +23,9 @@ public class Group extends Entity implements Subject {
 
     private Group(UUID id, String name, Set<User> users, LocalDateTime createdAt) {
         super(id);
-        this.name = Validation.validateText(name, 10);
+        this.name = name;
         this.users = new HashSet<>();
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = createdAt;
     }
 
     public static GroupBuilderId builder() {

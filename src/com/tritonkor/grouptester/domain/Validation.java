@@ -18,9 +18,9 @@ public class Validation {
      * @param text
      * @throws EntityArgumentException в разі, якщо є помилка в text
      */
-    public static String validateText(String text, int maxSynbols) {
+    public static String validateText(String text) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "тексту";
+        final String templateName = "text";
 
         if (text.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -28,8 +28,8 @@ public class Validation {
         if (text.length() < 4) {
             errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
         }
-        if (text.length() > maxSynbols) {
-            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, maxSynbols));
+        if (text.length() > 24) {
+            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 24));
         }
 
         Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
@@ -38,7 +38,12 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            throw new EntityArgumentException(errors);
+            String message = "";
+
+            for(String error : errors) {
+                message = message + error + '\n';
+            }
+            throw new EntityArgumentException(message);
         }
 
         return text;
@@ -46,7 +51,7 @@ public class Validation {
 
     public static String validatePassword(String password) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "паролю";
+        final String templateName = "password";
 
         if (password.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -64,7 +69,12 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            throw new EntityArgumentException(errors);
+            String message = "";
+
+            for(String error : errors) {
+                message = message + error + '\n';
+            }
+            throw new EntityArgumentException(message);
         }
 
         return password;
@@ -72,7 +82,7 @@ public class Validation {
 
     public static String validateEmail(String email) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "електронної пошти";
+        final String templateName = "email";
 
         if (email.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -85,7 +95,12 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            throw new EntityArgumentException(errors);
+            String message = "";
+
+            for(String error : errors) {
+                message = message + error + '\n';
+            }
+            throw new EntityArgumentException(message);
         }
 
         return email;
@@ -93,7 +108,7 @@ public class Validation {
 
     public static LocalDate validateDate(LocalDate date) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "дати";
+        final String templateName = "date";
 
         if (date.toString().isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -108,7 +123,12 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            throw new EntityArgumentException(errors);
+            String message = "";
+
+            for(String error : errors) {
+                message = message + error + '\n';
+            }
+            throw new EntityArgumentException(message);
         }
 
         return date;
@@ -116,7 +136,7 @@ public class Validation {
 
     public static LocalDateTime validateDateTime(LocalDateTime date) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "дати і часу";
+        final String templateName = "date and time";
 
         if (date.toString().isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -132,8 +152,12 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            throw new EntityArgumentException(errors);
-        }
+            String message = "";
+
+            for(String error : errors) {
+                message = message + error + '\n';
+            }
+            throw new EntityArgumentException(message);        }
 
         return date;
     }

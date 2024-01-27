@@ -12,6 +12,7 @@
     <orderEntry type="library" name="jakarta.mail-api-2.1.2" level="project" />
     <orderEntry type="library" name="consoleui-0.0.13" level="project" />
     <orderEntry type="library" name="jakarta.activation-2.0.1" level="project" />
+    <orderEntry type="library" name="JConsoleImage_1.0.0" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="c154d1a8-3d85-44f4-a298-8dc9aaac196e" />

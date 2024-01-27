@@ -1,8 +1,11 @@
 package com.tritonkor.grouptester.domain.impl;
 
 import com.tritonkor.grouptester.domain.contract.ResultService;
+import com.tritonkor.grouptester.domain.dto.ResultAddDto;
+import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
+import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.repository.contracts.ResultRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -34,5 +37,20 @@ public class ResultServiceImpl extends GenericService<Result> implements ResultS
     @Override
     public Set<Result> findAllByTestTitle(String testTitle) {
         return resultRepository.findAllByTestTitle(testTitle);
+    }
+
+    @Override
+    public Result add(ResultAddDto resultAddDto) {
+        try {
+            var result = Result.builder().id(resultAddDto.getId())
+                    .ownerUsername(resultAddDto.getOwnerUsername()).grade(resultAddDto.getGrade())
+                    .testTitle(resultAddDto.getTestTitle()).createdAt(resultAddDto.getCreatedAt())
+                    .build();
+            resultRepository.add(result);
+            return result;
+        } catch (RuntimeException e) {
+            throw new SignUpException("Error when saving a result: %s"
+                    .formatted(e.getMessage()));
+        }
     }
 }

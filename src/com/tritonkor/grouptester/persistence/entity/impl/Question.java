@@ -18,10 +18,10 @@ public class Question extends Entity {
 
     private Question(UUID id, String text, List<Answer> answers, Answer correctAnswer, LocalDateTime createdAt) {
         super(id);
-        this.text = Validation.validateText(text, 200);
+        this.text = text;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = createdAt;
     }
 
     public static QuestionBuilderId builder() {

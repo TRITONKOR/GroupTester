@@ -3,6 +3,8 @@ package com.tritonkor.grouptester.domain.impl;
 import static java.lang.System.out;
 
 import com.tritonkor.grouptester.domain.contract.TestService;
+import com.tritonkor.grouptester.domain.dto.TestAddDto;
+import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
 import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import com.tritonkor.grouptester.persistence.entity.impl.Question;
@@ -14,6 +16,7 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.mindrot.bcrypt.BCrypt;
 
 public class TestServiceImpl
         extends GenericService<Test>
@@ -21,7 +24,7 @@ public class TestServiceImpl
 
     private final TestRepository testRepository;
 
-    private  User userForTesting = null;
+    private User userForTesting = null;
 
     private Grade grade;
 
@@ -43,6 +46,22 @@ public class TestServiceImpl
         return testRepository.findByTitle(title);
     }
 
+    @Override
+    public Test add(TestAddDto testAddDto) {
+        try {
+            var test = Test.builder().id(testAddDto.getId()).title(testAddDto.getTitle())
+                    .countOfQuestionsle(testAddDto.getCountOfQuestions())
+                    .questions(testAddDto.getQuestions())
+                    .correctAnswers(testAddDto.getCorrectAnswers())
+                    .createdAt(testAddDto.getCreatedAt()).build();
+            testRepository.add(test);
+            return test;
+        } catch (RuntimeException e) {
+            throw new SignUpException("Error when saving a test: %s"
+                    .formatted(e.getMessage()));
+        }
+    }
+
     public Answer getUserAnswer(Supplier<Integer> waitForUserInput, Question question) {
         int userVariant = waitForUserInput.get();
         return question.getAnswers().get(userVariant - 1);
@@ -58,17 +77,17 @@ public class TestServiceImpl
 
         out.println("Test:" + test.getTitle());
 
-        for(Question question : test.getQuestionsList()) {
+        for (Question question : test.getQuestionsList()) {
             out.println("Введіть номер відповіді");
             out.println(question.toString());
-            for(Answer answer : question.getAnswers()) {
+            for (Answer answer : question.getAnswers()) {
                 out.println(answer);
             }
 
             userAnswers.add(getUserAnswer((() -> {
                 Scanner scanner = new Scanner(System.in);
                 return scanner.nextInt();
-            }) , question));
+            }), question));
         }
 
         grade = calculateGrade(test, userAnswers);
