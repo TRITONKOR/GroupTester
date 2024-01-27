@@ -36,6 +36,7 @@ public class GenericJsonRepository<E extends Entity> implements Repository<E> {
 
     private Set<E> loadAll() {
         try {
+            checkDataDirectory();
             fileNotFound();
             var json = Files.readString(path);
             return isValidJson(json) ? gson.fromJson(json, collectionType) : new HashSet<>();
@@ -63,6 +64,12 @@ public class GenericJsonRepository<E extends Entity> implements Repository<E> {
     private void fileNotFound() throws IOException {
         if (!Files.exists(path)) {
             Files.createFile(path);
+        }
+    }
+
+    private void checkDataDirectory() throws IOException {
+        if (!Files.exists(JsonPathFactory.DATA.getDataPath())) {
+            Files.createDirectory(JsonPathFactory.DATA.getDataPath());
         }
     }
 

@@ -18,10 +18,12 @@ public class ResultServiceImpl extends GenericService<Result> implements ResultS
         this.resultRepository = resultRepository;
     }
 
-    public Result makeResult(String userName, String testTitle, Grade grade) {
-        return Result.builder().id(UUID.randomUUID()).ownerUsername(userName).grade(grade)
+    public void makeResult(String userName, String testTitle, Grade grade) {
+        Result result = Result.builder().id(UUID.randomUUID()).ownerUsername(userName).grade(grade)
                 .testTitle(testTitle).createdAt(LocalDateTime.now().truncatedTo(
                         ChronoUnit.MINUTES)).build();
+
+        resultRepository.add(result);
     }
 
     @Override

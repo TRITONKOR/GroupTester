@@ -8,16 +8,21 @@ public enum JsonPathFactory {
     TESTS("tests.json"),
     GROUPS("groups.json"),
     RESULTS("results.json"),
-    REPORTS("reports.json");
+    REPORTS("reports.json"),
+    DATA("data");;
 
-    private static final String DATA_DIRECTORY = "data";
     private final String fileName;
+    private static final String DATA_DIRECTORY = "data";
 
     JsonPathFactory(String fileName) {
         this.fileName = fileName;
     }
 
     public Path getPath() {
-        return Path.of(DATA_DIRECTORY, this.fileName);
+        return Path.of(DATA_DIRECTORY.toString(), this.fileName);
+    }
+
+    public Path getDataPath() {
+        return Path.of(DATA_DIRECTORY);
     }
 }

@@ -9,7 +9,6 @@ import com.tritonkor.grouptester.persistence.entity.impl.Result;
 import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
-import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

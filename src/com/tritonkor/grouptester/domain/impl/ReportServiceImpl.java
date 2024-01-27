@@ -7,6 +7,7 @@ import com.tritonkor.grouptester.persistence.repository.Repository;
 import com.tritonkor.grouptester.persistence.repository.contracts.ReportRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,20 +15,39 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
 
     private ReportRepository reportRepository;
 
+    private Set<Grade> userGrades = new HashSet<>();
+
     public ReportServiceImpl(ReportRepository reportRepository) {
         super(reportRepository);
         this.reportRepository = reportRepository;
     }
 
-    public Report makeReport(String groupName, String testTitle, Set<Grade> grades) {
-        int min = grades.stream().mapToInt(Grade::getGrade).min().orElse(0);
-        int max = grades.stream().mapToInt(Grade::getGrade).max().orElse(0);
-        int average = (int) grades.stream().mapToInt(Grade::getGrade).average().orElse(0);
+    public Report makeReport(String groupName, String testTitle) {
 
-        return Report.builder().id(UUID.randomUUID()).testTitle(testTitle).groupName(groupName)
-                .minResult(min).maxResult(max).averageResult(average)
-                .createdAt(LocalDateTime.now().truncatedTo(
-                        ChronoUnit.MINUTES)).build();
+        int min = userGrades.stream().mapToInt(Grade::getGrade).min().orElse(0);
+        int max = userGrades.stream().mapToInt(Grade::getGrade).max().orElse(0);
+        int average = (int) userGrades.stream().mapToInt(Grade::getGrade).average().orElse(0);
+
+        Report report = Report.builder().id(UUID.randomUUID()).testTitle(testTitle)
+                .groupName(groupName)
+                .minResult(min)
+                .maxResult(max)
+                .averageResult(average)
+                .createdAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)).build();
+
+        userGrades.clear();
+
+        return report;
+    }
+
+    @Override
+    public void saveGrade(Grade grade) {
+        userGrades.add(grade);
+    }
+
+    @Override
+    public void resetGrades() {
+        userGrades.clear();
     }
 
     @Override

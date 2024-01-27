@@ -1,5 +1,6 @@
 package com.tritonkor.grouptester.persistence.entity.impl;
 
+import com.tritonkor.grouptester.domain.impl.TestServiceImpl;
 import com.tritonkor.grouptester.domain.observer.Subject;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.observer.Observer;
@@ -71,19 +72,14 @@ public class Group extends Entity implements Subject {
     }
 
     @Override
-    public void notifyObservers(String currentTest) {
-        for(Observer observer : observers) {
-            observer.update(currentTest);
+    public void notifyObservers(Runnable action, TestServiceImpl testService) {
+        for (Observer observer : observers) {
+            observer.update(action, testService);
         }
     }
 
     public String getTestNameToPerform() {
         return testNameToPerform;
-    }
-
-    public void setTestNameToPerform(String testNameToPerform) {
-        this.testNameToPerform = testNameToPerform;
-        notifyObservers(testNameToPerform);
     }
 
     public Set<User> getUsers() {

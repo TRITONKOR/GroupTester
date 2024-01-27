@@ -1,17 +1,18 @@
 package com.tritonkor.grouptester.domain.impl;
 
+import com.tritonkor.grouptester.domain.contract.AuthService;
 import com.tritonkor.grouptester.domain.exception.AuthException;
 import com.tritonkor.grouptester.domain.exception.UserAlreadyAuthException;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
 import com.tritonkor.grouptester.persistence.repository.contracts.UserRepository;
 import org.mindrot.bcrypt.BCrypt;
 
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     private User user;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -35,7 +36,7 @@ public class AuthService {
 
     public void logout() {
         if (user == null) {
-            throw new UserAlreadyAuthException("Ви ще не автентифікавані.");
+            throw new UserAlreadyAuthException("You are not yet authenticated.");
         }
         user = null;
     }

@@ -1,10 +1,12 @@
 package com.tritonkor.grouptester.domain.impl;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.appui.Renderable;
+import com.tritonkor.grouptester.domain.contract.SignUpService;
+import com.tritonkor.grouptester.domain.contract.UserService;
+import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
-import com.tritonkor.grouptester.persistence.entity.impl.User;
-import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
-import com.tritonkor.grouptester.persistence.repository.contracts.UserRepository;
+import de.codeshelf.consoleui.prompt.ConsolePrompt;
+import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -13,23 +15,18 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Properties;
-import java.util.UUID;
-import java.util.function.Supplier;
-import org.mindrot.bcrypt.BCrypt;
 
-public class SignUpService {
+final class SignUpServiceImpl implements SignUpService {
 
     private static final int VERIFICATION_CODE_EXPIRATION_MINUTES = 1;
     private static LocalDateTime codeCreationTime;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public SignUpService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    SignUpServiceImpl(UserService userService) {
+        this.userService = userService;
     }
 
     private static void sendVerificationCodeEmail(String email, String verificationCode) {
@@ -44,7 +41,7 @@ public class SignUpService {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("8c49268238c60d", "a1e3142ec54a95");
+                return new PasswordAuthentication("1f0168c77bec47", "5ce6955ef846a4");
             }
         });
 
@@ -59,23 +56,23 @@ public class SignUpService {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
 
             // Встановлення теми
-            message.setSubject("Код підтвердження");
+            message.setSubject("Verification code");
 
             // Встановлення тексту повідомлення
-            message.setText("Ваш код підтвердження: " + verificationCode);
+            message.setText("Your verification code: " + verificationCode);
 
             // Відправлення повідомлення
             Transport.send(message);
 
-            System.out.println("Повідомлення успішно відправлено.");
+            System.out.println("The message was successfully sent.");
 
         } catch (MessagingException e) {
             throw new RuntimeException(
-                    "Помилка при відправці електронного листа: " + e.getMessage());
+                    "Error sending an email: " + e.getMessage());
         }
     }
 
-    public static String generateAndSendVerificationCode(String email) {
+    public String generateAndSendVerificationCode(String email) {
         // Генерація 6-значного коду
         String verificationCode = String.valueOf((int) (Math.random() * 900000 + 100000));
 
@@ -91,51 +88,21 @@ public class SignUpService {
         long minutesElapsed = ChronoUnit.MINUTES.between(codeCreationTime, currentTime);
 
         if (minutesElapsed > VERIFICATION_CODE_EXPIRATION_MINUTES) {
-            throw new SignUpException("Час верифікації вийшов. Спробуйте ще раз.");
+            throw new SignUpException("Verification time has expired. Please try again.");
         }
 
         if (!inputCode.equals(generatedCode)) {
-            throw new SignUpException("Невірний код підтвердження.");
+            throw new SignUpException("The verification code is incorrect.");
         }
 
         // Скидання часу створення коду
         codeCreationTime = null;
     }
 
-    public void validateUser(String username,
-            String password,
-            String email,
-            LocalDate birthday,
-            Supplier<String> waitForUserInput) {
+    public void signUp(UserAddDto userAddDto, String userInputCode, String verificationCode) {
 
-        signUp(Validation.validateText(username, 24),
-                Validation.validatePassword(password),
-                Validation.validateEmail(email),
-                Validation.validateDate(birthday),
-                Role.GENERAL,
-                waitForUserInput);
-    }
+        verifyCode(userInputCode, verificationCode);
 
-    public void signUp(String username,
-            String password,
-            String email,
-            LocalDate birthday,
-            Role role,
-            Supplier<String> waitForUserInput) {
-        try {
-            String verificationCode = generateAndSendVerificationCode(email);
-            String userInputCode = waitForUserInput.get();
-
-            verifyCode(userInputCode, verificationCode);
-
-            // Додаємо користувача, якщо перевірка успішна
-            userRepository.add(User.builder().id(UUID.randomUUID()).username(username).email(email)
-                    .password(BCrypt.hashpw(password, BCrypt.gensalt())).birthday(birthday)
-                    .role(role).build());
-
-        } catch (SignUpException e) {
-            throw new SignUpException("Помилка при збереженні користувача: %s"
-                    .formatted(e.getMessage()));
-        }
+        userService.add(userAddDto);
     }
 }
