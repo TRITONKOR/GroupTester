@@ -19,7 +19,7 @@ public class GenericService<E extends Entity> implements Service<E> {
     @Override
     public E get(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("За даним id нічого не знайдено"));
+                .orElseThrow(() -> new EntityNotFoundException("Nothing found for this id"));
     }
 
     @Override

@@ -5,8 +5,6 @@ import com.tritonkor.grouptester.domain.contract.SignUpService;
 import com.tritonkor.grouptester.domain.contract.UserService;
 import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
-import de.codeshelf.consoleui.prompt.ConsolePrompt;
-import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -101,7 +99,7 @@ final class SignUpServiceImpl implements SignUpService {
 
     public void signUp(UserAddDto userAddDto, String userInputCode, String verificationCode) {
 
-        verifyCode(userInputCode, verificationCode);
+        //verifyCode(userInputCode, verificationCode);
 
         userService.add(userAddDto);
     }

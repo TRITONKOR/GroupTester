@@ -1,6 +1,6 @@
 package com.tritonkor.grouptester.domain.dto;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.domain.ValidationUtil;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import java.time.LocalDateTime;
@@ -16,10 +16,10 @@ public class ResultAddDto extends Entity {
     public ResultAddDto(UUID id, String ownerUsername, Grade grade, String testTitle,
             LocalDateTime createdAt) {
         super(id);
-        this.ownerUsername = Validation.validateText(ownerUsername);
+        this.ownerUsername = ValidationUtil.validateName(ownerUsername);
         this.grade = grade;
-        this.testTitle = Validation.validateText(testTitle);
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.testTitle = ValidationUtil.validateName(testTitle);
+        this.createdAt = ValidationUtil.validateDateTime(createdAt);
     }
 
     public String getOwnerUsername() {

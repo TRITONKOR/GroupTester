@@ -77,7 +77,7 @@ public class JsonRepositoryFactory extends RepositoryFactory {
             gson.toJson(entities, writer);
 
         } catch (IOException e) {
-            throw new JsonFileIOException("Не вдалось зберегти дані у json-файл. Детальніше: %s"
+            throw new JsonFileIOException("Could not save data to json file. Details: %s"
                     .formatted(e.getMessage()));
         }
     }

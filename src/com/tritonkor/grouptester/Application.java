@@ -3,11 +3,24 @@ package com.tritonkor.grouptester;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import com.tritonkor.grouptester.appui.AuthView;
+import com.tritonkor.grouptester.appui.TestView;
 import com.tritonkor.grouptester.domain.contract.AuthService;
+import com.tritonkor.grouptester.domain.contract.GroupService;
+import com.tritonkor.grouptester.domain.contract.ResultService;
 import com.tritonkor.grouptester.domain.contract.SignUpService;
+import com.tritonkor.grouptester.domain.contract.TestService;
+import com.tritonkor.grouptester.domain.contract.UserService;
+import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.impl.ServiceFactory;
+import com.tritonkor.grouptester.persistence.entity.impl.Group;
+import com.tritonkor.grouptester.persistence.entity.impl.User;
+import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import com.tritonkor.grouptester.persistence.repository.RepositoryFactory;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 import jline.TerminalFactory;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -17,19 +30,27 @@ final class Application {
         RepositoryFactory jsonRepositoryFactory = RepositoryFactory
                 .getRepositoryFactory(RepositoryFactory.JSON);
         ServiceFactory serviceFactory = ServiceFactory.getInstance(jsonRepositoryFactory);
+
         AuthService authService = serviceFactory.getAuthService();
         SignUpService signUpService = serviceFactory.getSignUpService();
+
+        TestService testService = serviceFactory.getTestService();
+        UserService userService = serviceFactory.getUserService();
+        ResultService resultService = serviceFactory.getResultService();
+        GroupService groupService = serviceFactory.getGroupService();
 
         //===
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
         AnsiConsole.systemInstall();                                      // #1
-        System.out.println(ansi().eraseScreen().render("Simple list example:"));
+        System.out.println(ansi().eraseScreen().render("Group Test AuthMenu:"));
 
         try {
-            AuthView authView = new AuthView(authService, signUpService);
+            TestView testView = new TestView(testService, resultService, groupService);
+            AuthView authView = new AuthView(authService, signUpService, userService, testView);
             authView.render();
+            System.out.println("Peremoha");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

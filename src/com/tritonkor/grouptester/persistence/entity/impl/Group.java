@@ -4,7 +4,6 @@ import com.tritonkor.grouptester.domain.impl.TestServiceImpl;
 import com.tritonkor.grouptester.domain.observer.Subject;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.observer.Observer;
-import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,13 +12,9 @@ import java.util.UUID;
 
 public class Group extends Entity implements Subject {
 
-    private final LocalDateTime createdAt;
-
-    private String testNameToPerform = null;
-
     private String name;
     private Set<User> users;
-    private Set<Observer> observers = new HashSet<>();
+    private final LocalDateTime createdAt;
 
     private Group(UUID id, String name, Set<User> users, LocalDateTime createdAt) {
         super(id);
@@ -59,27 +54,19 @@ public class Group extends Entity implements Subject {
 
     @Override
     public void addObserver(Observer observer) {
-
-        observers.add(observer);
         users.add((User) observer);
     }
 
     @Override
     public void removeObserver(Observer observer) {
-
-        observers.remove(observer);
         users.remove((User) observer);
     }
 
     @Override
     public void notifyObservers(Runnable action, TestServiceImpl testService) {
-        for (Observer observer : observers) {
-            observer.update(action, testService);
+        for (User user : users) {
+            user.update(action, testService);
         }
-    }
-
-    public String getTestNameToPerform() {
-        return testNameToPerform;
     }
 
     public Set<User> getUsers() {

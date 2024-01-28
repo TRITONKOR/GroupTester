@@ -3,16 +3,20 @@ package com.tritonkor.grouptester.appui;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.EXIT;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.SIGN_IN;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.SIGN_UP;
+import static com.tritonkor.grouptester.appui.TestView.TesterMenu.JOIN_THE_GROUP;
+import static com.tritonkor.grouptester.appui.TestView.TesterMenu.VIEW_REPORTS;
+import static com.tritonkor.grouptester.appui.TestView.TesterMenu.VIEW_RESULTS;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.appui.TestView.TesterMenu;
 import com.tritonkor.grouptester.domain.contract.AuthService;
-
 import com.tritonkor.grouptester.domain.contract.SignUpService;
+import com.tritonkor.grouptester.domain.contract.UserService;
 import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.exception.AuthException;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
+import de.codeshelf.consoleui.prompt.ListPrompt;
 import de.codeshelf.consoleui.prompt.ListResult;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
@@ -24,17 +28,25 @@ public class AuthView implements Renderable {
 
     private final SignUpService signUpService;
 
-    public AuthView(AuthService authService, SignUpService signUpService) {
+    private final UserService userService;
+
+    private final TestView testView;
+
+    public AuthView(AuthService authService, SignUpService signUpService, UserService userService, TestView testView) {
         this.authService = authService;
         this.signUpService = signUpService;
+        this.userService = userService;
+
+        this.testView = testView;
     }
 
     private void process(AuthMenu selectedItem) throws IOException {
-        ConsolePrompt prompt = new ConsolePrompt();
-        PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
         switch (selectedItem) {
             case SIGN_IN -> {
+                ConsolePrompt prompt = new ConsolePrompt();
+                PromptBuilder promptBuilder = prompt.getPromptBuilder();
+
                 promptBuilder.createInputPrompt()
                         .name("username")
                         .message("Type your login: ")
@@ -52,18 +64,24 @@ public class AuthView implements Renderable {
                 try {
                     boolean authenticate = authService.authenticate(
                             usernameInput.getInput(),
-                            passwordInput.getInput()
-                    );
-                    System.out.printf("%s %n", authenticate);
+                            passwordInput.getInput());
+                    if (authenticate) {
+                        testView.setCurrentUser(userService.findByUsername(usernameInput.getInput()));
+                    }
+
                 } catch (AuthException e) {
                     System.err.println(e.getMessage());
                 }
+                ConsolClearer.clearConsole();
+                testView.render();
 
 
             }
             case SIGN_UP -> {
                 boolean dataCorrect = true;
 
+                ConsolePrompt prompt = new ConsolePrompt();
+                PromptBuilder promptBuilder = prompt.getPromptBuilder();
                 do {
                     promptBuilder.createInputPrompt()
                             .name("username")
@@ -91,19 +109,21 @@ public class AuthView implements Renderable {
                         var usernameInput = (InputResult) result.get("username");
 
                         var passwordInput = (InputResult) result.get("password");
-                        String validatedPassword = Validation.validatePassword(
-                                passwordInput.getInput());
 
                         var emailInput = (InputResult) result.get("email");
+
                         var birthdayInput = (InputResult) result.get("birthday");
+
+                        UserAddDto userAddDto = new UserAddDto(UUID.randomUUID(),
+                                usernameInput.getInput(), passwordInput.getInput(),
+                                emailInput.getInput(), birthdayInput.getInput());
 
                         prompt = new ConsolePrompt();
                         promptBuilder = prompt.getPromptBuilder();
 
                         System.out.println(
                                 "Please little wait, we are sending list on your email with verification code");
-                        String verificationCode = signUpService.generateAndSendVerificationCode(
-                                emailInput.getInput());
+                        //String verificationCode = signUpService.generateAndSendVerificationCode(emailInput.getInput());
 
                         promptBuilder.createInputPrompt()
                                 .name("verify code")
@@ -112,41 +132,35 @@ public class AuthView implements Renderable {
                         result = prompt.prompt(promptBuilder.build());
                         var verifyCodeInput = (InputResult) result.get("verify code");
                         try {
-                            UserAddDto userAddDto = new UserAddDto(UUID.randomUUID(),
-                                    usernameInput.getInput(), validatedPassword,
-                                    emailInput.getInput(), birthdayInput.getInput());
                             signUpService.signUp(userAddDto, verifyCodeInput.getInput(),
-                                    verificationCode);
-                            System.out.printf("%s %n", "Account created");
+                                    "2");
 
-                            clearConsole();
+                            testView.setCurrentUser(userService.findByUsername(usernameInput.getInput()));
 
                             dataCorrect = true;
                         } catch (AuthException e) {
                             System.err.println(e.getMessage());
                         }
                     } catch (EntityArgumentException e) {
-                        clearConsole();
-
+                        prompt = new ConsolePrompt();
+                        promptBuilder = prompt.getPromptBuilder();
+                        ConsolClearer.clearConsole();
                         System.out.println(e.getMessage());
 
                         dataCorrect = false;
                     }
                 } while (!dataCorrect);
+
+                ConsolClearer.clearConsole();
+                testView.render();
             }
             case EXIT -> {
-            }
-            default -> {
 
+                ConsolClearer.clearConsole();
+                testView.render();
             }
         }
     }
-
-    private static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();

@@ -51,7 +51,7 @@ public final class ServiceFactory {
             return INSTANCE;
         } else {
             throw new DependencyException(
-                    "Ви забули створити обєкт RepositoryFactory, перед використанням ServiceFactory.");
+                    "You forgot to create the RepositoryFactory object before using the ServiceFactory.");
         }
     }
 

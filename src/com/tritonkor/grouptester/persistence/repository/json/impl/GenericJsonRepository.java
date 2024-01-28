@@ -47,7 +47,7 @@ public class GenericJsonRepository<E extends Entity> implements Repository<E> {
             var json = Files.readString(currentDir.resolve(path));
             return isValidJson(json) ? gson.fromJson(json, collectionType) : new HashSet<>();
         } catch (IOException e) {
-            throw new JsonFileIOException("Помилка при роботі із файлом %s."
+            throw new JsonFileIOException("Error working with file %s."
                     .formatted(currentDir.resolve(path).getFileName()));
         }
     }

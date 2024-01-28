@@ -3,7 +3,6 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 import com.tritonkor.grouptester.domain.impl.TestServiceImpl;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.domain.observer.Observer;
-import com.tritonkor.grouptester.domain.Validation;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;

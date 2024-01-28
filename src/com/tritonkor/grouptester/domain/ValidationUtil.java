@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Validation {
+public class ValidationUtil {
 
     /**
      * Валідація тексту
@@ -18,9 +18,9 @@ public class Validation {
      * @param text
      * @throws EntityArgumentException в разі, якщо є помилка в text
      */
-    public static String validateText(String text) {
+    public static String validateName(String text) {
         Set<String> errors = new HashSet<>();
-        final String templateName = "text";
+        final String templateName = "name";
 
         if (text.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -38,12 +38,7 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            String message = "";
-
-            for(String error : errors) {
-                message = message + error + '\n';
-            }
-            throw new EntityArgumentException(message);
+            throw new EntityArgumentException(combineErrorMessages(errors));
         }
 
         return text;
@@ -69,12 +64,7 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            String message = "";
-
-            for(String error : errors) {
-                message = message + error + '\n';
-            }
-            throw new EntityArgumentException(message);
+            throw new EntityArgumentException(combineErrorMessages(errors));
         }
 
         return password;
@@ -95,43 +85,36 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            String message = "";
-
-            for(String error : errors) {
-                message = message + error + '\n';
-            }
-            throw new EntityArgumentException(message);
+            throw new EntityArgumentException(combineErrorMessages(errors));
         }
 
         return email;
     }
 
-    public static LocalDate validateDate(LocalDate date) {
+    public static LocalDate validateDate(String date) {
         Set<String> errors = new HashSet<>();
         final String templateName = "date";
 
-        if (date.toString().isBlank()) {
+        if (date.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate parsedDate = LocalDate.parse(date.toString(), formatter);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate parsedDate = LocalDate.parse(date, formatter);
 
-        LocalDate currentDate = LocalDate.now();
-        if (parsedDate.isAfter(currentDate)) {
-            errors.add(ErrorTemplates.DATE.getTemplate().formatted(templateName));
-        }
-
-        if (!errors.isEmpty()) {
-            String message = "";
-
-            for(String error : errors) {
-                message = message + error + '\n';
+            LocalDate currentDate = LocalDate.now();
+            if (parsedDate.isAfter(currentDate)) {
+                errors.add(ErrorTemplates.DATE.getTemplate().formatted(templateName));
             }
-            throw new EntityArgumentException(message);
+        }catch (Exception e) {
+            throw new EntityArgumentException("Wrong data format");
+        }
+        if (!errors.isEmpty()) {
+            throw new EntityArgumentException(combineErrorMessages(errors));
         }
 
-        return date;
+        return LocalDate.parse(date);
     }
 
     public static LocalDateTime validateDateTime(LocalDateTime date) {
@@ -152,13 +135,19 @@ public class Validation {
         }
 
         if (!errors.isEmpty()) {
-            String message = "";
-
-            for(String error : errors) {
-                message = message + error + '\n';
-            }
-            throw new EntityArgumentException(message);        }
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
 
         return date;
+    }
+
+    private static String combineErrorMessages(Set<String> errors) {
+        String message = "";
+
+        for(String error : errors) {
+            message = message + error + '\n';
+        }
+
+        return message;
     }
 }

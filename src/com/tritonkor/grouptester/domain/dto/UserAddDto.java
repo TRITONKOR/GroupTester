@@ -1,6 +1,6 @@
 package com.tritonkor.grouptester.domain.dto;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.domain.ValidationUtil;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.entity.impl.User.Role;
 import java.time.LocalDate;
@@ -17,21 +17,21 @@ public final class UserAddDto extends Entity {
     public UserAddDto(UUID id, String username, String rawPassword, String email,
             String birthday) {
         super(id);
-        this.username = Validation.validateText(username);
-        this.rawPassword = Validation.validatePassword(rawPassword);
-        this.email = Validation.validateEmail(email);
-        this.birthday = Validation.validateDate(LocalDate.parse(birthday));
+        this.username = ValidationUtil.validateName(username);
+        this.rawPassword = ValidationUtil.validatePassword(rawPassword);
+        this.email = ValidationUtil.validateEmail(email);
+        this.birthday = ValidationUtil.validateDate(birthday);
         this.role = Role.GENERAL;
     }
 
     public UserAddDto(UUID id, String username, String rawPassword, String email,
-            LocalDate birthday,
+            String birthday,
             Role role) {
         super(id);
-        this.username = username;
-        this.rawPassword = rawPassword;
-        this.email = email;
-        this.birthday = birthday;
+        this.username = ValidationUtil.validateName(username);
+        this.rawPassword = ValidationUtil.validatePassword(rawPassword);
+        this.email = ValidationUtil.validateEmail(email);
+        this.birthday = ValidationUtil.validateDate(birthday);
         this.role = role;
     }
 

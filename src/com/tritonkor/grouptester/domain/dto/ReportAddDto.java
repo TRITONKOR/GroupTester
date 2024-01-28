@@ -1,6 +1,6 @@
 package com.tritonkor.grouptester.domain.dto;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.domain.ValidationUtil;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,12 +17,12 @@ public class ReportAddDto extends Entity {
     public ReportAddDto(UUID id, String testTitle, String groupName,
             int minResult, int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
-        this.testTitle = Validation.validateText(testTitle);
-        this.groupName = Validation.validateText(groupName);
+        this.testTitle = ValidationUtil.validateName(testTitle);
+        this.groupName = ValidationUtil.validateName(groupName);
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = ValidationUtil.validateDateTime(createdAt);
     }
 
     public String getTestTitle() {

@@ -78,7 +78,7 @@ public class TestServiceImpl
         out.println("Test:" + test.getTitle());
 
         for (Question question : test.getQuestionsList()) {
-            out.println("Введіть номер відповіді");
+            out.println("Enter the response number");
             out.println(question.toString());
             for (Answer answer : question.getAnswers()) {
                 out.println(answer);

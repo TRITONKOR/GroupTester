@@ -1,6 +1,6 @@
 package com.tritonkor.grouptester.domain.dto;
 
-import com.tritonkor.grouptester.domain.Validation;
+import com.tritonkor.grouptester.domain.ValidationUtil;
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
 import com.tritonkor.grouptester.persistence.entity.impl.Question;
@@ -19,11 +19,11 @@ public class TestAddDto extends Entity {
     public TestAddDto(UUID id, String title, int countOfQuestions, Set<Question> questions,
             Set<Answer> correctAnswers, LocalDateTime createdAt) {
         super(id);
-        this.title = Validation.validateText(title);
+        this.title = ValidationUtil.validateName(title);
         this.countOfQuestions = countOfQuestions;
         this.questions = questions;
         this.correctAnswers = correctAnswers;
-        this.createdAt = Validation.validateDateTime(createdAt);
+        this.createdAt = ValidationUtil.validateDateTime(createdAt);
     }
 
     public String getTitle() {
