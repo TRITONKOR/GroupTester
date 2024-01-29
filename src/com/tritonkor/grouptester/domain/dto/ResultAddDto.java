@@ -8,18 +8,24 @@ import java.util.UUID;
 
 public class ResultAddDto extends Entity {
 
+    private String resultTitle;
     private final String ownerUsername;
     private final Grade grade;
     private final String testTitle;
     private final LocalDateTime createdAt;
 
-    public ResultAddDto(UUID id, String ownerUsername, Grade grade, String testTitle,
+    public ResultAddDto(UUID id, String resultTitle, String ownerUsername, Grade grade, String testTitle,
             LocalDateTime createdAt) {
         super(id);
+        this.resultTitle = ValidationUtil.validateTitle(resultTitle);
         this.ownerUsername = ValidationUtil.validateName(ownerUsername);
         this.grade = grade;
-        this.testTitle = ValidationUtil.validateName(testTitle);
+        this.testTitle = ValidationUtil.validateTitle(testTitle);
         this.createdAt = ValidationUtil.validateDateTime(createdAt);
+    }
+
+    public String getResultTitle() {
+        return resultTitle;
     }
 
     public String getOwnerUsername() {

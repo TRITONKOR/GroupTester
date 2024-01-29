@@ -12,5 +12,7 @@ public interface ResultService extends Service<Result> {
 
     Set<Result> findAllByTestTitle(String testTitle);
 
+    Result findByName(String resultName);
+
     Result add(ResultAddDto resultAddDto);
 }

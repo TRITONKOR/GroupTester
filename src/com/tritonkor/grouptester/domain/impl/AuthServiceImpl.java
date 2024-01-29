@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(AuthException::new);
 
         if (!BCrypt.checkpw(password, foundedUser.getPassword())) {
-            return false;
+            throw new AuthException();
         }
 
         user = foundedUser;

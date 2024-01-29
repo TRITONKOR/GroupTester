@@ -133,13 +133,15 @@ public class Generator {
             UUID id = UUID.randomUUID();
             String ownerUsername = faker.name().username();
 
+            String resultName = faker.lorem().sentence(1);
+
             String testTitle = faker.lorem().sentence(2);
 
             Grade grade = new Grade((int) Math.floor(Math.random() * 100 + 1));
 
             LocalDateTime createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
-            Result result = Result.builder().id(id).ownerUsername(ownerUsername).grade(grade).testTitle(testTitle)
+            Result result = Result.builder().id(id).resultTitle(resultName).ownerUsername(ownerUsername).testTitle(testTitle).grade(grade)
                     .createdAt(createdAt).build();
             results.add(result);
         }

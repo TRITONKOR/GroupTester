@@ -34,6 +34,11 @@ public class GroupServiceImpl extends GenericService<Group> implements GroupServ
     }
 
     @Override
+    public Group findByUser(User user) {
+        return groupRepository.findByUser(user).orElse(null);
+    }
+
+    @Override
     public Group add(GroupAddDto groupAddDto) {
         try {
             var group = Group.builder().id(groupAddDto.getId()).name(groupAddDto.getName())

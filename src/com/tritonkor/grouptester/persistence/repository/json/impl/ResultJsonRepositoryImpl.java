@@ -6,6 +6,7 @@ import com.tritonkor.grouptester.persistence.entity.impl.Result;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
 import com.tritonkor.grouptester.persistence.repository.contracts.ResultRepository;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,11 @@ public class ResultJsonRepositoryImpl
     public ResultJsonRepositoryImpl(Gson gson) {
         super(gson, JsonPathFactory.RESULTS.getPath(),
                 TypeToken.getParameterized(Set.class, Result.class).getType());
+    }
+
+    @Override
+    public Optional<Result> findByName(String resultNAme) {
+        return entities.stream().filter(r -> r.getResultTitle().equals(resultNAme)).findFirst();
     }
 
     @Override

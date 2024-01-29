@@ -16,7 +16,7 @@ public abstract class RepositoryFactory {
         return switch (whichFactory) {
             case JSON -> JsonRepositoryFactory.getInstance();
             default -> throw new IllegalArgumentException(
-                    "Помилка при виборі фабрики репозиторіїв.");
+                    "Error when selecting a repository factory.");
         };
     }
 

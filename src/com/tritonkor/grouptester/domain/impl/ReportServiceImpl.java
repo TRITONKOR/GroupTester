@@ -33,7 +33,7 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
         int max = userGrades.stream().mapToInt(Grade::getGrade).max().orElse(0);
         int average = (int) userGrades.stream().mapToInt(Grade::getGrade).average().orElse(0);
 
-        Report report = Report.builder().id(UUID.randomUUID()).testTitle(testTitle)
+        Report report = Report.builder().id(UUID.randomUUID()).reportTitle("Test").testTitle(testTitle)
                 .groupName(groupName)
                 .minResult(min)
                 .maxResult(max)
@@ -43,6 +43,11 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
         userGrades.clear();
 
         return report;
+    }
+
+    @Override
+    public Report findByName(String reportName) {
+        return reportRepository.findByName(reportName).orElse(null);
     }
 
     @Override
@@ -70,6 +75,7 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
     public Report add(ReportAddDto reportAddDto) {
         try {
             var report = Report.builder().id(reportAddDto.getId())
+                    .reportTitle(reportAddDto.getReportTitle())
                     .testTitle(reportAddDto.getTestTitle()).groupName(reportAddDto.getGroupName())
                     .minResult(reportAddDto.getMinResult()).maxResult(reportAddDto.getMaxResult())
                     .averageResult(reportAddDto.getAverageResult())

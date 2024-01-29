@@ -6,37 +6,43 @@ import java.util.UUID;
 
 public class Result extends Entity {
 
+    private String resultTitle;
     private final String ownerUsername;
     private final Grade grade;
     private final String testTitle;
     private final LocalDateTime createdAt;
 
-    private Result(UUID id, String ownerUsername, Grade grade, String testTitle, LocalDateTime createdAt) {
+    private Result(UUID id, String resultTitle, String ownerUsername, String testTitle, Grade grade, LocalDateTime createdAt) {
         super(id);
+        this.resultTitle = resultTitle;
         this.ownerUsername = ownerUsername;
-        this.grade = grade;
         this.testTitle = testTitle;
+        this.grade = grade;
         this.createdAt = createdAt;
     }
 
     public static ResultBuilderId builder() {
-        return id -> ownerUsername -> grade -> testTitle -> createdAt -> () -> new Result(id, ownerUsername, grade, testTitle, createdAt);
+        return id -> resultTitle -> ownerUsername -> testTitle -> grade -> createdAt -> () -> new Result(id, resultTitle, ownerUsername, testTitle, grade, createdAt);
     }
 
     public interface ResultBuilderId {
-        ResultBuilderOwnerUsername id(UUID id);
+        ResultBuilderResultTitle id(UUID id);
+    }
+
+    public interface ResultBuilderResultTitle{
+        ResultBuilderOwnerUsername resultTitle(String resultTitle);
     }
 
     public interface ResultBuilderOwnerUsername{
-        ResultBuilderGrade ownerUsername(String ownerUsername);
-    }
-
-    public interface ResultBuilderGrade {
-        ResultBuilderTestTitle grade(Grade grade);
+        ResultBuilderTestTitle ownerUsername(String ownerUsername);
     }
 
     public interface ResultBuilderTestTitle {
-        ResultBuilderCreatedAt testTitle(String testTitle);
+        ResultBuilderGrade testTitle(String testTitle);
+    }
+
+    public interface ResultBuilderGrade {
+        ResultBuilderCreatedAt grade(Grade grade);
     }
 
     public interface ResultBuilderCreatedAt {
@@ -45,6 +51,14 @@ public class Result extends Entity {
 
     public interface ResultBuilder {
         Result build();
+    }
+
+    public void setResultTitle(String resultName) {
+        this.resultTitle = resultTitle;
+    }
+
+    public String getResultTitle() {
+        return resultTitle;
     }
 
     public String getOwnerUsername() {
@@ -66,8 +80,10 @@ public class Result extends Entity {
     @Override
     public String toString() {
         return "Result{" +
-                "ownerUsername=" + ownerUsername + grade +
-                ", testTitle=" + testTitle +
+                "resultTitle='" + resultTitle + '\'' +
+                ", ownerUsername='" + ownerUsername + '\'' +
+                ", grade=" + grade +
+                ", testTitle='" + testTitle + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }

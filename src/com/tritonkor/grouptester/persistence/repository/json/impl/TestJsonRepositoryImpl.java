@@ -2,6 +2,8 @@ package com.tritonkor.grouptester.persistence.repository.json.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tritonkor.grouptester.persistence.entity.impl.Answer;
+import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.repository.contracts.TestRepository;
 import java.util.Optional;

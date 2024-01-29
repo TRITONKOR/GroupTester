@@ -11,10 +11,16 @@ import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
 import com.tritonkor.grouptester.persistence.repository.contracts.TestRepository;
+import de.codeshelf.consoleui.prompt.ConsolePrompt;
+import de.codeshelf.consoleui.prompt.ListResult;
+import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
+import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Supplier;
 import org.mindrot.bcrypt.BCrypt;
 
@@ -24,8 +30,6 @@ public class TestServiceImpl
 
     private final TestRepository testRepository;
 
-    private User userForTesting = null;
-
     private Grade grade;
 
     public TestServiceImpl(TestRepository testRepository) {
@@ -33,17 +37,9 @@ public class TestServiceImpl
         this.testRepository = testRepository;
     }
 
-    public User getUserForTesting() {
-        return userForTesting;
-    }
-
-    public void setUserForTesting(User userForTesting) {
-        this.userForTesting = userForTesting;
-    }
-
     @Override
-    public Optional<Test> findByTitle(String title) {
-        return testRepository.findByTitle(title);
+    public Test findByTitle(String title) {
+        return testRepository.findByTitle(title).orElse(null);
     }
 
     @Override
@@ -62,41 +58,51 @@ public class TestServiceImpl
         }
     }
 
-    public Answer getUserAnswer(Supplier<Integer> waitForUserInput, Question question) {
-        int userVariant = waitForUserInput.get();
-        return question.getAnswers().get(userVariant - 1);
-    }
-
     public Grade calculateGrade(Test test, Set<Answer> userAnswers) {
         userAnswers.retainAll(test.getCorrectAnswers());
         return new Grade(Math.round(100 / test.getCountOfQuestions()) * userAnswers.size());
     }
 
-    public void runTest(Test test, ResultServiceImpl resultService) {
+    @Override
+    public Grade runTest(Test test) throws IOException {
+        ConsolePrompt prompt = new ConsolePrompt();
+        PromptBuilder promptBuilder = prompt.getPromptBuilder();
+
         Set<Answer> userAnswers = new HashSet<>();
 
-        out.println("Test:" + test.getTitle());
-
         for (Question question : test.getQuestionsList()) {
-            out.println("Enter the response number");
-            out.println(question.toString());
+            ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                    .name("test").message("Test: " + test.getTitle());
+
+            out.println(question.getText());
             for (Answer answer : question.getAnswers()) {
-                out.println(answer);
+                listPromptBuilder.newItem(answer.getText()).text(answer.getText()).add();
             }
 
-            userAnswers.add(getUserAnswer((() -> {
-                Scanner scanner = new Scanner(System.in);
-                return scanner.nextInt();
-            }), question));
+            var result = prompt.prompt(listPromptBuilder.addPrompt().build());
+            ListResult answerInput = (ListResult) result.get("test");
+
+            Answer userAnswer = findAnswerByText(test, answerInput.getSelectedId().toString());
+
+            userAnswers.add(userAnswer);
+
+            out.println('\n');
+            prompt = new ConsolePrompt();
+            promptBuilder = prompt.getPromptBuilder();
         }
 
         grade = calculateGrade(test, userAnswers);
-
-        resultService.makeResult(userForTesting.getUsername(), test.getTitle(), grade);
-
+        return grade;
     }
 
     private void resetGrade() {
         grade = null;
+    }
+
+    private Answer findAnswerByText(Test test, String text) {
+        return  test.getQuestionsList().stream()
+                .flatMap(question -> question.getAnswers().stream())
+                .filter(answer -> answer.getText().equals(text))
+                .findFirst().orElse(null);
     }
 }

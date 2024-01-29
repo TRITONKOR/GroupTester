@@ -93,7 +93,7 @@ public class User extends Entity implements Observer {
 
     @Override
     public void update(Runnable runTest, TestServiceImpl testService) {
-        testService.setUserForTesting(this);
+        //testService.setUserForTesting(this);
         runTest.run();
     }
 
@@ -156,7 +156,7 @@ public class User extends Entity implements Observer {
             REPORT;
         }
 
-        private record Permission(boolean canAdd,
+        public record Permission(boolean canAdd,
                                   boolean canEdit,
                                   boolean canDelete,
                                   boolean canRead) {

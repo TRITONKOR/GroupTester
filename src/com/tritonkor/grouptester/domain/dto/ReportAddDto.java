@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public class ReportAddDto extends Entity {
 
+    private String reportTitle;
     private final String testTitle;
     private final String groupName;
     private int minResult;
@@ -14,16 +15,19 @@ public class ReportAddDto extends Entity {
     private int averageResult;
     private final LocalDateTime createdAt;
 
-    public ReportAddDto(UUID id, String testTitle, String groupName,
+    public ReportAddDto(UUID id, String reportTitle, String testTitle, String groupName,
             int minResult, int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
-        this.testTitle = ValidationUtil.validateName(testTitle);
+        this.reportTitle = ValidationUtil.validateTitle(reportTitle);
+        this.testTitle = ValidationUtil.validateTitle(testTitle);
         this.groupName = ValidationUtil.validateName(groupName);
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
         this.createdAt = ValidationUtil.validateDateTime(createdAt);
     }
+
+    public String getReportTitle() { return reportTitle; }
 
     public String getTestTitle() {
         return testTitle;

@@ -28,8 +28,34 @@ public class ValidationUtil {
         if (text.length() < 4) {
             errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
         }
-        if (text.length() > 24) {
-            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 24));
+        if (text.length() > 30) {
+            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 30));
+        }
+
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
+        if (!pattern.matcher(text).matches()) {
+            errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
+
+        return text;
+    }
+
+    public static String validateTitle(String text) {
+        Set<String> errors = new HashSet<>();
+        final String templateName = "name";
+
+        if (text.isBlank()) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+        }
+        if (text.length() < 4) {
+            errors.add(ErrorTemplates.MIN_LENGTH.getTemplate().formatted(templateName, 4));
+        }
+        if (text.length() > 100) {
+            errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 100));
         }
 
         Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");

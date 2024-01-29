@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public class Report extends Entity implements Comparable<Report> {
 
+    private String reportTitle;
     private final String testTitle;
     private final String groupName;
     private final LocalDateTime createdAt;
@@ -13,9 +14,10 @@ public class Report extends Entity implements Comparable<Report> {
     private int maxResult;
     private int averageResult;
 
-    private Report(UUID id, String testTitle, String groupName, int minResult,
+    private Report(UUID id, String reportTitle, String testTitle, String groupName, int minResult,
             int maxResult, int averageResult, LocalDateTime createdAt) {
         super(id);
+        this.reportTitle = reportTitle;
         this.testTitle = testTitle;
         this.groupName = groupName;
         this.minResult = minResult;
@@ -25,13 +27,18 @@ public class Report extends Entity implements Comparable<Report> {
     }
 
     public static ReportBuilderId builder() {
-        return id -> testTitle -> groupName -> minResult -> maxResult -> averageResult -> createdAt -> () -> new Report(
-                id, testTitle, groupName, minResult, maxResult, averageResult, createdAt);
+        return id -> reportTitle -> testTitle -> groupName -> minResult -> maxResult -> averageResult -> createdAt -> () -> new Report(
+                id, reportTitle, testTitle, groupName, minResult, maxResult, averageResult, createdAt);
     }
 
     public interface ReportBuilderId {
 
-        ReportBuilderTestTitle id(UUID id);
+        ReportBuilderReportTitle id(UUID id);
+    }
+
+    public interface ReportBuilderReportTitle {
+
+        ReportBuilderTestTitle reportTitle(String reportTitle);
     }
 
     public interface ReportBuilderTestTitle {
@@ -73,6 +80,12 @@ public class Report extends Entity implements Comparable<Report> {
     public interface GroupBuilder {
 
         Group build();
+    }
+
+    public String getReportTitle() { return reportTitle; }
+
+    public void setReportTitle(String reportTitle) {
+        this.reportTitle = reportTitle;
     }
 
     public String getTestTitle() {
@@ -119,8 +132,9 @@ public class Report extends Entity implements Comparable<Report> {
     @Override
     public String toString() {
         return "Report{" +
-                "testTitle=" + testTitle +
-                ", groupName=" + groupName +
+                "reportTitle='" + reportTitle + '\'' +
+                ", testTitle='" + testTitle + '\'' +
+                ", groupName='" + groupName + '\'' +
                 ", createdAt=" + createdAt +
                 ", minResult=" + minResult +
                 ", maxResult=" + maxResult +

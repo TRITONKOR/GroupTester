@@ -22,11 +22,16 @@ public class ResultServiceImpl extends GenericService<Result> implements ResultS
     }
 
     public void makeResult(String userName, String testTitle, Grade grade) {
-        Result result = Result.builder().id(UUID.randomUUID()).ownerUsername(userName).grade(grade)
-                .testTitle(testTitle).createdAt(LocalDateTime.now().truncatedTo(
+        Result result = Result.builder().id(UUID.randomUUID()).resultTitle("TestService").ownerUsername(userName)
+                .testTitle(testTitle).grade(grade).createdAt(LocalDateTime.now().truncatedTo(
                         ChronoUnit.MINUTES)).build();
 
         resultRepository.add(result);
+    }
+
+    @Override
+    public Result findByName(String resultName) {
+        return resultRepository.findByName(resultName).orElse(null);
     }
 
     @Override
@@ -43,8 +48,10 @@ public class ResultServiceImpl extends GenericService<Result> implements ResultS
     public Result add(ResultAddDto resultAddDto) {
         try {
             var result = Result.builder().id(resultAddDto.getId())
-                    .ownerUsername(resultAddDto.getOwnerUsername()).grade(resultAddDto.getGrade())
-                    .testTitle(resultAddDto.getTestTitle()).createdAt(resultAddDto.getCreatedAt())
+                    .resultTitle(resultAddDto.getResultTitle())
+                    .ownerUsername(resultAddDto.getOwnerUsername())
+                    .testTitle(resultAddDto.getTestTitle()).grade(resultAddDto.getGrade())
+                    .createdAt(resultAddDto.getCreatedAt())
                     .build();
             resultRepository.add(result);
             return result;

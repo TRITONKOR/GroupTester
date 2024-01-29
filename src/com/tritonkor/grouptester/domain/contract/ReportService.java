@@ -8,6 +8,8 @@ import java.util.Set;
 
 public interface ReportService extends Service<Report> {
 
+    Report findByName(String reportName);
+
     Set<Report> findAllByGroupName(String  groupName);
 
     Set<Report> findAllByTestTitle(String testTitle);

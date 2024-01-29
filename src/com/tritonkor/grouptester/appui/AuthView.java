@@ -18,6 +18,7 @@ import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
 import de.codeshelf.consoleui.prompt.ListPrompt;
 import de.codeshelf.consoleui.prompt.ListResult;
+import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 import java.util.UUID;
@@ -32,7 +33,8 @@ public class AuthView implements Renderable {
 
     private final TestView testView;
 
-    public AuthView(AuthService authService, SignUpService signUpService, UserService userService, TestView testView) {
+    public AuthView(AuthService authService, SignUpService signUpService, UserService userService,
+            TestView testView) {
         this.authService = authService;
         this.signUpService = signUpService;
         this.userService = userService;
@@ -41,11 +43,13 @@ public class AuthView implements Renderable {
     }
 
     private void process(AuthMenu selectedItem) throws IOException {
+        ConsolePrompt prompt = new ConsolePrompt();
+        PromptBuilder promptBuilder = prompt.getPromptBuilder();
+
 
         switch (selectedItem) {
             case SIGN_IN -> {
-                ConsolePrompt prompt = new ConsolePrompt();
-                PromptBuilder promptBuilder = prompt.getPromptBuilder();
+                boolean dataCorrect = true;
 
                 promptBuilder.createInputPrompt()
                         .name("username")
@@ -57,51 +61,51 @@ public class AuthView implements Renderable {
                         .mask('*')
                         .addPrompt();
 
-                var result = prompt.prompt(promptBuilder.build());
-                var usernameInput = (InputResult) result.get("username");
-                var passwordInput = (InputResult) result.get("password");
+                do {
+                    try {
+                        var result = prompt.prompt(promptBuilder.build());
+                        var usernameInput = (InputResult) result.get("username");
+                        var passwordInput = (InputResult) result.get("password");
 
-                try {
-                    boolean authenticate = authService.authenticate(
-                            usernameInput.getInput(),
-                            passwordInput.getInput());
-                    if (authenticate) {
-                        testView.setCurrentUser(userService.findByUsername(usernameInput.getInput()));
+                        authService.authenticate(usernameInput.getInput(),
+                                passwordInput.getInput());
+                        dataCorrect = true;
+                    } catch (AuthException e) {
+                        dataCorrect = false;
+
+                        ConsolClearer.clearConsole();
+                        System.out.println(e.getMessage());
                     }
+                } while (!dataCorrect);
+                prompt = new ConsolePrompt();
+                promptBuilder = prompt.getPromptBuilder();
 
-                } catch (AuthException e) {
-                    System.err.println(e.getMessage());
-                }
                 ConsolClearer.clearConsole();
                 testView.render();
-
-
             }
             case SIGN_UP -> {
                 boolean dataCorrect = true;
 
-                ConsolePrompt prompt = new ConsolePrompt();
-                PromptBuilder promptBuilder = prompt.getPromptBuilder();
-                do {
-                    promptBuilder.createInputPrompt()
-                            .name("username")
-                            .message("Type your login: ")
-                            .addPrompt();
-                    promptBuilder.createInputPrompt()
-                            .name("password")
-                            .message(
-                                    "Type your password(capital letters, numbers, and special characters must be present): ")
-                            .mask('*')
-                            .addPrompt();
-                    promptBuilder.createInputPrompt()
-                            .name("email")
-                            .message("Type your email: ")
-                            .addPrompt();
-                    promptBuilder.createInputPrompt()
-                            .name("birthday")
-                            .message("Type your birthday(example: 1977-4-11): ")
-                            .addPrompt();
+                promptBuilder.createInputPrompt()
+                        .name("username")
+                        .message("Type your login: ")
+                        .addPrompt();
+                promptBuilder.createInputPrompt()
+                        .name("password")
+                        .message(
+                                "Type your password(capital letters, numbers, and special characters must be present): ")
+                        .mask('*')
+                        .addPrompt();
+                promptBuilder.createInputPrompt()
+                        .name("email")
+                        .message("Type your email: ")
+                        .addPrompt();
+                promptBuilder.createInputPrompt()
+                        .name("birthday")
+                        .message("Type your birthday(example: 1977-4-11): ")
+                        .addPrompt();
 
+                do {
                     try {
 
                         var result = prompt.prompt(promptBuilder.build());
@@ -129,21 +133,20 @@ public class AuthView implements Renderable {
                                 .name("verify code")
                                 .message("Type your verification code: ")
                                 .addPrompt();
+
                         result = prompt.prompt(promptBuilder.build());
                         var verifyCodeInput = (InputResult) result.get("verify code");
                         try {
                             signUpService.signUp(userAddDto, verifyCodeInput.getInput(),
                                     "2");
-
-                            testView.setCurrentUser(userService.findByUsername(usernameInput.getInput()));
+                            testView.setCurrentUser(
+                                    userService.findByUsername(usernameInput.getInput()));
 
                             dataCorrect = true;
                         } catch (AuthException e) {
                             System.err.println(e.getMessage());
                         }
                     } catch (EntityArgumentException e) {
-                        prompt = new ConsolePrompt();
-                        promptBuilder = prompt.getPromptBuilder();
                         ConsolClearer.clearConsole();
                         System.out.println(e.getMessage());
 
@@ -155,26 +158,27 @@ public class AuthView implements Renderable {
                 testView.render();
             }
             case EXIT -> {
-
                 ConsolClearer.clearConsole();
-                testView.render();
+                authService.authenticate("kazah", "Kazah123456");
+                testView.render();//System.out.println("Good bye, botik >w<");
             }
         }
     }
+
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
-        promptBuilder.createListPrompt()
+        ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
                 .name("auth-menu")
-                .message("Group Tester")
-                .newItem(SIGN_IN.toString()).text(SIGN_IN.getName()).add()
-                .newItem(SIGN_UP.toString()).text(SIGN_UP.getName()).add()
-                .newItem(EXIT.toString()).text(EXIT.getName()).add()
-                .addPrompt();
+                .message("Group Tester");
 
-        var result = prompt.prompt(promptBuilder.build());
+        listPromptBuilder.newItem(SIGN_IN.toString()).text(SIGN_IN.getName()).add();
+        listPromptBuilder.newItem(SIGN_UP.toString()).text(SIGN_UP.getName()).add();
+        listPromptBuilder.newItem(EXIT.toString()).text(EXIT.getName()).add();
+
+        var result = prompt.prompt(listPromptBuilder.addPrompt().build());
         ListResult resultItem = (ListResult) result.get("auth-menu");
 
         AuthMenu selectedItem = AuthMenu.valueOf(resultItem.getSelectedId());
