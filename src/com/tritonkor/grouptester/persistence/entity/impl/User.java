@@ -93,7 +93,6 @@ public class User extends Entity implements Observer {
 
     @Override
     public void update(Runnable runTest, TestServiceImpl testService) {
-        //testService.setUserForTesting(this);
         runTest.run();
     }
 

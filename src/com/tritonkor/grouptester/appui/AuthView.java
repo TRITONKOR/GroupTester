@@ -1,13 +1,10 @@
 package com.tritonkor.grouptester.appui;
 
+import static com.tritonkor.grouptester.Application.jsonRepositoryFactory;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.EXIT;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.SIGN_IN;
 import static com.tritonkor.grouptester.appui.AuthView.AuthMenu.SIGN_UP;
-import static com.tritonkor.grouptester.appui.TestView.TesterMenu.JOIN_THE_GROUP;
-import static com.tritonkor.grouptester.appui.TestView.TesterMenu.VIEW_REPORTS;
-import static com.tritonkor.grouptester.appui.TestView.TesterMenu.VIEW_RESULTS;
 
-import com.tritonkor.grouptester.appui.TestView.TesterMenu;
 import com.tritonkor.grouptester.domain.contract.AuthService;
 import com.tritonkor.grouptester.domain.contract.SignUpService;
 import com.tritonkor.grouptester.domain.contract.UserService;
@@ -16,7 +13,6 @@ import com.tritonkor.grouptester.domain.exception.AuthException;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
-import de.codeshelf.consoleui.prompt.ListPrompt;
 import de.codeshelf.consoleui.prompt.ListResult;
 import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
@@ -45,7 +41,6 @@ public class AuthView implements Renderable {
     private void process(AuthMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
-
 
         switch (selectedItem) {
             case SIGN_IN -> {
@@ -139,8 +134,9 @@ public class AuthView implements Renderable {
                         try {
                             signUpService.signUp(userAddDto, verifyCodeInput.getInput(),
                                     "2");
-                            testView.setCurrentUser(
-                                    userService.findByUsername(usernameInput.getInput()));
+                            jsonRepositoryFactory.commit();
+                            authService.authenticate(userAddDto.username(),
+                                    userAddDto.rawPassword());
 
                             dataCorrect = true;
                         } catch (AuthException e) {

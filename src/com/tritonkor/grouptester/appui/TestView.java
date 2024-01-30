@@ -1,6 +1,8 @@
 package com.tritonkor.grouptester.appui;
 
+import static com.tritonkor.grouptester.Application.jsonRepositoryFactory;
 import static com.tritonkor.grouptester.appui.TestView.TesterMenu.CREATE_GROUP;
+import static com.tritonkor.grouptester.appui.TestView.TesterMenu.CREATE_TEST;
 import static com.tritonkor.grouptester.appui.TestView.TesterMenu.DELETE_REPORT;
 import static com.tritonkor.grouptester.appui.TestView.TesterMenu.DELETE_RESULT;
 import static com.tritonkor.grouptester.appui.TestView.TesterMenu.EXIT;
@@ -18,11 +20,15 @@ import com.tritonkor.grouptester.domain.contract.ReportService;
 import com.tritonkor.grouptester.domain.contract.ResultService;
 import com.tritonkor.grouptester.domain.contract.TestService;
 import com.tritonkor.grouptester.domain.dto.GroupAddDto;
+import com.tritonkor.grouptester.domain.dto.ReportAddDto;
 import com.tritonkor.grouptester.domain.dto.ResultAddDto;
-import com.tritonkor.grouptester.domain.dto.UserAddDto;
+import com.tritonkor.grouptester.domain.dto.TestAddDto;
 import com.tritonkor.grouptester.domain.exception.AuthException;
+import com.tritonkor.grouptester.domain.exception.SignUpException;
+import com.tritonkor.grouptester.persistence.entity.impl.Answer;
 import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import com.tritonkor.grouptester.persistence.entity.impl.Group;
+import com.tritonkor.grouptester.persistence.entity.impl.Question;
 import com.tritonkor.grouptester.persistence.entity.impl.Report;
 import com.tritonkor.grouptester.persistence.entity.impl.Result;
 import com.tritonkor.grouptester.persistence.entity.impl.Test;
@@ -34,13 +40,15 @@ import de.codeshelf.consoleui.prompt.ConfirmResult;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
 import de.codeshelf.consoleui.prompt.ListResult;
-import de.codeshelf.consoleui.prompt.builder.InputValueBuilder;
 import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 import java.security.Permission;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,8 +61,6 @@ public class TestView implements Renderable {
     private final AuthService authService;
 
     private User currentUser;
-
-    private Permission permissions;
 
     public TestView(TestService testService, ResultService resultService,
             ReportService reportService,
@@ -72,7 +78,7 @@ public class TestView implements Renderable {
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
         currentUser = authService.getUser();
-        
+
         System.out.println(TesterMenu.USERNAME.getName() + currentUser.getUsername()
                 + " " + TesterMenu.ROLE.getName() + currentUser.getRole());
 
@@ -80,6 +86,7 @@ public class TestView implements Renderable {
                 .name("tester-menu")
                 .message("Tester Menu");
 
+        listPromptBuilder.newItem(CREATE_TEST.toString()).text(CREATE_TEST.getName()).add();
         listPromptBuilder.newItem(RUN_TEST.toString()).text(RUN_TEST.getName()).add();
         listPromptBuilder.newItem(JOIN_THE_GROUP.toString()).text(JOIN_THE_GROUP.getName()).add();
         listPromptBuilder.newItem(CREATE_GROUP.toString()).text(CREATE_GROUP.getName()).add();
@@ -100,6 +107,148 @@ public class TestView implements Renderable {
 
         switch (selectedItem) {
 
+            case CREATE_TEST -> {
+                boolean dataCorrect = true;
+
+                if (currentUser.getRole().equals(Role.GENERAL)) {
+                    ConsolClearer.clearConsole();
+
+                    System.out.println("Access to create tests is denied");
+                    this.render();
+                }
+
+                do {
+                    promptBuilder.createInputPrompt()
+                            .name("test-name")
+                            .message("Type test name: ")
+                            .addPrompt();
+                    promptBuilder.createInputPrompt()
+                            .name("questions-count")
+                            .message("Type count of questions: ")
+                            .addPrompt();
+
+                    try {
+
+                        var result = prompt.prompt(promptBuilder.build());
+
+                        var testTitleInput = (InputResult) result.get("test-name");
+                        var countInput = (InputResult) result.get("questions-count");
+                        int countOfQuestions = 0;
+                        String testTitle;
+                        try {
+                            testTitle = testTitleInput.getInput();
+                        } catch (EntityArgumentException e) {;
+                            dataCorrect = false;
+                            continue;
+                        }
+                        try {
+                            countOfQuestions = Integer.parseInt(countInput.getInput());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Wrong count of questions format");
+                            dataCorrect = false;
+                            continue;
+                        }
+
+                        Set<Answer> correctAnswers = new HashSet<>();
+                        Set<Question> questions = new HashSet<>();
+
+                        prompt = new ConsolePrompt();
+                        promptBuilder = new PromptBuilder();
+                        for (int i = 0; i < countOfQuestions; i++) {
+                            promptBuilder.createInputPrompt()
+                                    .name("question-text")
+                                    .message("Type question text: ")
+                                    .addPrompt();
+
+                            var questionResult = prompt.prompt(promptBuilder.build());
+
+                            var questionTextInput = (InputResult) questionResult.get(
+                                    "question-text");
+
+                            List<Answer> answerList = new ArrayList<>();
+                            prompt = new ConsolePrompt();
+                            promptBuilder = new PromptBuilder();
+
+                            for (int j = 0; j < 3; j++) {
+                                promptBuilder.createInputPrompt()
+                                        .name("answer-text")
+                                        .message("Type answer text: ")
+                                        .addPrompt();
+
+                                var answerResult = prompt.prompt(promptBuilder.build());
+
+                                var answerTextInput = (InputResult) answerResult.get(
+                                        "answer-text");
+
+                                Answer answerAddDto = Answer.builder().id(UUID.randomUUID())
+                                        .text(answerTextInput.getInput()).createdAt(
+                                                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                                        .build();
+                                answerList.add(answerAddDto);
+
+                                prompt = new ConsolePrompt();
+                                promptBuilder = new PromptBuilder();
+                            }
+
+                            ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                                    .message("choose correct answer: ").name("correct-answer");
+                            for (Answer answer : answerList) {
+                                listPromptBuilder.newItem(answer.getText()).text(answer.getText())
+                                        .add();
+                            }
+                            var correctAnswerResult = prompt.prompt(
+                                    listPromptBuilder.addPrompt().build());
+
+                            var correctAnswerInput = (ListResult) correctAnswerResult.get(
+                                    "correct-answer");
+
+                            Answer correctAnswer = testService.findCorrectAnswer(answerList,
+                                    correctAnswerInput.getSelectedId());
+
+                            Question question = Question.builder().id(UUID.randomUUID())
+                                    .text(questionTextInput.getInput()).answers(answerList)
+                                    .correctAnswer(correctAnswer)
+                                    .createdAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                                    .build();
+
+                            questions.add(question);
+                            correctAnswers.add(correctAnswer);
+
+                            prompt = new ConsolePrompt();
+                            promptBuilder = new PromptBuilder();
+
+                            ConsolClearer.clearConsole();
+                        }
+                        LocalDateTime createdAt = LocalDateTime.now()
+                                .truncatedTo(ChronoUnit.MINUTES);
+
+                        TestAddDto testAddDto = new TestAddDto(UUID.randomUUID(),
+                                testTitle, countOfQuestions, questions,
+                                correctAnswers, createdAt);
+                        try {
+
+                            testService.add(testAddDto);
+                            jsonRepositoryFactory.commit();
+
+                            ConsolClearer.clearConsole();
+                            System.out.println(
+                                    testTitleInput.getInput() + " test successfully created");
+                            dataCorrect = true;
+                        } catch (SignUpException e) {
+                            promptBuilder = prompt.getPromptBuilder();
+                            ConsolClearer.clearConsole();
+                            System.out.println(e.getMessage());
+                            dataCorrect = false;
+                        }
+                    } catch (EntityArgumentException e) {
+                        promptBuilder = prompt.getPromptBuilder();
+                        ConsolClearer.clearConsole();
+                        System.out.println(e.getMessage());
+
+                        dataCorrect = false;
+                    }
+                } while (!dataCorrect);
+            }
             case RUN_TEST -> {
                 if (groupService.findByUser(currentUser).equals(null)) {
                     ConsolClearer.clearConsole();
@@ -152,6 +301,7 @@ public class TestView implements Renderable {
                                 currentUser.getUsername(), userGrade, test.getTitle(),
                                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
                         resultService.add(resultAddDto);
+                        jsonRepositoryFactory.commit();
 
                         correctData = true;
                     } catch (EntityArgumentException e) {
@@ -225,15 +375,16 @@ public class TestView implements Renderable {
                         try {
 
                             groupService.add(groupAddDto);
+                            jsonRepositoryFactory.commit();
 
                             ConsolClearer.clearConsole();
-                            System.out.println(groupNameInput.getInput() + " group successfully created");
+                            System.out.println(
+                                    groupNameInput.getInput() + " group successfully created");
                             dataCorrect = true;
-                        } catch (AuthException e) {
+                        } catch (SignUpException e) {
                             System.err.println(e.getMessage());
                         }
                     } catch (EntityArgumentException e) {
-                        prompt = new ConsolePrompt();
                         promptBuilder = prompt.getPromptBuilder();
                         ConsolClearer.clearConsole();
                         System.out.println(e.getMessage());
@@ -249,16 +400,24 @@ public class TestView implements Renderable {
                         .name("results-list").message("List of results:");
 
                 Set<Result> results = resultService.findAllByUsername(currentUser.getUsername());
-                for (Result result : results) {
-                    listPromptBuilder.newItem(result.getResultTitle()).text(result.getResultTitle())
-                            .add();
+                if (results.equals(null)) {
+                    System.out.println("But no one came");
+
+                } else {
+                    for (Result result : results) {
+                        listPromptBuilder.newItem(result.getResultTitle())
+                                .text(result.getResultTitle())
+                                .add();
+                    }
                 }
                 listPromptBuilder.newItem("back").text("Back to menu").add();
 
                 var result = prompt.prompt(listPromptBuilder.addPrompt().build());
+
                 ListResult resultInput = (ListResult) result.get("results-list");
 
                 if (resultInput.getSelectedId().equals("back")) {
+                    ConsolClearer.clearConsole();
                     this.render();
                 }
 
@@ -290,6 +449,7 @@ public class TestView implements Renderable {
                 ListResult reportInput = (ListResult) result.get("reports-list");
 
                 if (reportInput.getSelectedId().equals("back")) {
+                    ConsolClearer.clearConsole();
                     this.render();
                 }
 
@@ -297,7 +457,6 @@ public class TestView implements Renderable {
 
                 System.out.println(userReport.toString());
 
-                listPromptBuilder = promptBuilder.createListPrompt();
                 actionsWithReport(userReport);
             }
             case EXIT -> {
@@ -306,6 +465,7 @@ public class TestView implements Renderable {
     }
 
     enum TesterMenu {
+        CREATE_TEST("Create test"),
         RUN_TEST("Run test"),
         JOIN_THE_GROUP("Join the group"),
         CREATE_GROUP("Create new group"),
@@ -361,7 +521,12 @@ public class TestView implements Renderable {
 
                 var resultNameInput = (InputResult) result.get("result-name");
 
-                userResult.setResultTitle(resultNameInput.getInput());
+                ResultAddDto resultAddDto = new ResultAddDto(userResult.getId(),
+                        resultNameInput.getInput(), userResult.getOwnerUsername(),
+                        userResult.getMark(), userResult.getTestTitle(), userResult.getCreatedAt());
+                resultService.remove(userResult);
+                resultService.add(resultAddDto);
+                jsonRepositoryFactory.commit();
 
                 ConsolClearer.clearConsole();
                 System.out.println("Set new name for result: " + resultNameInput.getInput());
@@ -382,10 +547,11 @@ public class TestView implements Renderable {
 
                 if (userChoice.getConfirmed() == ConfirmChoice.ConfirmationValue.YES) {
                     resultService.remove(userResult);
+                    jsonRepositoryFactory.commit();
 
                     ConsolClearer.clearConsole();
                     System.out.println("Result has been successfully deleted");
-                    actionsWithResult(userResult);
+                    this.render();
                 } else {
                     ConsolClearer.clearConsole();
                     actionsWithResult(userResult);
@@ -427,12 +593,19 @@ public class TestView implements Renderable {
 
                 result = prompt.prompt(promptBuilder.build());
 
-                var resultNameInput = (InputResult) result.get("report-name");
+                var reportNameInput = (InputResult) result.get("report-name");
 
-                userReport.setReportTitle(resultNameInput.getInput());
+                ReportAddDto reportAddDto = new ReportAddDto(userReport.getId(),
+                        reportNameInput.getInput(), userReport.getTestTitle(),
+                        userReport.getGroupName(), userReport.getMinResult(),
+                        userReport.getMaxResult(), userReport.getAverageResult(),
+                        userReport.getCreatedAt());
+                reportService.remove(userReport);
+                reportService.add(reportAddDto);
+                jsonRepositoryFactory.commit();
 
                 ConsolClearer.clearConsole();
-                System.out.println("Set new name for report: " + resultNameInput.getInput());
+                System.out.println("Set new name for report: " + reportNameInput.getInput());
 
                 actionsWithReport(userReport);
             }
@@ -450,6 +623,7 @@ public class TestView implements Renderable {
 
                 if (userChoice.getConfirmed() == ConfirmChoice.ConfirmationValue.YES) {
                     reportService.remove(userReport);
+                    jsonRepositoryFactory.commit();
 
                     ConsolClearer.clearConsole();
                     System.out.println("Report has been successfully deleted");

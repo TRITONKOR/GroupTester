@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Question extends Entity {
-
-
+    
     private String text;
     private final LocalDateTime createdAt;
     private List<Answer> answers;

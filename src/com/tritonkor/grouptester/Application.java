@@ -30,10 +30,11 @@ import java.util.UUID;
 import jline.TerminalFactory;
 import org.fusesource.jansi.AnsiConsole;
 
-final class Application {
+public final class Application {
 
+    public static RepositoryFactory jsonRepositoryFactory;
     static void init() {
-        RepositoryFactory jsonRepositoryFactory = RepositoryFactory
+        jsonRepositoryFactory = RepositoryFactory
                 .getRepositoryFactory(RepositoryFactory.JSON);
         ServiceFactory serviceFactory = ServiceFactory.getInstance(jsonRepositoryFactory);
 

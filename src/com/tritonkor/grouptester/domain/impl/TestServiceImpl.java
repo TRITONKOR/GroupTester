@@ -17,6 +17,7 @@ import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
@@ -35,6 +36,11 @@ public class TestServiceImpl
     public TestServiceImpl(TestRepository testRepository) {
         super(testRepository);
         this.testRepository = testRepository;
+    }
+
+    @Override
+    public Answer findCorrectAnswer(List<Answer> answerList, String text) {
+        return answerList.stream().filter(a -> a.getText().equals(text)).findFirst().orElse(null);
     }
 
     @Override
