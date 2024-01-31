@@ -1,0 +1,46 @@
+[
+  {
+    "name": "AdminSquad",
+    "users": [
+      {
+        "username": "Admin",
+        "email": "admin@gmail.com",
+        "role": "ADMIN",
+        "password": "$2a$10$Fth61pgOz9DDHWleFyiX5ulzaNP5k0lITsgdwk2IgXTlsVfqJHR46",
+        "birthday": "08-04-2006",
+        "id": "7f70f8ee-83ab-476f-ba90-948fc1d41451"
+      },
+      {
+        "username": "kazah",
+        "email": "kazah@gmail.com",
+        "role": "GENERAL",
+        "password": "$2a$10$.ktDd/NmPFaXLDFoyTmaaOjIdjkrHKCo2RM1JwgL/yAeedQqPaVjC",
+        "birthday": "08-04-2006",
+        "id": "540959de-62aa-4573-a2f7-b95e753f533d"
+      }
+    ],
+    "createdAt": "31-01-2024 22:00",
+    "id": "151b4620-5b7d-4543-bd5e-187eb1e4d0ec"
+  },
+  {
+    "name": "Rakamakafo",
+    "users": [
+      {
+        "username": "Aleksandr",
+        "email": "aleksandr@gmail.com",
+        "role": "GENERAL",
+        "password": "$2a$10$UULPJR.Sf9NqtAre8QMzNeCj03s91FFirC.DagOzh3RmxFuhxctxa",
+        "birthday": "08-04-2006",
+        "id": "d3ed322b-dcbb-4c1d-970f-690266b14693"
+      }
+    ],
+    "createdAt": "01-02-2024 00:07",
+    "id": "127b81f5-6528-487c-9ffe-523561bf2eb6"
+  },
+  {
+    "name": "DreamTeam",
+    "users": [],
+    "createdAt": "01-02-2024 00:08",
+    "id": "8ee41de8-fdea-437e-870c-5a29e37b2469"
+  }
+]

@@ -1,0 +1,490 @@
+[
+  {
+    "title": "Constructive Insights Challenge",
+    "countOfQuestions": 5,
+    "questions": [
+      {
+        "text": "What is the purpose of a stud in framing construction?",
+        "createdAt": "31-01-2024 21:50",
+        "answers": [
+          {
+            "text": "To support the roof",
+            "createdAt": "31-01-2024 21:50",
+            "id": "6947027e-0259-4d68-937b-34017c07b270"
+          },
+          {
+            "text": "To create a smooth surface for painting",
+            "createdAt": "31-01-2024 21:50",
+            "id": "6c855023-3f08-4f1d-a733-4f033747e49f"
+          },
+          {
+            "text": "To provide structural support for walls",
+            "createdAt": "31-01-2024 21:50",
+            "id": "daa73be3-2513-4672-9cd2-563a6bd70bc5"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To provide structural support for walls",
+          "createdAt": "31-01-2024 21:50",
+          "id": "daa73be3-2513-4672-9cd2-563a6bd70bc5"
+        },
+        "id": "3274e7c0-88ae-4ce0-8822-e85ce67d97c9"
+      },
+      {
+        "text": "In roofing, what is the purpose of flashing?",
+        "createdAt": "31-01-2024 21:51",
+        "answers": [
+          {
+            "text": "To add aesthetic appeal",
+            "createdAt": "31-01-2024 21:51",
+            "id": "65193db1-b27f-4b8c-bb21-fb7691936b87"
+          },
+          {
+            "text": "To direct water away from critical areas",
+            "createdAt": "31-01-2024 21:51",
+            "id": "3ec135ba-3961-4849-a12f-4b94fb682014"
+          },
+          {
+            "text": "To provide additional insulation",
+            "createdAt": "31-01-2024 21:51",
+            "id": "d8ebac2e-1de3-4df0-b5a8-ef27c8039714"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To direct water away from critical areas",
+          "createdAt": "31-01-2024 21:51",
+          "id": "3ec135ba-3961-4849-a12f-4b94fb682014"
+        },
+        "id": "3b554c3b-0277-40d5-9f98-87d5026717f6"
+      },
+      {
+        "text": "What is the primary function of a vapor barrier in building construction?",
+        "createdAt": "31-01-2024 21:52",
+        "answers": [
+          {
+            "text": "To control indoor temperature",
+            "createdAt": "31-01-2024 21:51",
+            "id": "caad62f4-f3af-495e-a503-75069178e34b"
+          },
+          {
+            "text": "To prevent the passage of moisture",
+            "createdAt": "31-01-2024 21:51",
+            "id": "1917f47f-f24a-4b6b-bd12-aefb5ef7bb2c"
+          },
+          {
+            "text": "To enhance sound insulation",
+            "createdAt": "31-01-2024 21:51",
+            "id": "bef234da-4963-47a3-903e-7877de831314"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To prevent the passage of moisture",
+          "createdAt": "31-01-2024 21:51",
+          "id": "1917f47f-f24a-4b6b-bd12-aefb5ef7bb2c"
+        },
+        "id": "45bf2690-a4ac-487a-aeaa-d18edbe83942"
+      },
+      {
+        "text": "What does the term \"LEED\" stand for in sustainable construction?",
+        "createdAt": "31-01-2024 21:51",
+        "answers": [
+          {
+            "text": "Low-Energy Engineering Design",
+            "createdAt": "31-01-2024 21:51",
+            "id": "5cd641b0-05fb-4972-bd15-7899314c68d4"
+          },
+          {
+            "text": "Leadership in Energy and Environmental Design",
+            "createdAt": "31-01-2024 21:51",
+            "id": "598cd6b7-a35b-4e91-a924-4bbab989ccf8"
+          },
+          {
+            "text": "Light Efficiency and Eco-friendly Development",
+            "createdAt": "31-01-2024 21:51",
+            "id": "28b791b8-8342-4231-a87a-fe90c135e699"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Leadership in Energy and Environmental Design",
+          "createdAt": "31-01-2024 21:51",
+          "id": "598cd6b7-a35b-4e91-a924-4bbab989ccf8"
+        },
+        "id": "d317718a-edf7-4366-8f5e-717daf1599fe"
+      },
+      {
+        "text": "Which construction method involves assembling prefabricated components off-site and then transporting them to the construction site for installation?",
+        "createdAt": "31-01-2024 21:50",
+        "answers": [
+          {
+            "text": "Cast-in-place concrete",
+            "createdAt": "31-01-2024 21:50",
+            "id": "556fee5c-f48b-4f34-9ed9-abc212c31916"
+          },
+          {
+            "text": "Modular construction",
+            "createdAt": "31-01-2024 21:50",
+            "id": "5f197208-a5aa-44ff-8ed7-cdf0dbfc7ff9"
+          },
+          {
+            "text": "Timber framing",
+            "createdAt": "31-01-2024 21:50",
+            "id": "5272221e-1647-4cd2-b195-4e409643a61c"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Modular construction",
+          "createdAt": "31-01-2024 21:50",
+          "id": "5f197208-a5aa-44ff-8ed7-cdf0dbfc7ff9"
+        },
+        "id": "25e75385-0f4f-472e-bd5a-3d9604a8f153"
+      }
+    ],
+    "correctAnswers": [
+      {
+        "text": "Modular construction",
+        "createdAt": "31-01-2024 21:50",
+        "id": "5f197208-a5aa-44ff-8ed7-cdf0dbfc7ff9"
+      },
+      {
+        "text": "To direct water away from critical areas",
+        "createdAt": "31-01-2024 21:51",
+        "id": "3ec135ba-3961-4849-a12f-4b94fb682014"
+      },
+      {
+        "text": "Leadership in Energy and Environmental Design",
+        "createdAt": "31-01-2024 21:51",
+        "id": "598cd6b7-a35b-4e91-a924-4bbab989ccf8"
+      },
+      {
+        "text": "To prevent the passage of moisture",
+        "createdAt": "31-01-2024 21:51",
+        "id": "1917f47f-f24a-4b6b-bd12-aefb5ef7bb2c"
+      },
+      {
+        "text": "To provide structural support for walls",
+        "createdAt": "31-01-2024 21:50",
+        "id": "daa73be3-2513-4672-9cd2-563a6bd70bc5"
+      }
+    ],
+    "createdAt": "31-01-2024 21:52",
+    "id": "f2c860a1-be11-4fd7-8140-8190c69d9a54"
+  },
+  {
+    "title": "Construction Mastery Quiz: Building Knowledge Challenge",
+    "countOfQuestions": 4,
+    "questions": [
+      {
+        "text": "What does the acronym HVAC stand for in the context of construction?",
+        "createdAt": "31-01-2024 21:35",
+        "answers": [
+          {
+            "text": "Heating, Ventilation, and Air Conditioning",
+            "createdAt": "31-01-2024 21:35",
+            "id": "960126e8-1b82-4a74-8003-3f9505989886"
+          },
+          {
+            "text": "High Voltage Alternating Current",
+            "createdAt": "31-01-2024 21:35",
+            "id": "091b4490-8397-44d7-a9bb-e46106260657"
+          },
+          {
+            "text": "Hydraulic Valve Adjustment Control",
+            "createdAt": "31-01-2024 21:35",
+            "id": "b4e7ceed-1626-438d-9e8d-7036ae3c81db"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Heating, Ventilation, and Air Conditioning",
+          "createdAt": "31-01-2024 21:35",
+          "id": "960126e8-1b82-4a74-8003-3f9505989886"
+        },
+        "id": "6d929af3-948c-4006-9185-7c331789a824"
+      },
+      {
+        "text": "What is the purpose of a foundation in construction?",
+        "createdAt": "31-01-2024 21:34",
+        "answers": [
+          {
+            "text": "To provide insulation",
+            "createdAt": "31-01-2024 21:34",
+            "id": "84ce28f0-ecf5-413d-981d-56e48ac4d555"
+          },
+          {
+            "text": "To support the structure and distribute its load",
+            "createdAt": "31-01-2024 21:34",
+            "id": "56fc82a8-2ad1-4dc3-9cd3-c03e13693b50"
+          },
+          {
+            "text": "To enhance the aesthetic appeal",
+            "createdAt": "31-01-2024 21:34",
+            "id": "a60438a3-ac69-45f3-b821-0d039cddb206"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To support the structure and distribute its load",
+          "createdAt": "31-01-2024 21:34",
+          "id": "56fc82a8-2ad1-4dc3-9cd3-c03e13693b50"
+        },
+        "id": "e482462c-c6f3-4561-a90c-11c856ca92c4"
+      },
+      {
+        "text": "In construction, what is the purpose of a building inspector?",
+        "createdAt": "31-01-2024 21:35",
+        "answers": [
+          {
+            "text": "To design architectural plans",
+            "createdAt": "31-01-2024 21:35",
+            "id": "ce9c17ad-e272-4c5b-b2a4-e41d87c01d70"
+          },
+          {
+            "text": "To ensure compliance with building codes and regulations",
+            "createdAt": "31-01-2024 21:35",
+            "id": "c76a3cd1-711a-4c1a-8774-f71f1093ff04"
+          },
+          {
+            "text": "To manage construction budgets",
+            "createdAt": "31-01-2024 21:35",
+            "id": "f2d45354-1791-461a-826b-660ebd693373"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To ensure compliance with building codes and regulations",
+          "createdAt": "31-01-2024 21:35",
+          "id": "c76a3cd1-711a-4c1a-8774-f71f1093ff04"
+        },
+        "id": "06b09092-ba2d-484a-81da-52270802243c"
+      },
+      {
+        "text": "Which construction material is known for its high compressive strength and is often used in structural components?",
+        "createdAt": "31-01-2024 21:35",
+        "answers": [
+          {
+            "text": "Glass",
+            "createdAt": "31-01-2024 21:35",
+            "id": "c45ce095-c15c-4f57-9b6e-c42d116d3b97"
+          },
+          {
+            "text": "Concrete",
+            "createdAt": "31-01-2024 21:35",
+            "id": "7c09eb4e-f7a6-4a00-a2a8-d15786a94ae5"
+          },
+          {
+            "text": "Wood",
+            "createdAt": "31-01-2024 21:35",
+            "id": "efacc942-dd6c-4e9c-8f3d-125c6e62ed86"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Concrete",
+          "createdAt": "31-01-2024 21:35",
+          "id": "7c09eb4e-f7a6-4a00-a2a8-d15786a94ae5"
+        },
+        "id": "480c88f1-0af5-4347-8a40-c9515b1cd76d"
+      }
+    ],
+    "correctAnswers": [
+      {
+        "text": "To support the structure and distribute its load",
+        "createdAt": "31-01-2024 21:34",
+        "id": "56fc82a8-2ad1-4dc3-9cd3-c03e13693b50"
+      },
+      {
+        "text": "Concrete",
+        "createdAt": "31-01-2024 21:35",
+        "id": "7c09eb4e-f7a6-4a00-a2a8-d15786a94ae5"
+      },
+      {
+        "text": "Heating, Ventilation, and Air Conditioning",
+        "createdAt": "31-01-2024 21:35",
+        "id": "960126e8-1b82-4a74-8003-3f9505989886"
+      },
+      {
+        "text": "To ensure compliance with building codes and regulations",
+        "createdAt": "31-01-2024 21:35",
+        "id": "c76a3cd1-711a-4c1a-8774-f71f1093ff04"
+      }
+    ],
+    "createdAt": "31-01-2024 21:35",
+    "id": "8e6d676a-37b7-42b2-acf8-228285650548"
+  },
+  {
+    "title": "DenisTop",
+    "countOfQuestions": 2,
+    "questions": [
+      {
+        "text": "What is BKB?",
+        "createdAt": "30-01-2024 14:42",
+        "answers": [
+          {
+            "text": "Two nektars",
+            "createdAt": "30-01-2024 14:41",
+            "id": "ac0e4410-3986-4eeb-b6e6-ffb893985d94"
+          },
+          {
+            "text": "Two gums",
+            "createdAt": "30-01-2024 14:41",
+            "id": "a36a463e-24c0-4a04-bb69-484ae311592f"
+          },
+          {
+            "text": "Magic immunity",
+            "createdAt": "30-01-2024 14:41",
+            "id": "aaba4e58-56be-4646-9621-74bb96b0448b"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Two nektars",
+          "createdAt": "30-01-2024 14:41",
+          "id": "ac0e4410-3986-4eeb-b6e6-ffb893985d94"
+        },
+        "id": "5f55b7b0-d552-4b27-896b-ab67b8d593c2"
+      },
+      {
+        "text": "Chomu Denis takui top?",
+        "createdAt": "31-01-2024 20:35",
+        "answers": [
+          {
+            "text": "Boh takim zrobuv",
+            "createdAt": "31-01-2024 20:35",
+            "id": "984add73-f2c8-44f5-afde-5de7b2701b77"
+          },
+          {
+            "text": "Bo genij",
+            "createdAt": "31-01-2024 20:35",
+            "id": "887dab73-d0f6-4a40-b222-df1d72edc6c4"
+          },
+          {
+            "text": "Sudba taka",
+            "createdAt": "31-01-2024 20:35",
+            "id": "3052ec1e-a663-45fe-a308-562ee3fc3c61"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Sudba taka",
+          "createdAt": "31-01-2024 20:35",
+          "id": "3052ec1e-a663-45fe-a308-562ee3fc3c61"
+        },
+        "id": "1bcb7833-8537-441a-9222-b6dbdd5f343a"
+      }
+    ],
+    "correctAnswers": [
+      {
+        "text": "Two nektars",
+        "createdAt": "30-01-2024 14:41",
+        "id": "ac0e4410-3986-4eeb-b6e6-ffb893985d94"
+      },
+      {
+        "text": "Sudba taka",
+        "createdAt": "31-01-2024 20:35",
+        "id": "3052ec1e-a663-45fe-a308-562ee3fc3c61"
+      }
+    ],
+    "createdAt": "30-01-2024 14:42",
+    "id": "ef7c3898-fa2e-475e-ac35-24488f5866a0"
+  },
+  {
+    "title": "Construction Fundamentals Challenge",
+    "countOfQuestions": 3,
+    "questions": [
+      {
+        "text": "Which construction material is known for its resistance to corrosion and is often used in roofing and cladding?",
+        "createdAt": "31-01-2024 21:56",
+        "answers": [
+          {
+            "text": "Aluminum",
+            "createdAt": "31-01-2024 21:55",
+            "id": "18bad197-7ad8-4e29-b172-0f90154ce857"
+          },
+          {
+            "text": "Copper",
+            "createdAt": "31-01-2024 21:55",
+            "id": "62496052-b664-49fd-98bc-1a3b42c5c840"
+          },
+          {
+            "text": "PVC",
+            "createdAt": "31-01-2024 21:55",
+            "id": "4c44356f-656e-4d1b-b534-2bfa492cf941"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Copper",
+          "createdAt": "31-01-2024 21:55",
+          "id": "62496052-b664-49fd-98bc-1a3b42c5c840"
+        },
+        "id": "49be40bb-67b7-4370-86b7-9c8659bfd8a5"
+      },
+      {
+        "text": "What is the purpose of a lintel in building construction?",
+        "createdAt": "31-01-2024 21:55",
+        "answers": [
+          {
+            "text": "To provide structural support for floors",
+            "createdAt": "31-01-2024 21:55",
+            "id": "087b6a27-28d4-402a-9063-9105e738fd43"
+          },
+          {
+            "text": "To act as a decorative element in doorways",
+            "createdAt": "31-01-2024 21:55",
+            "id": "51946900-aa1d-46f8-a6d4-5f217095c950"
+          },
+          {
+            "text": "To support the load above openings like doors and windows",
+            "createdAt": "31-01-2024 21:55",
+            "id": "2458977f-ba82-4bdc-8153-71ac5c0873c4"
+          }
+        ],
+        "correctAnswer": {
+          "text": "To support the load above openings like doors and windows",
+          "createdAt": "31-01-2024 21:55",
+          "id": "2458977f-ba82-4bdc-8153-71ac5c0873c4"
+        },
+        "id": "04402dfe-3817-468f-8539-8ed8d6761088"
+      },
+      {
+        "text": "What does the term \"R-value\" refer to in the context of insulation materials?",
+        "createdAt": "31-01-2024 21:56",
+        "answers": [
+          {
+            "text": "Resistance to heat flow",
+            "createdAt": "31-01-2024 21:56",
+            "id": "9295bd92-4165-401d-a39c-146760579ade"
+          },
+          {
+            "text": "Radiant energy value",
+            "createdAt": "31-01-2024 21:56",
+            "id": "fd30f37d-52dc-4642-818d-45236fc728a4"
+          },
+          {
+            "text": "Reinforcement value",
+            "createdAt": "31-01-2024 21:56",
+            "id": "ee62a278-0193-4a84-bdb0-4ff106b3ee2d"
+          }
+        ],
+        "correctAnswer": {
+          "text": "Resistance to heat flow",
+          "createdAt": "31-01-2024 21:56",
+          "id": "9295bd92-4165-401d-a39c-146760579ade"
+        },
+        "id": "8fed9bea-1f43-499d-833a-ecbfe1739bb8"
+      }
+    ],
+    "correctAnswers": [
+      {
+        "text": "Copper",
+        "createdAt": "31-01-2024 21:55",
+        "id": "62496052-b664-49fd-98bc-1a3b42c5c840"
+      },
+      {
+        "text": "To support the load above openings like doors and windows",
+        "createdAt": "31-01-2024 21:55",
+        "id": "2458977f-ba82-4bdc-8153-71ac5c0873c4"
+      },
+      {
+        "text": "Resistance to heat flow",
+        "createdAt": "31-01-2024 21:56",
+        "id": "9295bd92-4165-401d-a39c-146760579ade"
+      }
+    ],
+    "createdAt": "31-01-2024 21:56",
+    "id": "19f844a1-e9d7-4690-bdb0-f39be690997f"
+  }
+]

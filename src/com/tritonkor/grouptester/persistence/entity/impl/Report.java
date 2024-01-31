@@ -2,6 +2,7 @@ package com.tritonkor.grouptester.persistence.entity.impl;
 
 import com.tritonkor.grouptester.persistence.entity.Entity;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Report extends Entity implements Comparable<Report> {
@@ -10,12 +11,13 @@ public class Report extends Entity implements Comparable<Report> {
     private final String testTitle;
     private final String groupName;
     private final LocalDateTime createdAt;
+    private final HashMap<String, Grade> usersResults;
     private int minResult;
     private int maxResult;
     private int averageResult;
 
     private Report(UUID id, String reportTitle, String testTitle, String groupName, int minResult,
-            int maxResult, int averageResult, LocalDateTime createdAt) {
+            int maxResult, int averageResult, HashMap<String, Grade> usersResults, LocalDateTime createdAt) {
         super(id);
         this.reportTitle = reportTitle;
         this.testTitle = testTitle;
@@ -23,12 +25,13 @@ public class Report extends Entity implements Comparable<Report> {
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
+        this.usersResults = usersResults;
         this.createdAt = createdAt;
     }
 
     public static ReportBuilderId builder() {
-        return id -> reportTitle -> testTitle -> groupName -> minResult -> maxResult -> averageResult -> createdAt -> () -> new Report(
-                id, reportTitle, testTitle, groupName, minResult, maxResult, averageResult, createdAt);
+        return id -> reportTitle -> testTitle -> groupName -> minResult -> maxResult -> averageResult -> usersResults -> createdAt -> () -> new Report(
+                id, reportTitle, testTitle, groupName, minResult, maxResult, averageResult, usersResults, createdAt);
     }
 
     public interface ReportBuilderId {
@@ -63,7 +66,12 @@ public class Report extends Entity implements Comparable<Report> {
 
     public interface ReportBuilderAverageResult {
 
-        ReportBuilderCreatedAt averageResult(int averageResult);
+        ReportBuilderUsersResults averageResult(int averageResult);
+    }
+
+    public interface ReportBuilderUsersResults {
+
+        ReportBuilderCreatedAt usersResults(HashMap<String, Grade> usersResults);
     }
 
     public interface ReportBuilderCreatedAt {
@@ -80,6 +88,10 @@ public class Report extends Entity implements Comparable<Report> {
     public interface GroupBuilder {
 
         Group build();
+    }
+
+    public HashMap<String, Grade> getUsersResults() {
+        return usersResults;
     }
 
     public String getReportTitle() { return reportTitle; }

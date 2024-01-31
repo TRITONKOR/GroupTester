@@ -1,0 +1,50 @@
+[
+  {
+    "reportTitle": "Kazah",
+    "testTitle": "DenisTop",
+    "groupName": "AdminSquad",
+    "createdAt": "31-01-2024 22:55",
+    "usersResults": {
+      "kazah": {
+        "MAX_GRADE": 100,
+        "grade": 50
+      }
+    },
+    "minResult": 50,
+    "maxResult": 50,
+    "averageResult": 50,
+    "id": "d3fbef18-b6c0-42fc-993f-0abee55c6fd8"
+  },
+  {
+    "reportTitle": "dadas",
+    "testTitle": "DenisTop",
+    "groupName": "AdminSquad",
+    "createdAt": "31-01-2024 22:52",
+    "usersResults": {
+      "Admin": {
+        "MAX_GRADE": 100,
+        "grade": 50
+      }
+    },
+    "minResult": 50,
+    "maxResult": 50,
+    "averageResult": 50,
+    "id": "27f603af-c379-4fc3-a3b8-d023c1e22915"
+  },
+  {
+    "reportTitle": "AllWeAreTopchiki",
+    "testTitle": "DenisTop",
+    "groupName": "AdminSquad",
+    "createdAt": "31-01-2024 22:50",
+    "usersResults": {
+      "Admin": {
+        "MAX_GRADE": 100,
+        "grade": 50
+      }
+    },
+    "minResult": 50,
+    "maxResult": 50,
+    "averageResult": 50,
+    "id": "7fd65b45-ed3f-4edd-9b40-4f06ae6f1534"
+  }
+]

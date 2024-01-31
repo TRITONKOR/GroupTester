@@ -6,7 +6,6 @@ import com.tritonkor.grouptester.persistence.repository.contracts.ResultReposito
 import com.tritonkor.grouptester.persistence.repository.contracts.TestRepository;
 import com.tritonkor.grouptester.persistence.repository.contracts.UserRepository;
 import com.tritonkor.grouptester.persistence.repository.json.impl.JsonRepositoryFactory;
-import org.apache.commons.lang3.NotImplementedException;
 
 public abstract class RepositoryFactory {
 

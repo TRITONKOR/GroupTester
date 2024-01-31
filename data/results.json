@@ -1,0 +1,46 @@
+[
+  {
+    "resultTitle": "Halava",
+    "ownerUsername": "Admin",
+    "grade": {
+      "MAX_GRADE": 100,
+      "grade": 50
+    },
+    "testTitle": "DenisTop",
+    "createdAt": "31-01-2024 22:03",
+    "id": "7f658b49-1515-4b97-9e07-43db647fd955"
+  },
+  {
+    "resultTitle": "hghfghfhgf",
+    "ownerUsername": "Admin",
+    "grade": {
+      "MAX_GRADE": 100,
+      "grade": 50
+    },
+    "testTitle": "DenisTop",
+    "createdAt": "31-01-2024 23:31",
+    "id": "ff43168a-67e4-4bbc-9f51-f4e46c121996"
+  },
+  {
+    "resultTitle": "KirilTopchik",
+    "ownerUsername": "Admin",
+    "grade": {
+      "MAX_GRADE": 100,
+      "grade": 50
+    },
+    "testTitle": "DenisTop",
+    "createdAt": "31-01-2024 22:49",
+    "id": "6f1088d4-c615-46fb-8080-e4d0337637f4"
+  },
+  {
+    "resultTitle": "Kazah",
+    "ownerUsername": "kazah",
+    "grade": {
+      "MAX_GRADE": 100,
+      "grade": 50
+    },
+    "testTitle": "DenisTop",
+    "createdAt": "31-01-2024 22:55",
+    "id": "934d314d-b94b-4c1f-96fc-75f139576274"
+  }
+]

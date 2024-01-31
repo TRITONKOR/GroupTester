@@ -11,6 +11,7 @@ import com.tritonkor.grouptester.persistence.repository.Repository;
 import com.tritonkor.grouptester.persistence.repository.contracts.ReportRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -20,44 +21,36 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
 
     private ReportRepository reportRepository;
 
-    private Set<Grade> userGrades = new HashSet<>();
 
     public ReportServiceImpl(ReportRepository reportRepository) {
         super(reportRepository);
         this.reportRepository = reportRepository;
     }
 
-    public Report makeReport(String groupName, String testTitle) {
+    @Override
+    public ReportAddDto makeReport(String reportTitle, String groupName, String testTitle,
+            HashMap<String, Grade> usersResults) {
 
-        int min = userGrades.stream().mapToInt(Grade::getGrade).min().orElse(0);
-        int max = userGrades.stream().mapToInt(Grade::getGrade).max().orElse(0);
-        int average = (int) userGrades.stream().mapToInt(Grade::getGrade).average().orElse(0);
+        int maxValue = Integer.MIN_VALUE;
+        int minValue = Integer.MAX_VALUE;
+        int sum = 0;
 
-        Report report = Report.builder().id(UUID.randomUUID()).reportTitle("Test").testTitle(testTitle)
-                .groupName(groupName)
-                .minResult(min)
-                .maxResult(max)
-                .averageResult(average)
-                .createdAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)).build();
+        for (Grade value : usersResults.values()) {
+            maxValue = Math.max(maxValue, value.getGrade());
+            minValue = Math.min(minValue, value.getGrade());
+            sum += value.getGrade();
+        }
 
-        userGrades.clear();
+        int averageValue = (int) sum / usersResults.size();
 
-        return report;
+        return  new ReportAddDto(UUID.randomUUID(), reportTitle, testTitle,
+                groupName, minValue, maxValue, averageValue, usersResults,
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
     }
 
     @Override
     public Report findByName(String reportName) {
         return reportRepository.findByName(reportName).orElse(null);
-    }
-
-    @Override
-    public void saveGrade(Grade grade) {
-        userGrades.add(grade);
-    }
-
-    @Override
-    public void resetGrades() {
-        userGrades.clear();
     }
 
     @Override
@@ -79,6 +72,7 @@ public class ReportServiceImpl extends GenericService<Report> implements ReportS
                     .testTitle(reportAddDto.getTestTitle()).groupName(reportAddDto.getGroupName())
                     .minResult(reportAddDto.getMinResult()).maxResult(reportAddDto.getMaxResult())
                     .averageResult(reportAddDto.getAverageResult())
+                    .usersResults(reportAddDto.getUsersResults())
                     .createdAt(reportAddDto.getCreatedAt()).build();
             reportRepository.add(report);
             return report;

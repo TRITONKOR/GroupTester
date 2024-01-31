@@ -1,24 +1,46 @@
 package com.tritonkor.grouptester.persistence.entity;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
+/**
+ * The {@code Entity} class is an abstract base class for entities in the Group Tester system.
+ * It provides a common structure for entities with a universally unique identifier (UUID).
+ *
+ * <p>The {@code Entity} class is designed to be extended by specific entity classes within
+ * the Group Tester application.
+ */
 public abstract class Entity {
 
     protected final UUID id;
 
     protected transient boolean isValid;
 
+    /**
+     * Constructs a new {@code Entity} with the specified identifier.
+     *
+     * @param id The universally unique identifier (UUID) associated with the entity.
+     */
     public Entity(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Gets the universally unique identifier (UUID) associated with the entity.
+     *
+     * @return The UUID of the entity.
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * Equality is based on the equality of the identifiers.
+     *
+     * @param o The reference object with which to compare.
+     * @return {@code true} if this object is the same as the o argument; {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -31,10 +53,13 @@ public abstract class Entity {
         return Objects.equals(id, entity.id);
     }
 
+    /**
+     * Returns a hash code value for the entity.
+     *
+     * @return A hash code value based on the identifier.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-
-
 }

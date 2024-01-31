@@ -27,10 +27,10 @@ public class AuthView implements Renderable {
 
     private final UserService userService;
 
-    private final TestView testView;
+    private final MainMenuView testView;
 
     public AuthView(AuthService authService, SignUpService signUpService, UserService userService,
-            TestView testView) {
+            MainMenuView testView) {
         this.authService = authService;
         this.signUpService = signUpService;
         this.userService = userService;
@@ -46,36 +46,52 @@ public class AuthView implements Renderable {
             case SIGN_IN -> {
                 boolean dataCorrect = true;
 
-                promptBuilder.createInputPrompt()
-                        .name("username")
-                        .message("Type your login: ")
-                        .addPrompt();
-                promptBuilder.createInputPrompt()
-                        .name("password")
-                        .message("Type your password: ")
-                        .mask('*')
-                        .addPrompt();
-
                 do {
                     try {
+                        promptBuilder.createInputPrompt()
+                                .name("username")
+                                .message("Type your login\uD83D\uDC64: ")
+                                .addPrompt();
+                        promptBuilder.createInputPrompt()
+                                .name("password")
+                                .message("Type your password\uD83D\uDD12: ")
+                                .mask('*')
+                                .addPrompt();
+
                         var result = prompt.prompt(promptBuilder.build());
                         var usernameInput = (InputResult) result.get("username");
                         var passwordInput = (InputResult) result.get("password");
 
                         authService.authenticate(usernameInput.getInput(),
                                 passwordInput.getInput());
+
                         dataCorrect = true;
                     } catch (AuthException e) {
                         dataCorrect = false;
 
-                        ConsolClearer.clearConsole();
-                        System.out.println(e.getMessage());
+                        promptBuilder = new PromptBuilder();
+
+                        ConsolItems.clearConsole();
+
+                        promptBuilder.createListPrompt().name("user-choice")
+                                .message("Login or password wrong❌  Wanna try again?")
+                                .newItem("try-again").text("Try again\uD83D\uDD01").add()
+                                .newItem("back").text("Back\uD83D\uDD19").add().addPrompt();
+
+                        var result = prompt.prompt(promptBuilder.build());
+
+                        var userChoice = (ListResult) result.get("user-choice");
+
+                        prompt = new ConsolePrompt();
+                        promptBuilder = new PromptBuilder();
+                        ConsolItems.clearConsole();
+
+                        if (userChoice.getSelectedId().equals("back")) {
+                            this.render();
+                        }
                     }
                 } while (!dataCorrect);
-                prompt = new ConsolePrompt();
-                promptBuilder = prompt.getPromptBuilder();
 
-                ConsolClearer.clearConsole();
                 testView.render();
             }
             case SIGN_UP -> {
@@ -83,21 +99,21 @@ public class AuthView implements Renderable {
 
                 promptBuilder.createInputPrompt()
                         .name("username")
-                        .message("Type your login: ")
+                        .message("Type your login\uD83D\uDC64: ")
                         .addPrompt();
                 promptBuilder.createInputPrompt()
                         .name("password")
                         .message(
-                                "Type your password(capital letters, numbers, and special characters must be present): ")
+                                "Type your password\uD83D\uDD12(capital letters, numbers): ")
                         .mask('*')
                         .addPrompt();
                 promptBuilder.createInputPrompt()
                         .name("email")
-                        .message("Type your email: ")
+                        .message("Type your email\uD83D\uDCE7: ")
                         .addPrompt();
                 promptBuilder.createInputPrompt()
                         .name("birthday")
-                        .message("Type your birthday(example: 1977-4-11): ")
+                        .message("Type your birthday\uD83C\uDF82(example: 1977-4-11): ")
                         .addPrompt();
 
                 do {
@@ -121,12 +137,12 @@ public class AuthView implements Renderable {
                         promptBuilder = prompt.getPromptBuilder();
 
                         System.out.println(
-                                "Please little wait, we are sending list on your email with verification code");
+                                "Please little wait\uD83D\uDD53, we are sending list on your email with verification code\uD83D\uDEE0\uFE0F");
                         //String verificationCode = signUpService.generateAndSendVerificationCode(emailInput.getInput());
 
                         promptBuilder.createInputPrompt()
                                 .name("verify code")
-                                .message("Type your verification code: ")
+                                .message("Type your verification code\uD83D\uDD22: ")
                                 .addPrompt();
 
                         result = prompt.prompt(promptBuilder.build());
@@ -143,20 +159,21 @@ public class AuthView implements Renderable {
                             System.err.println(e.getMessage());
                         }
                     } catch (EntityArgumentException e) {
-                        ConsolClearer.clearConsole();
-                        System.out.println(e.getMessage());
-
                         dataCorrect = false;
+
+                        ConsolItems.clearConsole();
+                        System.out.println(e.getMessage());
                     }
                 } while (!dataCorrect);
 
-                ConsolClearer.clearConsole();
+                ConsolItems.clearConsole();
                 testView.render();
             }
             case EXIT -> {
-                ConsolClearer.clearConsole();
-                authService.authenticate("kazah", "Kazah123456");
-                testView.render();//System.out.println("Good bye, botik >w<");
+                prompt = new ConsolePrompt();
+                promptBuilder = prompt.getPromptBuilder();
+                ConsolItems.clearConsole();
+                System.out.println("Good bye, botik \uD83E\uDD7A\uD83D\uDC49\uD83D\uDC48");
             }
         }
     }
@@ -166,13 +183,18 @@ public class AuthView implements Renderable {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
+        ConsolItems.clearConsole();
+
         ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
                 .name("auth-menu")
-                .message("Group Tester");
+                .message("Group Tester\uD83D\uDC77");
 
-        listPromptBuilder.newItem(SIGN_IN.toString()).text(SIGN_IN.getName()).add();
-        listPromptBuilder.newItem(SIGN_UP.toString()).text(SIGN_UP.getName()).add();
-        listPromptBuilder.newItem(EXIT.toString()).text(EXIT.getName()).add();
+        listPromptBuilder.newItem(SIGN_IN.toString()).text(SIGN_IN.getName() + "\uD83E\uDEAA")
+                .add();
+        listPromptBuilder.newItem(SIGN_UP.toString()).text(SIGN_UP.getName() + "\uD83D\uDD11")
+                .add();
+        listPromptBuilder.newItem(EXIT.toString()).text(EXIT.getName() + "\uD83D\uDD90\uFE0F")
+                .add();
 
         var result = prompt.prompt(listPromptBuilder.addPrompt().build());
         ListResult resultItem = (ListResult) result.get("auth-menu");
@@ -196,4 +218,6 @@ public class AuthView implements Renderable {
             return name;
         }
     }
+
+
 }

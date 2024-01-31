@@ -2,7 +2,9 @@ package com.tritonkor.grouptester.domain.dto;
 
 import com.tritonkor.grouptester.domain.ValidationUtil;
 import com.tritonkor.grouptester.persistence.entity.Entity;
+import com.tritonkor.grouptester.persistence.entity.impl.Grade;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class ReportAddDto extends Entity {
@@ -13,10 +15,11 @@ public class ReportAddDto extends Entity {
     private int minResult;
     private int maxResult;
     private int averageResult;
+    private final HashMap<String, Grade> usersResults;
     private final LocalDateTime createdAt;
 
     public ReportAddDto(UUID id, String reportTitle, String testTitle, String groupName,
-            int minResult, int maxResult, int averageResult, LocalDateTime createdAt) {
+            int minResult, int maxResult, int averageResult, HashMap<String, Grade> usersResults, LocalDateTime createdAt) {
         super(id);
         this.reportTitle = ValidationUtil.validateTitle(reportTitle);
         this.testTitle = ValidationUtil.validateTitle(testTitle);
@@ -24,7 +27,12 @@ public class ReportAddDto extends Entity {
         this.minResult = minResult;
         this.maxResult = maxResult;
         this.averageResult = averageResult;
+        this.usersResults = usersResults;
         this.createdAt = ValidationUtil.validateDateTime(createdAt);
+    }
+
+    public HashMap<String, Grade> getUsersResults() {
+        return usersResults;
     }
 
     public String getReportTitle() { return reportTitle; }

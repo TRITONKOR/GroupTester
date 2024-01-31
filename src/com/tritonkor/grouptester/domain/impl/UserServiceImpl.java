@@ -5,14 +5,10 @@ import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.exception.EntityNotFoundException;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
-import com.tritonkor.grouptester.persistence.repository.Repository;
 import com.tritonkor.grouptester.persistence.repository.contracts.UserRepository;
-import java.io.IOException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
-import org.apache.commons.lang3.NotImplementedException;
 import org.mindrot.bcrypt.BCrypt;
 
 public class UserServiceImpl extends GenericService<User> implements UserService {
@@ -44,13 +40,6 @@ public class UserServiceImpl extends GenericService<User> implements UserService
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("This user does not exist."));
-    }
-
-    @Override
-    public User add(User entity) {
-        throw new NotImplementedException(
-                "Помилка архітектури, так як ми не використовували DTO та маппінг. "
-                        + "Прошу використовувати User add(UserAddDto userAddDto) версію.");
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,11 @@ public class ValidationUtil {
         Set<String> errors = new HashSet<>();
         final String templateName = "name";
 
+        if(Objects.isNull(text)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
+
         if (text.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
         }
@@ -32,7 +38,7 @@ public class ValidationUtil {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 30));
         }
 
-        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.#$%^:№\\s\\p{P}]+$");
         if (!pattern.matcher(text).matches()) {
             errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
         }
@@ -48,6 +54,11 @@ public class ValidationUtil {
         Set<String> errors = new HashSet<>();
         final String templateName = "name";
 
+        if(Objects.isNull(text)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
+
         if (text.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
         }
@@ -58,7 +69,7 @@ public class ValidationUtil {
             errors.add(ErrorTemplates.MAX_LENGTH.getTemplate().formatted(templateName, 100));
         }
 
-        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.\\s]+$");
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_.#$%^:№\\s\\p{P}]+$");
         if (!pattern.matcher(text).matches()) {
             errors.add(ErrorTemplates.ONLY_LATIN.getTemplate().formatted(templateName));
         }
@@ -73,6 +84,11 @@ public class ValidationUtil {
     public static String validatePassword(String password) {
         Set<String> errors = new HashSet<>();
         final String templateName = "password";
+
+        if(Objects.isNull(password)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
 
         if (password.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -100,6 +116,11 @@ public class ValidationUtil {
         Set<String> errors = new HashSet<>();
         final String templateName = "email";
 
+        if(Objects.isNull(email)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
+
         if (email.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
         }
@@ -120,6 +141,11 @@ public class ValidationUtil {
     public static LocalDate validateDate(String date) {
         Set<String> errors = new HashSet<>();
         final String templateName = "date";
+
+        if(Objects.isNull(date)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
 
         if (date.isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
@@ -146,6 +172,11 @@ public class ValidationUtil {
     public static LocalDateTime validateDateTime(LocalDateTime date) {
         Set<String> errors = new HashSet<>();
         final String templateName = "date and time";
+
+        if(Objects.isNull(date)) {
+            errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
+            throw new EntityArgumentException(combineErrorMessages(errors));
+        }
 
         if (date.toString().isBlank()) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));

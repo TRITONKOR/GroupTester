@@ -19,7 +19,7 @@ public class TestAddDto extends Entity {
     public TestAddDto(UUID id, String title, int countOfQuestions, Set<Question> questions,
             Set<Answer> correctAnswers, LocalDateTime createdAt) {
         super(id);
-        this.title = ValidationUtil.validateName(title);
+        this.title = ValidationUtil.validateTitle(title);
         this.countOfQuestions = countOfQuestions;
         this.questions = questions;
         this.correctAnswers = correctAnswers;

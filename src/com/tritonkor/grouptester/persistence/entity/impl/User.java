@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User extends Entity implements Observer {
+public class User extends Entity implements Observer, Comparable {
 
     private String username;
     private String email;
@@ -92,6 +92,11 @@ public class User extends Entity implements Observer {
     }
 
     @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
+
+    @Override
     public void update(Runnable runTest, TestServiceImpl testService) {
         runTest.run();
     }
@@ -142,6 +147,8 @@ public class User extends Entity implements Observer {
         private String name;
         private Map<EntityName, Permission> permissions;
 
+        public Map<EntityName, Permission> getPermissions() { return permissions; }
+
         Role(String name, Map<EntityName, Permission> permissions) {
             this.name = name;
             this.permissions = permissions;
@@ -159,8 +166,6 @@ public class User extends Entity implements Observer {
                                   boolean canEdit,
                                   boolean canDelete,
                                   boolean canRead) {
-
         }
-
     }
 }

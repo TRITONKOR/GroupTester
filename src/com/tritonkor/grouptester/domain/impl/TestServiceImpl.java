@@ -2,7 +2,9 @@ package com.tritonkor.grouptester.domain.impl;
 
 import static java.lang.System.out;
 
+import com.tritonkor.grouptester.appui.ConsolItems;
 import com.tritonkor.grouptester.domain.contract.TestService;
+import com.tritonkor.grouptester.domain.dto.ReportAddDto;
 import com.tritonkor.grouptester.domain.dto.TestAddDto;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
@@ -16,6 +18,8 @@ import de.codeshelf.consoleui.prompt.ListResult;
 import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +45,11 @@ public class TestServiceImpl
     @Override
     public Answer findCorrectAnswer(List<Answer> answerList, String text) {
         return answerList.stream().filter(a -> a.getText().equals(text)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Question findQuestion(Test test, String questionText) {
+        return test.getQuestionsList().stream().filter(q -> q.getText().equals(questionText)).findFirst().orElse(null);
     }
 
     @Override
@@ -92,7 +101,7 @@ public class TestServiceImpl
 
             userAnswers.add(userAnswer);
 
-            out.println('\n');
+            ConsolItems.clearConsole();
             prompt = new ConsolePrompt();
             promptBuilder = prompt.getPromptBuilder();
         }
@@ -101,12 +110,45 @@ public class TestServiceImpl
         return grade;
     }
 
+    @Override
+    public void addQuestionToTest(Test test, String questionText, List<Answer> answers,
+            Answer correctAnswer) {
+        Question question = Question.builder().id(UUID.randomUUID()).text(questionText)
+                .answers(answers).correctAnswer(correctAnswer).createdAt(
+                        LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)).build();
+
+        Set<Question> questions = test.getQuestionsList();
+        questions.add(question);
+
+        Set<Answer> correctAnswers = test.getCorrectAnswers();
+        correctAnswers.add(correctAnswer);
+
+        test.setCountOfQuestions(questions.size());
+    }
+
+    public void removeQuestionFromTest(Test test, Question question) {
+        Set<Question> questions = test.getQuestionsList();
+        questions.remove(question);
+
+        Set<Answer> correctAnswers = test.getCorrectAnswers();
+        Answer correctAnswer = question.getCorrectAnswer();
+        correctAnswers.remove(correctAnswer);
+    }
+
+    @Override
+    public void renameTest(Test test, String newTitle) {
+        TestAddDto testAddDto = new TestAddDto(test.getId(), newTitle, test.getCountOfQuestions(),
+                test.getQuestionsList(), test.getCorrectAnswers(), test.getCreatedAt());
+        this.remove(test);
+        this.add(testAddDto);
+    }
+
     private void resetGrade() {
         grade = null;
     }
 
     private Answer findAnswerByText(Test test, String text) {
-        return  test.getQuestionsList().stream()
+        return test.getQuestionsList().stream()
                 .flatMap(question -> question.getAnswers().stream())
                 .filter(answer -> answer.getText().equals(text))
                 .findFirst().orElse(null);
