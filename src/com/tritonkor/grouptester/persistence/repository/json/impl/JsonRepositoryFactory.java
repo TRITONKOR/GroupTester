@@ -22,6 +22,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Set;
 
+/**
+ * The {@code JsonRepositoryFactory} class is a concrete implementation of {@link RepositoryFactory}
+ * that provides JSON-based repositories for various entities in the system.
+ */
 public class JsonRepositoryFactory extends RepositoryFactory {
 
     private final Gson gson;
@@ -33,7 +37,7 @@ public class JsonRepositoryFactory extends RepositoryFactory {
     private ReportJsonRepositoryImpl reportJsonRepositoryImpl;
 
     private JsonRepositoryFactory() {
-        // Адаптер для типу даних LocalDateTime при серіалізації/десеріалізації
+        // Adapter for LocalDateTime data type during serialization/deserialization
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class,
                 (JsonSerializer<LocalDateTime>) (localDate, srcType, context) ->
@@ -45,7 +49,7 @@ public class JsonRepositoryFactory extends RepositoryFactory {
                                 DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
                                         .withLocale(Locale.of("uk", "UA"))));
 
-        // Адаптер для типу даних LocalDate при серіалізації/десеріалізації
+        // Adapter for LocalDate data type during serialization/deserialization
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonSerializer<LocalDate>) (localDate, srcType, context) ->
                         new JsonPrimitive(
@@ -65,15 +69,28 @@ public class JsonRepositoryFactory extends RepositoryFactory {
         reportJsonRepositoryImpl = new ReportJsonRepositoryImpl(gson);
     }
 
+    /**
+     * Gets the singleton instance of {@code JsonRepositoryFactory}.
+     *
+     * @return The singleton instance of {@code JsonRepositoryFactory}.
+     */
     public static JsonRepositoryFactory getInstance() {
         return InstanceHolder.INSTANCE;
     }
 
+    /**
+     * Serializes a collection of entities to JSON and writes them to the specified file.
+     *
+     * @param path     The path to the file.
+     * @param entities The collection of entities to be serialized and written.
+     * @param <E>      The type of entities (subtype of {@link Entity}).
+     * @throws JsonFileIOException If an error occurs while writing to the JSON file.
+     */
     private <E extends Entity> void serializeEntities(Path path, Set<E> entities) {
         try (FileWriter writer = new FileWriter(path.toFile())) {
-            // Скидуємо файлик, перед збереженням!
+            // Clears the file before saving
             writer.write("");
-            // Перетворюємо колекцію користувачів в JSON та записуємо у файл
+            // Converts the collection of entities to JSON and writes to the file
             gson.toJson(entities, writer);
 
         } catch (IOException e) {
@@ -103,8 +120,13 @@ public class JsonRepositoryFactory extends RepositoryFactory {
     }
 
     @Override
-    public ReportRepository getReportRepository() { return reportJsonRepositoryImpl; }
+    public ReportRepository getReportRepository() {
+        return reportJsonRepositoryImpl;
+    }
 
+    /**
+     * Commits changes to the underlying JSON files.
+     */
     public void commit() {
         serializeEntities(userJsonRepositoryImpl.getPath(), userJsonRepositoryImpl.findAll());
         serializeEntities(groupJsonRepositoryImpl.getPath(), groupJsonRepositoryImpl.findAll());

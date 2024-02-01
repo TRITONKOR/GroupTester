@@ -19,6 +19,10 @@ import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * The AuthView class represents a view for user authentication and sign-up.
+ * It provides methods to interactively handle user input for authentication and sign-up processes.
+ */
 public class AuthView implements Renderable {
 
     private final AuthService authService;
@@ -29,6 +33,14 @@ public class AuthView implements Renderable {
 
     private final MainMenuView testView;
 
+    /**
+     * Constructs an AuthView with the specified services and the main menu view.
+     *
+     * @param authService   The authentication service.
+     * @param signUpService The sign-up service.
+     * @param userService    The user service.
+     * @param testView       The main menu view.
+     */
     public AuthView(AuthService authService, SignUpService signUpService, UserService userService,
             MainMenuView testView) {
         this.authService = authService;
@@ -38,6 +50,12 @@ public class AuthView implements Renderable {
         this.testView = testView;
     }
 
+    /**
+     * Processes the selected item from the authentication menu.
+     *
+     * @param selectedItem The selected item from the authentication menu.
+     * @throws IOException If an I/O error occurs during processing.
+     */
     private void process(AuthMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
@@ -82,42 +100,42 @@ public class AuthView implements Renderable {
 
                         var userChoice = (ListResult) result.get("user-choice");
 
-                        prompt = new ConsolePrompt();
-                        promptBuilder = new PromptBuilder();
                         ConsolItems.clearConsole();
 
                         if (userChoice.getSelectedId().equals("back")) {
                             this.render();
+                            break;
+                        } else {
+                            promptBuilder = new PromptBuilder();
+                            continue;
                         }
                     }
-                } while (!dataCorrect);
 
-                testView.render();
+                    testView.render();
+                } while (!dataCorrect);
             }
             case SIGN_UP -> {
                 boolean dataCorrect = true;
-
-                promptBuilder.createInputPrompt()
-                        .name("username")
-                        .message("Type your login\uD83D\uDC64: ")
-                        .addPrompt();
-                promptBuilder.createInputPrompt()
-                        .name("password")
-                        .message(
-                                "Type your password\uD83D\uDD12(capital letters, numbers): ")
-                        .mask('*')
-                        .addPrompt();
-                promptBuilder.createInputPrompt()
-                        .name("email")
-                        .message("Type your email\uD83D\uDCE7: ")
-                        .addPrompt();
-                promptBuilder.createInputPrompt()
-                        .name("birthday")
-                        .message("Type your birthday\uD83C\uDF82(example: 1977-4-11): ")
-                        .addPrompt();
-
                 do {
                     try {
+                        promptBuilder.createInputPrompt()
+                                .name("username")
+                                .message("Type your login\uD83D\uDC64: ")
+                                .addPrompt();
+                        promptBuilder.createInputPrompt()
+                                .name("password")
+                                .message(
+                                        "Type your password\uD83D\uDD12(capital letters, numbers): ")
+                                .mask('*')
+                                .addPrompt();
+                        promptBuilder.createInputPrompt()
+                                .name("email")
+                                .message("Type your email\uD83D\uDCE7: ")
+                                .addPrompt();
+                        promptBuilder.createInputPrompt()
+                                .name("birthday")
+                                .message("Type your birthday\uD83C\uDF82(example: 1977-4-11): ")
+                                .addPrompt();
 
                         var result = prompt.prompt(promptBuilder.build());
 
@@ -161,23 +179,44 @@ public class AuthView implements Renderable {
                     } catch (EntityArgumentException e) {
                         dataCorrect = false;
 
-                        ConsolItems.clearConsole();
-                        System.out.println(e.getMessage());
-                    }
-                } while (!dataCorrect);
+                        promptBuilder = new PromptBuilder();
 
-                ConsolItems.clearConsole();
-                testView.render();
+                        ConsolItems.clearConsole();
+                        System.out.println(e.getMessage() + "❌");
+                        promptBuilder.createListPrompt().name("user-choice")
+                                .message("Wanna try again?")
+                                .newItem("try-again").text("Try again\uD83D\uDD01").add()
+                                .newItem("back").text("Back\uD83D\uDD19").add().addPrompt();
+
+                        var result = prompt.prompt(promptBuilder.build());
+
+                        var userChoice = (ListResult) result.get("user-choice");
+
+                        ConsolItems.clearConsole();
+
+                        if (userChoice.getSelectedId().equals("back")) {
+                            this.render();
+                            break;
+                        } else {
+                            promptBuilder = new PromptBuilder();
+                            continue;
+                        }
+                    }
+                    testView.render();
+                } while (!dataCorrect);
             }
             case EXIT -> {
-                prompt = new ConsolePrompt();
-                promptBuilder = prompt.getPromptBuilder();
                 ConsolItems.clearConsole();
                 System.out.println("Good bye, botik \uD83E\uDD7A\uD83D\uDC49\uD83D\uDC48");
             }
         }
     }
 
+    /**
+     * Renders the authentication menu and handles user input.
+     *
+     * @throws IOException If an I/O error occurs during rendering.
+     */
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
@@ -189,12 +228,9 @@ public class AuthView implements Renderable {
                 .name("auth-menu")
                 .message("Group Tester\uD83D\uDC77");
 
-        listPromptBuilder.newItem(SIGN_IN.toString()).text(SIGN_IN.getName() + "\uD83E\uDEAA")
-                .add();
-        listPromptBuilder.newItem(SIGN_UP.toString()).text(SIGN_UP.getName() + "\uD83D\uDD11")
-                .add();
-        listPromptBuilder.newItem(EXIT.toString()).text(EXIT.getName() + "\uD83D\uDD90\uFE0F")
-                .add();
+        listPromptBuilder.newItem(SIGN_IN.toString()).text(SIGN_IN.getName()).add();
+        listPromptBuilder.newItem(SIGN_UP.toString()).text(SIGN_UP.getName()).add();
+        listPromptBuilder.newItem(EXIT.toString()).text(EXIT.getName()).add();
 
         var result = prompt.prompt(listPromptBuilder.addPrompt().build());
         ListResult resultItem = (ListResult) result.get("auth-menu");
@@ -203,10 +239,13 @@ public class AuthView implements Renderable {
         process(selectedItem);
     }
 
+    /**
+     * Enum representing the items in the authentication menu.
+     */
     enum AuthMenu {
-        SIGN_IN("Authorization"),
-        SIGN_UP("Create an account"),
-        EXIT("Exit");
+        SIGN_IN("Authorization\uD83E\uDEAA"),
+        SIGN_UP("Create an account\uD83D\uDD11"),
+        EXIT("Exit\uD83D\uDEAA");
 
         private final String name;
 
@@ -218,6 +257,4 @@ public class AuthView implements Renderable {
             return name;
         }
     }
-
-
 }

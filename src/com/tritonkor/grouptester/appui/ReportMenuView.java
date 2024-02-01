@@ -22,7 +22,13 @@ import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 
-public class ReportMenuView implements Renderable{
+/**
+ * The ReportMenuView class provides a console-based user interface for interacting with reports in
+ * a group testing application. It allows users to rename or delete reports and return to the main
+ * menu. The class implements the Renderable interface for rendering the menu and handling user
+ * input.
+ */
+public class ReportMenuView implements Renderable {
 
     private final TestService testService;
     private final ReportService reportService;
@@ -33,6 +39,13 @@ public class ReportMenuView implements Renderable{
     private User currentUser;
     private Report currentReport;
 
+    /**
+     * Constructs a new ReportMenuView with the specified services.
+     *
+     * @param testService   The service for managing tests.
+     * @param reportService The service for managing reports.
+     * @param userService   The service for managing users.
+     */
     public ReportMenuView(TestService testService, ReportService reportService,
             UserService userService) {
         this.testService = testService;
@@ -40,6 +53,12 @@ public class ReportMenuView implements Renderable{
         this.userService = userService;
     }
 
+    /**
+     * Renders the report menu, allowing the user to choose actions such as renaming or deleting
+     * reports.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
@@ -61,6 +80,12 @@ public class ReportMenuView implements Renderable{
         process(selectedItem);
     }
 
+    /**
+     * Processes the selected option from the report menu and performs the corresponding actions.
+     *
+     * @param selectedItem The selected option from the report menu.
+     * @throws IOException If an I/O error occurs.
+     */
     private void process(ReportMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
@@ -108,7 +133,7 @@ public class ReportMenuView implements Renderable{
                     jsonRepositoryFactory.commit();
 
                     ConsolItems.clearConsole();
-                    System.out.println("Report has been successfully deleted");
+                    System.out.println("Report has been successfully deleted✅");
                     this.render();
                 } else {
                     ConsolItems.clearConsole();
@@ -123,10 +148,13 @@ public class ReportMenuView implements Renderable{
         }
     }
 
+    /**
+     * Enumeration representing the available options in the report menu.
+     */
     enum ReportMenu {
-        RENAME_REPORT("Rename report"),
-        DELETE_REPORT("Delete report"),
-        EXIT("Exit");
+        RENAME_REPORT("Rename report\uD83C\uDFF7\uFE0F"),
+        DELETE_REPORT("Delete report\uD83D\uDDD1\uFE0F"),
+        EXIT("Exit\uD83D\uDEAA");
 
         private final String name;
 
@@ -139,14 +167,29 @@ public class ReportMenuView implements Renderable{
         }
     }
 
+    /**
+     * Sets the current user for the ReportMenuView.
+     *
+     * @param user The current user.
+     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
 
+    /**
+     * Sets the current report for the ReportMenuView.
+     *
+     * @param report The current report.
+     */
     public void setCurrentReport(Report report) {
         this.currentReport = report;
     }
 
+    /**
+     * Sets the main menu view for the ReportMenuView.
+     *
+     * @param mainMenuView The main menu view.
+     */
     public void setMainMenuView(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
     }

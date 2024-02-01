@@ -20,11 +20,21 @@ import java.io.IOException;
 import jline.TerminalFactory;
 import org.fusesource.jansi.AnsiConsole;
 
+/**
+ * The {@code Application} class is the entry point for the GroupTester application.
+ * It initializes necessary services and views to start the application's functionality.
+ */
 public final class Application {
 
+    /** The JSON repository factory used to create repositories for data persistence. */
     public static RepositoryFactory jsonRepositoryFactory;
 
+    /**
+     * Initializes the GroupTester application by setting up services, views, and necessary dependencies.
+     * This method also handles the installation of ANSI console features for better command-line interface rendering.
+     */
     static void init() {
+        // Initialization of the JSON repository factory and services
         jsonRepositoryFactory = RepositoryFactory
                 .getRepositoryFactory(RepositoryFactory.JSON);
         ServiceFactory serviceFactory = ServiceFactory.getInstance(jsonRepositoryFactory);
@@ -39,7 +49,7 @@ public final class Application {
         GroupService groupService = serviceFactory.getGroupService();
 
         //===
-
+        // ANSI console setup for improved command-line interface rendering
         AnsiConsole.systemInstall();                                      // #1
         System.out.println(ansi().eraseScreen().render(""));
         System.out.print("\033[H\033[2J");
@@ -66,7 +76,7 @@ public final class Application {
         }
         //===
 
-        // Цей рядок, має бути обовязково в кінці метода main!!!!
+        // JSON repository commit (must be included at the end of the main method)
         jsonRepositoryFactory.commit();
     }
 }

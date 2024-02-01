@@ -1,6 +1,5 @@
 package com.tritonkor.grouptester.domain.impl;
 
-import com.tritonkor.grouptester.appui.Renderable;
 import com.tritonkor.grouptester.domain.contract.SignUpService;
 import com.tritonkor.grouptester.domain.contract.UserService;
 import com.tritonkor.grouptester.domain.dto.UserAddDto;
@@ -17,16 +16,31 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 
+/**
+ * The SignUpServiceImpl class is an implementation of the SignUpService interface, providing user
+ * registration functionality in the application.
+ */
 final class SignUpServiceImpl implements SignUpService {
 
     private static final int VERIFICATION_CODE_EXPIRATION_MINUTES = 1;
     private static LocalDateTime codeCreationTime;
     private final UserService userService;
 
+    /**
+     * Constructs a new SignUpServiceImpl with the specified UserService.
+     *
+     * @param userService the user service used for user-related operations.
+     */
     SignUpServiceImpl(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Sends a verification code email to the specified email address.
+     *
+     * @param email            the email address to which the verification code will be sent.
+     * @param verificationCode the generated verification code.
+     */
     private static void sendVerificationCodeEmail(String email, String verificationCode) {
         // Властивості для конфігурації підключення до поштового сервера
         Properties properties = new Properties();
@@ -70,6 +84,12 @@ final class SignUpServiceImpl implements SignUpService {
         }
     }
 
+    /**
+     * Generates and sends a verification code to the specified email address.
+     *
+     * @param email the email address to which the verification code will be sent.
+     * @return the generated verification code.
+     */
     public String generateAndSendVerificationCode(String email) {
         // Генерація 6-значного коду
         String verificationCode = String.valueOf((int) (Math.random() * 900000 + 100000));
@@ -81,6 +101,14 @@ final class SignUpServiceImpl implements SignUpService {
         return verificationCode;
     }
 
+    /**
+     * Verifies the input code against the generated code and checks if the verification code has
+     * expired.
+     *
+     * @param inputCode     the input verification code provided by the user.
+     * @param generatedCode the generated verification code.
+     * @throws SignUpException if the verification code is incorrect or has expired.
+     */
     public static void verifyCode(String inputCode, String generatedCode) {
         LocalDateTime currentTime = LocalDateTime.now();
         long minutesElapsed = ChronoUnit.MINUTES.between(codeCreationTime, currentTime);
@@ -97,6 +125,15 @@ final class SignUpServiceImpl implements SignUpService {
         codeCreationTime = null;
     }
 
+    /**
+     * Registers a new user with the provided user details, input verification code, and the
+     * generated verification code.
+     *
+     * @param userAddDto       the user details for registration.
+     * @param userInputCode    the input verification code provided by the user.
+     * @param verificationCode the generated verification code.
+     * @throws SignUpException if the verification code is incorrect or has expired.
+     */
     public void signUp(UserAddDto userAddDto, String userInputCode, String verificationCode) {
 
         //verifyCode(userInputCode, verificationCode);

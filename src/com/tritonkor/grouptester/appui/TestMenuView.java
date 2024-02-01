@@ -42,7 +42,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-public class TestMenuView implements Renderable{
+/**
+ * The TestMenuView class represents the console-based user interface for managing tests.
+ */
+public class TestMenuView implements Renderable {
 
     private final TestService testService;
     private final ResultService resultService;
@@ -55,6 +58,15 @@ public class TestMenuView implements Renderable{
     private User currentUser;
     private Test currentTest;
 
+    /**
+     * Constructs a TestMenuView with the specified services.
+     *
+     * @param testService   The test service.
+     * @param resultService The result service.
+     * @param groupService  The group service.
+     * @param userService   The user service.
+     * @param reportService The report service.
+     */
     public TestMenuView(TestService testService, ResultService resultService,
             GroupService groupService,
             UserService userService, ReportService reportService) {
@@ -65,6 +77,11 @@ public class TestMenuView implements Renderable{
         this.reportService = reportService;
     }
 
+    /**
+     * Renders the TestMenuView and processes user input.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
@@ -92,6 +109,12 @@ public class TestMenuView implements Renderable{
         process(selectedItem);
     }
 
+    /**
+     * Processes the selected menu item.
+     *
+     * @param selectedItem The selected TestMenu item.
+     * @throws IOException if an I/O error occurs.
+     */
     private void process(TestMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
@@ -101,7 +124,7 @@ public class TestMenuView implements Renderable{
             case RUN_TEST -> {
                 if (Objects.isNull(groupService.findByUser(currentUser))) {
                     ConsolItems.clearConsole();
-                    System.out.println("You must join a group before taking the tests");
+                    System.out.println("You must join a group before taking the tests⚠\uFE0F");
 
                     this.render();
                 }
@@ -127,15 +150,18 @@ public class TestMenuView implements Renderable{
                                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
                         resultService.add(resultAddDto);
 
+                        System.out.println(resultAddDto);
+
                         Group userGroup = groupService.findByUser(currentUser);
                         Set<User> users = userService.getAll();
-                        System.out.println(users);
+
                         users.remove(currentUser);
 
                         HashMap<String, Grade> usersResults = new HashMap<>();
                         Random random = new Random();
-                        for(User user : users) {
-                            usersResults.put(user.getUsername(), new Grade(random.nextInt(100) + 1));
+                        for (User user : users) {
+                            usersResults.put(user.getUsername(),
+                                    new Grade(random.nextInt(100) + 1));
                         }
                         usersResults.put(currentUser.getUsername(), userGrade);
 
@@ -150,7 +176,8 @@ public class TestMenuView implements Renderable{
 
                         resultNameInput = (InputResult) result.get("report-name");
 
-                        ReportAddDto reportAddDto = reportService.makeReport(resultNameInput.getInput(), userGroup.getName(),
+                        ReportAddDto reportAddDto = reportService.makeReport(
+                                resultNameInput.getInput(), userGroup.getName(),
                                 currentTest.getTitle(), usersResults);
                         reportService.add(reportAddDto);
 
@@ -158,7 +185,7 @@ public class TestMenuView implements Renderable{
 
                         ConsolItems.clearConsole();
                         System.out.println(
-                                "Result " + resultNameInput.getInput() + "has been saved");
+                                "Result " + resultNameInput.getInput() + "has been saved✅");
 
                         correctData = true;
                     } catch (EntityArgumentException e) {
@@ -174,9 +201,10 @@ public class TestMenuView implements Renderable{
             case RENAME_TEST -> {
                 if (!currentUser.getRole().getPermissions().get(EntityName.TEST).canEdit()) {
 
-                    System.out.println("Access to create tests is denied");
+                    System.out.println("Access to create tests is denied❌");
                     System.console().reader().read();
                     this.render();
+                    break;
                 }
 
                 promptBuilder.createInputPrompt()
@@ -192,7 +220,7 @@ public class TestMenuView implements Renderable{
                 jsonRepositoryFactory.commit();
 
                 ConsolItems.clearConsole();
-                System.out.println("Set new name for report: " + reportNameInput.getInput());
+                System.out.println("Set new name for test: " + reportNameInput.getInput());
 
                 setCurrentTest(currentTest);
                 this.render();
@@ -201,9 +229,10 @@ public class TestMenuView implements Renderable{
             case ADD_QUESTION -> {
                 if (!currentUser.getRole().getPermissions().get(EntityName.TEST).canEdit()) {
 
-                    System.out.println("Access to create tests is denied");
+                    System.out.println("Access to create tests is denied❌");
                     System.console().reader().read();
                     this.render();
+                    break;
                 }
 
                 promptBuilder.createInputPrompt()
@@ -265,12 +294,14 @@ public class TestMenuView implements Renderable{
             case DELETE_QUESTION -> {
                 if (!currentUser.getRole().getPermissions().get(EntityName.TEST).canEdit()) {
 
-                    System.out.println("Access to create tests is denied");
+                    System.out.println("Access to create tests is denied❌");
                     System.console().reader().read();
                     this.render();
+                    break;
                 }
 
-                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt().name("questions-list")
+                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                        .name("questions-list")
                         .message("List of questions: ");
 
                 Set<Question> questions = currentTest.getQuestionsList();
@@ -301,7 +332,7 @@ public class TestMenuView implements Renderable{
                     jsonRepositoryFactory.commit();
 
                     ConsolItems.clearConsole();
-                    System.out.println("Question has been successfully deleted");
+                    System.out.println("Question has been successfully deleted✅");
                     this.render();
                 } else {
                     ConsolItems.clearConsole();
@@ -315,12 +346,15 @@ public class TestMenuView implements Renderable{
         }
     }
 
+    /**
+     * Enum representing the available options in the TestMenu.
+     */
     enum TestMenu {
-        RUN_TEST("Run test"),
-        RENAME_TEST("Rename test"),
-        ADD_QUESTION("Add question"),
-        DELETE_QUESTION("Delete question"),
-        EXIT("Exit");
+        RUN_TEST("Run test\uD83D\uDD27"),
+        RENAME_TEST("Rename test\uD83C\uDFF7\uFE0F"),
+        ADD_QUESTION("Add question➕"),
+        DELETE_QUESTION("Delete question\uD83D\uDDD1\uFE0F"),
+        EXIT("Exit\uD83D\uDEAA");
 
         private final String name;
 
@@ -333,14 +367,29 @@ public class TestMenuView implements Renderable{
         }
     }
 
+    /**
+     * Sets the current user for the TestMenuView.
+     *
+     * @param user The current user.
+     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
 
+    /**
+     * Sets the current test for the TestMenuView.
+     *
+     * @param test The current test.
+     */
     public void setCurrentTest(Test test) {
         this.currentTest = test;
     }
 
+    /**
+     * Sets the MainMenuView for navigation.
+     *
+     * @param mainMenuView The MainMenuView.
+     */
     public void setMainMenuView(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
     }

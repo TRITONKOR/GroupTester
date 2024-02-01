@@ -1,16 +1,16 @@
 package com.tritonkor.grouptester.appui;
 
 import static com.tritonkor.grouptester.Application.jsonRepositoryFactory;
+import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.BACK;
+import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.FIND_BY_GROUP;
+import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.FIND_BY_TEST;
+import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.SHOW_ALL;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.VIEW_TESTS;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.CREATE_GROUP;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.CREATE_TEST;
-import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.DELETE_REPORT;
-import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.DELETE_RESULT;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.USERNAME;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.ROLE;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.EXIT;
-import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.RENAME_REPORT;
-import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.RENAME_RESULT;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.VIEW_RESULTS;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.VIEW_REPORTS;
 import static com.tritonkor.grouptester.appui.MainMenuView.MainMenu.JOIN_THE_GROUP;
@@ -22,8 +22,6 @@ import com.tritonkor.grouptester.domain.contract.ResultService;
 import com.tritonkor.grouptester.domain.contract.TestService;
 import com.tritonkor.grouptester.domain.contract.UserService;
 import com.tritonkor.grouptester.domain.dto.GroupAddDto;
-import com.tritonkor.grouptester.domain.dto.ReportAddDto;
-import com.tritonkor.grouptester.domain.dto.ResultAddDto;
 import com.tritonkor.grouptester.domain.dto.TestAddDto;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.Answer;
@@ -35,8 +33,6 @@ import com.tritonkor.grouptester.persistence.entity.impl.Test;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
 import com.tritonkor.grouptester.persistence.entity.impl.User.Role.EntityName;
 import com.tritonkor.grouptester.persistence.exception.EntityArgumentException;
-import de.codeshelf.consoleui.elements.ConfirmChoice;
-import de.codeshelf.consoleui.prompt.ConfirmResult;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
 import de.codeshelf.consoleui.prompt.ListResult;
@@ -51,7 +47,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+/**
+ * The MainMenuView class provides a console-based user interface for the main menu of a group
+ * testing application. It allows users to perform various actions such as creating and viewing
+ * tests, joining groups, and viewing results and reports. The class implements the Renderable
+ * interface for rendering the menu and handling user input.
+ */
 public class MainMenuView implements Renderable {
 
     private final TestService testService;
@@ -67,9 +70,23 @@ public class MainMenuView implements Renderable {
 
     private User currentUser;
 
+    /**
+     * Constructs a new MainMenuView with the specified services and related menu views.
+     *
+     * @param testService    The service for managing tests.
+     * @param resultService  The service for managing results.
+     * @param reportService  The service for managing reports.
+     * @param userService    The service for managing users.
+     * @param groupService   The service for managing groups.
+     * @param authService    The service for managing authentication.
+     * @param testMenuView   The related TestMenuView.
+     * @param resultMenuView The related ResultMenuView.
+     * @param reportMenuView The related ReportMenuView.
+     */
     public MainMenuView(TestService testService, ResultService resultService,
             ReportService reportService, UserService userService,
-            GroupService groupService, AuthService authService, TestMenuView testMenuView, ResultMenuView resultMenuView, ReportMenuView reportMenuView) {
+            GroupService groupService, AuthService authService, TestMenuView testMenuView,
+            ResultMenuView resultMenuView, ReportMenuView reportMenuView) {
         this.testService = testService;
         this.resultService = resultService;
         this.reportService = reportService;
@@ -82,6 +99,12 @@ public class MainMenuView implements Renderable {
         this.reportMenuView = reportMenuView;
     }
 
+    /**
+     * Renders the main menu, allowing the user to choose various actions such as creating and
+     * viewing tests, joining groups, and viewing results and reports.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
@@ -92,7 +115,6 @@ public class MainMenuView implements Renderable {
         testMenuView.setMainMenuView(this);
         resultMenuView.setMainMenuView(this);
         reportMenuView.setMainMenuView(this);
-
 
         testMenuView.setCurrentUser(authService.getUser());
         resultMenuView.setCurrentUser(authService.getUser());
@@ -122,6 +144,12 @@ public class MainMenuView implements Renderable {
         process(selectedItem);
     }
 
+    /**
+     * Processes the selected option from the main menu and performs the corresponding actions.
+     *
+     * @param selectedItem The selected option from the main menu.
+     * @throws IOException If an I/O error occurs.
+     */
     private void process(MainMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
@@ -143,13 +171,13 @@ public class MainMenuView implements Renderable {
                                 .add();
                     }
                 }
-                listPromptBuilder.newItem("back").text("Back to menu").add();
+                listPromptBuilder.newItem(BACK.toString()).text("Back to menu").add();
 
                 var result = prompt.prompt(listPromptBuilder.addPrompt().build());
 
                 ListResult resultInput = (ListResult) result.get("tests-list");
 
-                if (resultInput.getSelectedId().equals("back")) {
+                if (resultInput.getSelectedId().equals(BACK.toString())) {
                     ConsolItems.clearConsole();
                     this.render();
                 }
@@ -166,7 +194,7 @@ public class MainMenuView implements Renderable {
 
                 if (!currentUser.getRole().getPermissions().get(EntityName.TEST).canAdd()) {
 
-                    System.out.println("Access to create tests is denied");
+                    System.out.println("Access to create tests is denied❌");
                     System.console().reader().read();
                     this.render();
                 }
@@ -285,7 +313,7 @@ public class MainMenuView implements Renderable {
 
                             ConsolItems.clearConsole();
                             System.out.println(
-                                    testTitleInput.getInput() + " test successfully created");
+                                    testTitleInput.getInput() + " test successfully created✅");
                             dataCorrect = true;
                         } catch (SignUpException e) {
                             promptBuilder = prompt.getPromptBuilder();
@@ -317,12 +345,12 @@ public class MainMenuView implements Renderable {
                 for (Group group : groups) {
                     listPromptBuilder.newItem(group.getName()).text(group.getName()).add();
                 }
-                listPromptBuilder.newItem("back").text("Back to menu").add();
+                listPromptBuilder.newItem(BACK.toString()).text("Back to menu").add();
 
                 var result = prompt.prompt(listPromptBuilder.addPrompt().build());
                 ListResult groupInput = (ListResult) result.get("groups-list");
 
-                if (groupInput.getSelectedId().equals("back")) {
+                if (groupInput.getSelectedId().equals(BACK.toString())) {
                     ConsolItems.clearConsole();
                     this.render();
                 }
@@ -341,7 +369,7 @@ public class MainMenuView implements Renderable {
             }
             case CREATE_GROUP -> {
                 if (!currentUser.getRole().getPermissions().get(EntityName.GROUP).canAdd()) {
-                    System.out.println("Access to create groups is denied");
+                    System.out.println("Access to create groups is denied❌");
                     System.console().reader().read();
                     this.render();
                 }
@@ -369,7 +397,7 @@ public class MainMenuView implements Renderable {
 
                             ConsolItems.clearConsole();
                             System.out.println(
-                                    groupNameInput.getInput() + " group successfully created");
+                                    groupNameInput.getInput() + " group successfully created✅");
                             dataCorrect = true;
                         } catch (SignUpException e) {
                             System.err.println(e.getMessage());
@@ -386,12 +414,51 @@ public class MainMenuView implements Renderable {
                 this.render();
             }
             case VIEW_RESULTS -> {
-                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
-                        .name("results-list").message("List of results:");
+                promptBuilder.createListPrompt().name("results-filter")
+                        .message("Which filter you want use?")
+                        .newItem(SHOW_ALL.toString())
+                        .text(SHOW_ALL.getName()).add()
+                        .newItem(FIND_BY_TEST.toString()).text(FIND_BY_TEST.name).add()
+                        .newItem(BACK.toString()).text(BACK.getName()).add().addPrompt();
+
+                var choise = prompt.prompt(promptBuilder.build());
+                ListResult userChoice = (ListResult) choise.get("results-filter");
+
+                MainMenu selectedFilter = MainMenu.valueOf(userChoice.getSelectedId());
 
                 Set<Result> results = resultService.findAllByUsername(currentUser.getUsername());
+
+                if (selectedFilter.equals(FIND_BY_TEST)) {
+                    promptBuilder = new PromptBuilder();
+
+                    ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                            .name("test-name")
+                            .message("Choose test name");
+                    Set<Test> tests = testService.getAll();
+
+                    for (Test test : tests) {
+                        listPromptBuilder.newItem(test.getTitle()).text(test.getTitle()).add();
+                    }
+
+                    var result = prompt.prompt(listPromptBuilder.addPrompt().build());
+                    var testNameInput = (ListResult) result.get("test-name");
+
+                    results = results.stream()
+                            .filter(r -> r.getTestTitle().equals(testNameInput.getSelectedId()))
+                            .collect(Collectors.toSet());
+                } else if (selectedFilter.equals(BACK)) {
+                    this.render();
+                    break;
+                }
+
+                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                        .name("results-list").message("Result list");
+
                 if (Objects.isNull(results)) {
                     System.out.println("But no one came");
+                    System.console().reader().read();
+                    this.render();
+                    break;
 
                 } else {
                     for (Result result : results) {
@@ -400,13 +467,13 @@ public class MainMenuView implements Renderable {
                                 .add();
                     }
                 }
-                listPromptBuilder.newItem("back").text("Back to menu").add();
+                listPromptBuilder.newItem(BACK.toString()).text("Back to menu").add();
 
                 var result = prompt.prompt(listPromptBuilder.addPrompt().build());
 
                 ListResult resultInput = (ListResult) result.get("results-list");
 
-                if (resultInput.getSelectedId().equals("back")) {
+                if (resultInput.getSelectedId().equals(BACK.toString())) {
                     ConsolItems.clearConsole();
                     this.render();
                 }
@@ -420,27 +487,80 @@ public class MainMenuView implements Renderable {
             }
             case VIEW_REPORTS -> {
                 if (!currentUser.getRole().getPermissions().get(EntityName.REPORT).canRead()) {
-                    System.out.println("Access to view reports is denied");
+                    System.out.println("Access to view reports is denied❌");
                     System.console().reader().read();
                     this.render();
                 }
 
-                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
-                        .name("reports-list").message("List of reports:");
+                promptBuilder.createListPrompt().name("report-filter")
+                        .message("Which filter you want use?")
+                        .newItem(SHOW_ALL.toString())
+                        .text(SHOW_ALL.getName()).add()
+                        .newItem(FIND_BY_TEST.toString()).text(FIND_BY_TEST.getName()).add()
+                        .newItem(FIND_BY_GROUP.toString()).text(FIND_BY_GROUP.getName()).add()
+                        .newItem(BACK.toString()).text(BACK.getName()).add().addPrompt();
 
-                Set<Report> reports = reportService.getAll();
+                var result = prompt.prompt(promptBuilder.build());
+                ListResult userChoice = (ListResult) result.get("report-filter");
+
+                MainMenu selectedFilter = MainMenu.valueOf(userChoice.getSelectedId());
+
+                Set<Report> reports;
+
+                if (selectedFilter.equals(SHOW_ALL)) {
+                    reports = reportService.getAll();
+                } else if (selectedFilter.equals(FIND_BY_TEST)) {
+                    promptBuilder = new PromptBuilder();
+
+                    ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                            .name("test-name").message("Choose test name");
+                    Set<Test> tests = testService.getAll();
+
+                    for (Test test : tests) {
+                        listPromptBuilder.newItem(test.getTitle()).text(test.getTitle()).add();
+                    }
+
+                    result = prompt.prompt(listPromptBuilder.addPrompt().build());
+                    var testNameInput = (ListResult) result.get("test-name");
+
+                    reports = reportService.findAllByTestTitle(testNameInput.getSelectedId());
+                } else if (selectedFilter.equals(FIND_BY_GROUP)) {
+                    promptBuilder = new PromptBuilder();
+
+                    ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                            .name("group-name").message("Choose group name");
+                    Set<Group> groups = groupService.getAll();
+
+                    for (Group group : groups) {
+                        listPromptBuilder.newItem(group.getName()).text(group.getName()).add();
+                    }
+
+                    result = prompt.prompt(listPromptBuilder.addPrompt().build());
+                    var groupNameInput = (ListResult) result.get("group-name");
+
+                    reports = reportService.findAllByGroupName(groupNameInput.getSelectedId());
+                } else {
+                    this.render();
+                    break;
+                }
+
+                promptBuilder = new PromptBuilder();
+
+                ListPromptBuilder listPromptBuilder = promptBuilder.createListPrompt()
+                        .name("reports-list").message("List of Reports");
+
                 for (Report report : reports) {
                     listPromptBuilder.newItem(report.getReportTitle()).text(report.getReportTitle())
                             .add();
                 }
-                listPromptBuilder.newItem("back").text("Back to menu").add();
+                listPromptBuilder.newItem(BACK.toString()).text("Back to menu").add();
 
-                var result = prompt.prompt(listPromptBuilder.addPrompt().build());
+                result = prompt.prompt(listPromptBuilder.addPrompt().build());
                 ListResult reportInput = (ListResult) result.get("reports-list");
 
-                if (reportInput.getSelectedId().equals("back")) {
-                    ConsolItems.clearConsole();
+                if (reportInput.getSelectedId().equals(BACK.toString())) {
                     this.render();
+                    break;
                 }
 
                 Report userReport = reportService.findByName(reportInput.getSelectedId());
@@ -451,24 +571,30 @@ public class MainMenuView implements Renderable {
                 reportMenuView.render();
             }
             case EXIT -> {
+                ConsolItems.clearConsole();
+                System.out.println("Good bye, botik \uD83E\uDD7A\uD83D\uDC49\uD83D\uDC48");
             }
         }
     }
 
+    /**
+     * The MainMenu enum represents the available options in the main menu of the group testing
+     * application. Each option has a unique name and an emoji representation.
+     */
     enum MainMenu {
-        CREATE_TEST("Create test"),
-        VIEW_TESTS("View tests"),
-        JOIN_THE_GROUP("Join the group"),
-        CREATE_GROUP("Create new group"),
-        VIEW_RESULTS("View your results"),
-        RENAME_RESULT("Rename result"),
-        DELETE_RESULT("Delete result"),
-        VIEW_REPORTS("View your reports"),
-        RENAME_REPORT("Rename report"),
-        DELETE_REPORT("Delete report"),
-        USERNAME("Username: "),
-        ROLE("Role: "),
-        EXIT("Exit");
+        CREATE_TEST("Create test\uD83D\uDCDD"),
+        VIEW_TESTS("View tests\uD83D\uDCD1"),
+        JOIN_THE_GROUP("Join the group\uD83E\uDD1D\uD83C\uDFFB"),
+        CREATE_GROUP("Create new group\uD83D\uDC65"),
+        VIEW_RESULTS("View your results\uD83D\uDCC8"),
+        VIEW_REPORTS("View your reports\uD83D\uDCCA"),
+        SHOW_ALL("Show all"),
+        FIND_BY_TEST("Find by test name"),
+        FIND_BY_GROUP("Find by group name"),
+        USERNAME("Username\uD83D\uDC64: "),
+        ROLE("Role⭐: "),
+        BACK("Back\uD83D\uDEAA"),
+        EXIT("Exit\uD83D\uDEAA");
 
         private final String name;
 

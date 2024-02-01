@@ -2,16 +2,12 @@ package com.tritonkor.grouptester.domain.impl;
 
 import com.tritonkor.grouptester.domain.contract.GroupService;
 import com.tritonkor.grouptester.domain.dto.GroupAddDto;
-import com.tritonkor.grouptester.domain.dto.UserAddDto;
 import com.tritonkor.grouptester.domain.exception.EntityNotFoundException;
 import com.tritonkor.grouptester.domain.exception.SignUpException;
 import com.tritonkor.grouptester.persistence.entity.impl.Group;
 import com.tritonkor.grouptester.persistence.entity.impl.User;
-import com.tritonkor.grouptester.persistence.repository.Repository;
 import com.tritonkor.grouptester.persistence.repository.contracts.GroupRepository;
-import java.util.Optional;
 import java.util.Set;
-import org.mindrot.bcrypt.BCrypt;
 
 public class GroupServiceImpl extends GenericService<Group> implements GroupService {
 

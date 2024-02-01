@@ -24,7 +24,13 @@ import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import java.io.IOException;
 
-public class ResultMenuView implements  Renderable{
+/**
+ * The ResultMenuView class provides a console-based user interface for interacting with results in
+ * a group testing application. It allows users to rename or delete results and return to the main
+ * menu. The class implements the Renderable interface for rendering the menu and handling user
+ * input.
+ */
+public class ResultMenuView implements Renderable {
 
     private final TestService testService;
     private final ResultService resultService;
@@ -35,13 +41,26 @@ public class ResultMenuView implements  Renderable{
     private User currentUser;
     private Result currentResult;
 
+    /**
+     * Constructs a new ResultMenuView with the specified services.
+     *
+     * @param testService   The service for managing tests.
+     * @param resultService The service for managing results.
+     * @param userService   The service for managing users.
+     */
     public ResultMenuView(TestService testService, ResultService resultService,
-             UserService userService) {
+            UserService userService) {
         this.testService = testService;
         this.resultService = resultService;
         this.userService = userService;
     }
 
+    /**
+     * Renders the result menu, allowing the user to choose actions such as renaming or deleting
+     * results.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void render() throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
@@ -63,6 +82,12 @@ public class ResultMenuView implements  Renderable{
         process(selectedItem);
     }
 
+    /**
+     * Processes the selected option from the result menu and performs the corresponding actions.
+     *
+     * @param selectedItem The selected option from the result menu.
+     * @throws IOException If an I/O error occurs.
+     */
     private void process(ResultMenu selectedItem) throws IOException {
         ConsolePrompt prompt = new ConsolePrompt();
         PromptBuilder promptBuilder = prompt.getPromptBuilder();
@@ -115,7 +140,7 @@ public class ResultMenuView implements  Renderable{
                     jsonRepositoryFactory.commit();
 
                     ConsolItems.clearConsole();
-                    System.out.println("Result has been successfully deleted");
+                    System.out.println("Result has been successfully deleted✅");
                     this.render();
                 } else {
                     ConsolItems.clearConsole();
@@ -129,10 +154,13 @@ public class ResultMenuView implements  Renderable{
         }
     }
 
+    /**
+     * Enumeration representing the available options in the result menu.
+     */
     enum ResultMenu {
-        RENAME_RESULT("Rename result"),
-        DELETE_RESULT("Delete result"),
-        EXIT("Exit");
+        RENAME_RESULT("Rename result\uD83C\uDFF7\uFE0F"),
+        DELETE_RESULT("Delete result\uD83D\uDDD1\uFE0F"),
+        EXIT("Exit\uD83D\uDEAA");
 
         private final String name;
 
@@ -145,14 +173,29 @@ public class ResultMenuView implements  Renderable{
         }
     }
 
+    /**
+     * Sets the current user for the ResultMenuView.
+     *
+     * @param user The current user.
+     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
 
+    /**
+     * Sets the current result for the ResultMenuView.
+     *
+     * @param result The current result.
+     */
     public void setCurrentResult(Result result) {
         this.currentResult = result;
     }
 
+    /**
+     * Sets the main menu view for the ResultMenuView.
+     *
+     * @param mainMenuView The main menu view.
+     */
     public void setMainMenuView(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
     }

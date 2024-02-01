@@ -11,19 +11,24 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * The ValidationUtil class provides utility methods for validating different types of data. It
+ * includes validation methods for names, titles, passwords, emails, dates, and date and time.
+ */
 public class ValidationUtil {
 
     /**
-     * Валідація тексту
+     * Validates the provided name.
      *
-     * @param text
-     * @throws EntityArgumentException в разі, якщо є помилка в text
+     * @param text The name to be validated.
+     * @return The validated name.
+     * @throws EntityArgumentException If there is an error in the validation.
      */
     public static String validateName(String text) {
         Set<String> errors = new HashSet<>();
         final String templateName = "name";
 
-        if(Objects.isNull(text)) {
+        if (Objects.isNull(text)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -50,11 +55,18 @@ public class ValidationUtil {
         return text;
     }
 
+    /**
+     * Validates the provided title.
+     *
+     * @param text The title to be validated.
+     * @return The validated title.
+     * @throws EntityArgumentException If there is an error in the validation.
+     */
     public static String validateTitle(String text) {
         Set<String> errors = new HashSet<>();
         final String templateName = "name";
 
-        if(Objects.isNull(text)) {
+        if (Objects.isNull(text)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -81,11 +93,18 @@ public class ValidationUtil {
         return text;
     }
 
+    /**
+     * Validates the provided password.
+     *
+     * @param password The password to be validated.
+     * @return The validated password.
+     * @throws EntityArgumentException If there is an error in the validation.
+     */
     public static String validatePassword(String password) {
         Set<String> errors = new HashSet<>();
         final String templateName = "password";
 
-        if(Objects.isNull(password)) {
+        if (Objects.isNull(password)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -112,11 +131,18 @@ public class ValidationUtil {
         return password;
     }
 
+    /**
+     * Validates the provided email.
+     *
+     * @param email The email to be validated.
+     * @return The validated email.
+     * @throws EntityArgumentException If there is an error in the validation.
+     */
     public static String validateEmail(String email) {
         Set<String> errors = new HashSet<>();
         final String templateName = "email";
 
-        if(Objects.isNull(email)) {
+        if (Objects.isNull(email)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -138,11 +164,18 @@ public class ValidationUtil {
         return email;
     }
 
+    /**
+     * Validates the provided date.
+     *
+     * @param date The date to be validated.
+     * @return The validated date.
+     * @throws EntityArgumentException If there is an error in the validation.
+     */
     public static LocalDate validateDate(String date) {
         Set<String> errors = new HashSet<>();
         final String templateName = "date";
 
-        if(Objects.isNull(date)) {
+        if (Objects.isNull(date)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -159,7 +192,7 @@ public class ValidationUtil {
             if (parsedDate.isAfter(currentDate)) {
                 errors.add(ErrorTemplates.DATE.getTemplate().formatted(templateName));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new EntityArgumentException("Wrong data format");
         }
         if (!errors.isEmpty()) {
@@ -169,11 +202,18 @@ public class ValidationUtil {
         return LocalDate.parse(date);
     }
 
+    /**
+     * Validates the provided date and time.
+     *
+     * @param date The date and time to be validated.
+     * @return The validated date and time.
+     * @throws EntityArgumentException If there is an error in the validation.
+     */
     public static LocalDateTime validateDateTime(LocalDateTime date) {
         Set<String> errors = new HashSet<>();
         final String templateName = "date and time";
 
-        if(Objects.isNull(date)) {
+        if (Objects.isNull(date)) {
             errors.add(ErrorTemplates.REQUIRED.getTemplate().formatted(templateName));
             throw new EntityArgumentException(combineErrorMessages(errors));
         }
@@ -198,10 +238,16 @@ public class ValidationUtil {
         return date;
     }
 
+    /**
+     * Combines error messages from a set into a single string.
+     *
+     * @param errors The set of error messages.
+     * @return The combined error message.
+     */
     private static String combineErrorMessages(Set<String> errors) {
         String message = "";
 
-        for(String error : errors) {
+        for (String error : errors) {
             message = message + error + '\n';
         }
 
